@@ -1,14 +1,14 @@
 <div align="center">
-<img src="https://raw.githubusercontent.com/krlvm/PowerTunnel/master/github-images/logo.png" height="192px" width="192px" />
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/logo.png" height="192px" width="192px" />
 <br><h1>BeautySearch</h1><br>
 Windows 10 Search Window appearance tweaker
 <br><br>
-<a href="https://github.com/krlvm/BeautySearch/blob/master/LICENSE"><img src="https://img.shields.io/github/license/krlvm/PowerTunnel?style=flat-square" alt="License"/></a>
+<a href="https://github.com/krlvm/BeautySearch/blob/master/LICENSE"><img src="https://img.shields.io/github/license/krlvm/BeautySearch?style=flat-square" alt="License"/></a>
 <a href="https://github.com/krlvm/BeautySearch/releases/latest"><img src="https://img.shields.io/github/v/release/krlvm/BeautySearch?style=flat-square" alt="Latest release"/></a>
-<!--<a href="https://github.com/krlvm/BeautySearch/releases"><img src="https://img.shields.io/github/downloads/krlvm/PowerTunnel/total?style=flat-square" alt="Downloads"/></a>-->
+<!--<a href="https://github.com/krlvm/BeautySearch/releases"><img src="https://img.shields.io/github/downloads/krlvm/BeautySearch/total?style=flat-square" alt="Downloads"/></a>-->
 <!--<a href="https://github.com/krlvm/BeautySearch/wiki"><img src="https://img.shields.io/badge/help-wiki-yellow?style=flat-square" alt="Help on the Wiki"/></a>-->
 <br>
-<img src="https://raw.githubusercontent.com/krlvm/PowerTunnel/master/github-images/ui.png" alt="BeautySearch Installer" />
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/ui.png" alt="BeautySearch Installer" />
 </div>
 
 Windows 10 Search User Interface is built on web technologies, so it can be easily tweaked by injecting a custom JavaScript file.\
@@ -20,13 +20,22 @@ The [BeautySearch script](https://github.com/krlvm/BeautySearch/blob/master/Beau
 You can show accent color on Start Menu, Action Center and Taskbar with Windows 10, but not on Search Window for now.\
 BeautySearch can fix this flaw.
 
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/background-accent/disabled.png" width="100%" />
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/background-accent/enabled.png" width="100%" />
+
 ### Show search results in Dark Theme
 Windows 10 still show search results in Light Theme, although Dark Theme is enabled.\
 BeautySearch implements the missing Dark Theme for search results.
 
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/dark-theme/disabled.png" width="100%" />
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/dark-theme/enabled.png" width="100%" />
+
 ### Remove background from UWP applications icons
 UWP icons background was removed from the Start Menu in the last Insider Builds, but it still present in other pieces of the OS.\
 BeautySearch helps you to get rid of that inconsistency for the Search Window.
+
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/tiles-background/disabled.png" width="100%" />
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/tiles-background/enabled.png" width="100%" />
 
 ### Context menu tweaking
 The context menus of the Search Window are unlike the others in the system.\
@@ -34,6 +43,9 @@ BeautySearch provides following tweaks for the context menus:
 - Adding shadows to context menus
 - Making the corners of context menus rounded
 - Adding acrylic effect to the context menus
+
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/context-menus/disabled.png" width="100%" />
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/context-menus/enabled.png" width="100%" />
 
 ### Hide outlines when using mouse
 There are outlines in UI to help the people navigating using keyboard. However, outlines in the Search Window are visible when you navigating with mouse.\
