@@ -180,7 +180,7 @@ if(SETTINGS.darkTheme) {
         .bsDark .openPreviewPaneBtn:hover,
         .bsDark .suggDetailsContainer:hover .openPreviewPaneBtn,
         .bsDark .withOpenPreviewPaneBtn:hover .openPreviewPaneBtn {
-            border-color: black !important;
+            border-color: rgba(0, 0, 0, 0.3) !important;
         }
         .bsDark .contextMenu .menuItem:not(.focusable, .menuLabel) {
             color: #6F777D !important;
@@ -188,6 +188,12 @@ if(SETTINGS.darkTheme) {
         .bsDark .contextMenu .divider {
             border-color: #6F777D !important;
         }
+        .bsDark .sectionItem:hover {
+            background-color: rgba(255, 255, 255, 0.25) !important;
+		}
+        .bsDark .sectionItem:focus {
+            background-color: rgba(255, 255, 255, 0.3) !important;
+		}
     `);
 
     let darkThemeListener = () => {
