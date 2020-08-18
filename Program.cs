@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -59,16 +60,27 @@ namespace BeautySearch
         public const int ERR_READ          = 1;
         public const int ERR_WRITE         = 2;
         public const int ERR_NOT_INSTALLED = 3;
+        public const int ERR_KILL_FAILED   = 4;
 
-        private const string TARGET_FILE = @"C:\Windows\SystemApps\Microsoft.Windows.Search_cw5n1h2txyewy\cache\Local\Desktop\2.html";
-        private const string SCRIPT_DEST = @"C:\Windows\SystemApps\Microsoft.Windows.Search_cw5n1h2txyewy\cache\Local\Desktop\BeautySearch.js";
+        // Bing Search
+        private const string BING_SEARCH_REGISTRY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Search";
+        private const int BING_SEARCH_DISABLED = 0;
+        private const int BING_SEARCH_ENABLED  = 1;
+
+        private static string SEARCH_APP_NAME = "Microsoft.Windows.Search_cw5n1h2txyewy";
+
+        private static string TARGET_DIR  = @"C:\Windows\SystemApps\" + SEARCH_APP_NAME + @"\cache\Local\Desktop";
+        private static string TARGET_FILE = TARGET_DIR + @"\2.html";
+        private static string SCRIPT_DEST = TARGET_DIR + @"\BeautySearch.js";
 
         private const string INJECT_LINE = "<script type=\"text/javascript\" src=\"ms-appx-web:///cache/local/Desktop/BeautySearch.js\"></script>";
 
         public static int Install(FeatureControl features)
         {
+            SetBingSearchEnabled(BING_SEARCH_DISABLED);
             KillSearchApp();
 
+            Utility.TakeOwnership(TARGET_DIR);
             Utility.TakeOwnership(TARGET_FILE);
             Utility.TakeOwnership(SCRIPT_DEST);
 
@@ -91,13 +103,27 @@ namespace BeautySearch
             script = script.Replace("const SETTINGS = SETTINGS_DEFAULTS;", features.Build());
             Utility.WriteFile(SCRIPT_DEST, script);
 
-            KillSearchApp();
+            if(!KillSearchApp())
+            {
+                return ERR_KILL_FAILED;
+            }
 
             return 0;
         }
 
         public static int Uninstall()
         {
+            DialogResult dialogResult = MessageBox.Show(
+                "Online Bing Search was disabled after BeautySearch installation.\nEnable it again?",
+                "BeautySearch",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+            if (dialogResult == DialogResult.Yes)
+            {
+                SetBingSearchEnabled(BING_SEARCH_ENABLED);
+            }
+
             KillSearchApp();
 
             if (!IsInstalled())
@@ -120,17 +146,43 @@ namespace BeautySearch
                 return ERR_WRITE;
             }
 
-            KillSearchApp();
+            if (!KillSearchApp())
+            {
+                return ERR_KILL_FAILED;
+            }
 
             return 0;
         }
 
-        public static void KillSearchApp()
+        public static void SetBingSearchEnabled(int val)
         {
+            // When Bing Web Search is enabled, the Search App doesn't use the local search instance
+            // 0 - disabled, 1 - enabled
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(BING_SEARCH_REGISTRY, true))
+            {
+                if (key != null)  //must check for null key
+                {
+                    key.SetValue("BingSearchEnabled", val, RegistryValueKind.DWord);
+                }
+            }
+        }
+
+        public static bool KillSearchApp()
+        {
+            bool success = true;
             foreach (var process in Process.GetProcessesByName("SearchApp"))
             {
-                process.Kill();
+                try
+                {
+                    process.Kill();
+                } catch(Exception e)
+                {
+                    // We will try to kill the Search App using TASKKILL instead of asking to re-login
+                    //success = false;
+                    Process.Start("cmd.exe", "/c taskkill /F /IM SearchApp.exe");
+                }
             }
+            return success;
         }
 
         public static bool IsInstalled()

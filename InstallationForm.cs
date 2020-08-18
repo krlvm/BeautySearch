@@ -73,6 +73,9 @@ namespace BeautySearch
                 case ScriptInstaller.ERR_WRITE:
                     MessageBox.Show("Failed to write target file (not enough permissions?)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
+                case ScriptInstaller.ERR_KILL_FAILED:
+                    MessageBox.Show("Sign out and sign in to finish installation", "BeautySearch", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
             }
 
             UpdateInstallStatus();
@@ -99,6 +102,9 @@ namespace BeautySearch
                     break;
                 case ScriptInstaller.ERR_WRITE:
                     MessageBox.Show("Failed to write target file (not enough permissions?)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+                case ScriptInstaller.ERR_KILL_FAILED:
+                    MessageBox.Show("BeautySearch has been uninstalled, sign out and sign in for the change to take effect", "BeautySearch", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
             }
 
