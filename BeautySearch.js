@@ -3,6 +3,8 @@
  * Improved Search Window appearance for Windows 10
  * 
  * Tested on:
+ * - Windows 10 May 2019 Update (19H1, Build 18362)
+ * - Windows 10 Nov 2019 Update (19H2, Build 18363)
  * - Windows 10 May 2020 Update (20H1, Build 19041)
  * - Windows 10 ??? 2020 Update (20H2, Build 19042)
  * 
@@ -89,6 +91,10 @@ const toRGB = (r, g, b) => {
     return 'rgb(' + r + ', ' + g + ', ' + b + ')';
 }
 
+const toRGBa = (r, g, b, a) => {
+    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+}
+
 const injectStyle = (styleString) => {
     const style = document.createElement('style');
     style.textContent = styleString;
@@ -119,10 +125,14 @@ if(SETTINGS.accentBackground) {
                 } else {
                     let rgb = getRGB(base);
                 
-                    document.getElementById('rootContainer').style.backgroundColor = toRGB(
-                        subtractPercent(rgb[0], 0.25),
-                        subtractPercent(rgb[1], 0.30),
-                        subtractPercent(rgb[2], 0.25)
+                    document.getElementById('rootContainer').style.backgroundColor = toRGBa(
+                        //subtractPercent(rgb[0], 0),
+                        //subtractPercent(rgb[1], 0),
+                        //subtractPercent(rgb[2], 0),
+                        rgb[0],
+                        rgb[1],
+                        rgb[2],
+                        0.5
                     );
                     lastAccent = base;
                 }

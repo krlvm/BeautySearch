@@ -104,10 +104,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(12, 53);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(342, 51);
+            this.label3.Size = new System.Drawing.Size(213, 51);
             this.label3.TabIndex = 14;
-            this.label3.Text = "Tested on:\r\n- Windows 10 May 2020 Update (20H1, Build 19041)\r\n- Windows 10 ???  2" +
-    "020 Update (20H2, Build 19042)";
+            this.label3.Text = "Tested on Windows 10 versions:\r\n1903, 1909,\r\n2004, 2009.";
             // 
             // featureBox
             // 
