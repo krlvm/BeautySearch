@@ -249,7 +249,7 @@ if(SETTINGS.contextMenuAcrylic) {
     // Dark  context menu: rgb(48, 48, 48)
     // Light context menu: rgb(243, 243, 243)
     injectStyle(`
-        .lightTheme19H1 .contextMenu {
+        .lightTheme19H1 .contextMenu, .darkTheme19H1:not(.bsDark) .contextMenu {
             background-color: rgba(243, 243, 243, 0.1) !important;
             -webkit-backdrop-filter: blur(50px) saturate(175%);
         }
