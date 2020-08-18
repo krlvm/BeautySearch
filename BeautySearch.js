@@ -168,9 +168,12 @@ if(SETTINGS.darkTheme) {
             background-color: #2B2B2B;
             border-radius: 15px;
         }
-        .bsDark #previewContainer .divider {
+        .bsDark #previewContainer .divider:not(:hover):not(:focus),  {
             border: 1px solid #2B2B2B !important;
         }
+        .bsDark #previewContainer .divider {
+            border: 1px solid #2B2B2B;
+		}
         .bsDark .annotation, .bsDark .iconContainer:not(.accentColor) {
             color: rgba(255, 255, 255, 0.6) !important;
         }
