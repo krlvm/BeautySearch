@@ -95,7 +95,7 @@ namespace BeautySearch
                 SEARCH_APP_NAME = "Microsoft.Windows.Cortana_cw5n1h2txyewy";
             }
 
-            TARGET_DIR = @"C:\Windows\SystemApps\" + SEARCH_APP_NAME + @"\cache\Local\Desktop";
+            TARGET_DIR = Path.GetPathRoot(Environment.SystemDirectory) + @"Windows\SystemApps\" + SEARCH_APP_NAME + @"\cache\Local\Desktop";
             TARGET_FILE = TARGET_DIR + @"\2.html";
             SCRIPT_DEST = TARGET_DIR + @"\BeautySearch.js";
         }
