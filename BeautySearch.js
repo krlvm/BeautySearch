@@ -16,7 +16,9 @@
  * run "sfc /scannow" command in terminal to repair the application.
  * If it does not help, run PowerShell as administrator and execute
  * following command to re-register and repair the Search application:
- * Get-AppxPackage -AllUsers Microsoft.Windows.Search | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+
+ * 1903, 1909: Get-AppxPackage -AllUsers Microsoft.Windows.Cortana | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
+ * 2004, 2009: Get-AppxPackage -AllUsers Microsoft.Windows.Search | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register "$($_.InstallLocation)\AppXManifest.xml"}
  * 
  * You have to configure folder access permission youself if you prefer
  * manual installation.
@@ -115,20 +117,16 @@ if(SETTINGS.accentBackground) {
         // May not work in the future
         //let color = '#' + SearchAppWrapper.CortanaApp.systemTheme.substring(7);
     
-        let scopes = document.querySelectorAll('.selectedScope');
+        let scopes = document.querySelectorAll('.accentColor');
         if(scopes.length > 0) {
-            let base = isSystemLightTheme() ? -1 : window.getComputedStyle(scopes[0]).borderBottomColor;
+            let base = isSystemLightTheme() ? -1 : window.getComputedStyle(scopes[0]).color;
             console.log(`Base: ${base} | Last: ${lastAccent}`)
             if(lastAccent != base) {
                 if(base === -1) {
                     document.getElementById('rootContainer').style.backgroundColor = '';
                 } else {
                     let rgb = getRGB(base);
-                
                     document.getElementById('rootContainer').style.backgroundColor = toRGBa(
-                        //subtractPercent(rgb[0], 0),
-                        //subtractPercent(rgb[1], 0),
-                        //subtractPercent(rgb[2], 0),
                         rgb[0],
                         rgb[1],
                         rgb[2],
