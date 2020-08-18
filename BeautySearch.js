@@ -235,7 +235,7 @@ if(SETTINGS.contextMenuShadow) {
 if(SETTINGS.contextMenuRound) {
     // + #menuContainer
     injectStyle(`
-        .contextMenu {
+        #menuContainer, .contextMenu {
             border-radius: 5px;
         }
     `);
