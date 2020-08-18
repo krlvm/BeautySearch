@@ -43,12 +43,6 @@ namespace BeautySearch
 
         private void installBtn_Click(object sender, EventArgs e)
         {
-            int buildNumber = Int32.Parse(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentBuildNumber", "0").ToString());
-            if (buildNumber < ScriptInstaller.MIN_REQUIRED_BUILD)
-            {
-                MessageBox.Show("BeautySearch can be installed only on Windows 10 May 2020 Update (20H1, Build 19041) and higher", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
             if (Utility.RequireAdministrator())
             {
                 return;
@@ -75,6 +69,9 @@ namespace BeautySearch
                     break;
                 case ScriptInstaller.ERR_KILL_FAILED:
                     MessageBox.Show("Sign out and sign in to finish installation", "BeautySearch", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                case ScriptInstaller.ERR_OLD_BUILD:
+                    MessageBox.Show("BeautySearch can be installed only on Windows 10 May 2020 Update (20H1, Build 19041) and higher", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
 

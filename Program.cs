@@ -33,7 +33,7 @@ namespace BeautySearch
         {
             if(!writeable)
             {
-                throw new System.InvalidOperationException("FeatureControl is not writeable");
+                throw new InvalidOperationException("FeatureControl is not writeable");
             }
             sb.Append(feature + ":true,");
         }
@@ -53,36 +53,66 @@ namespace BeautySearch
 
     static class ScriptInstaller
     {
-        // Windows 10 May 2020 Update, 20H1
-        public const int MIN_REQUIRED_BUILD = 19041;
+        public static int CURRENT_BUILD;
+
+        private const int BUILD_MAY_2019 = 18362;
+        private const int BUILD_MAY_2020 = 19041;
+
+        private const int MIN_REQUIRED_BUILD = BUILD_MAY_2019;
 
         // Error codes
         public const int ERR_READ          = 1;
         public const int ERR_WRITE         = 2;
         public const int ERR_NOT_INSTALLED = 3;
         public const int ERR_KILL_FAILED   = 4;
+        public const int ERR_OLD_BUILD     = 5;
 
         // Bing Search
-        private const string BING_SEARCH_REGISTRY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Search";
+        private const string BING_SEARCH_REGISTRY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Search\";
         private const int BING_SEARCH_DISABLED = 0;
-        private const int BING_SEARCH_ENABLED  = 1;
+        private const int BING_SEARCH_ENABLED = 1;
 
-        private static string SEARCH_APP_NAME = "Microsoft.Windows.Search_cw5n1h2txyewy";
+        private static string SEARCH_APP_NAME;
+        private static string SEARCH_APP_EXEC;
 
-        private static string TARGET_DIR  = @"C:\Windows\SystemApps\" + SEARCH_APP_NAME + @"\cache\Local\Desktop";
-        private static string TARGET_FILE = TARGET_DIR + @"\2.html";
-        private static string SCRIPT_DEST = TARGET_DIR + @"\BeautySearch.js";
+        private static string TARGET_DIR;
+        private static string TARGET_FILE;
+        private static string SCRIPT_DEST;
 
         private const string INJECT_LINE = "<script type=\"text/javascript\" src=\"ms-appx-web:///cache/local/Desktop/BeautySearch.js\"></script>";
 
+        static ScriptInstaller()
+        {
+            CURRENT_BUILD = Utility.GetBuildNumber();
+            if(CURRENT_BUILD >= BUILD_MAY_2020)
+            {
+                SEARCH_APP_EXEC = "SearchApp";
+                SEARCH_APP_NAME = "Microsoft.Windows.Search_cw5n1h2txyewy";
+            }
+            else if(CURRENT_BUILD >= BUILD_MAY_2019)
+            {
+                SEARCH_APP_EXEC = "SearchUI";
+                SEARCH_APP_NAME = "Microsoft.Windows.Cortana_cw5n1h2txyewy";
+            }
+
+            TARGET_DIR = @"C:\Windows\SystemApps\" + SEARCH_APP_NAME + @"\cache\Local\Desktop";
+            TARGET_FILE = TARGET_DIR + @"\2.html";
+            SCRIPT_DEST = TARGET_DIR + @"\BeautySearch.js";
+        }
+
         public static int Install(FeatureControl features)
         {
+            if (CURRENT_BUILD < MIN_REQUIRED_BUILD)
+            {
+                return ERR_OLD_BUILD;
+            }
+
             SetBingSearchEnabled(BING_SEARCH_DISABLED);
             KillSearchApp();
 
-            Utility.TakeOwnership(TARGET_DIR);
+            //Utility.TakeOwnership(TARGET_DIR);
             Utility.TakeOwnership(TARGET_FILE);
-            Utility.TakeOwnership(SCRIPT_DEST);
+            //Utility.TakeOwnership(SCRIPT_DEST);
 
             string target = Utility.ReadFile(TARGET_FILE);
             if (target == null)
@@ -163,6 +193,7 @@ namespace BeautySearch
                 if (key != null)  //must check for null key
                 {
                     key.SetValue("BingSearchEnabled", val, RegistryValueKind.DWord);
+                    key.Close();
                 }
             }
         }
@@ -170,16 +201,17 @@ namespace BeautySearch
         public static bool KillSearchApp()
         {
             bool success = true;
-            foreach (var process in Process.GetProcessesByName("SearchApp"))
+            foreach (var process in Process.GetProcessesByName(SEARCH_APP_EXEC))
             {
                 try
                 {
                     process.Kill();
-                } catch(Exception e)
+                }
+                catch
                 {
                     // We will try to kill the Search App using TASKKILL instead of asking to re-login
                     //success = false;
-                    Process.Start("cmd.exe", "/c taskkill /F /IM SearchApp.exe");
+                    Process.Start("taskkill.exe", "/F /IM " + SEARCH_APP_EXEC + ".exe");
                 }
             }
             return success;
@@ -207,6 +239,11 @@ namespace BeautySearch
 
     static class Utility
     {
+        public static int GetBuildNumber()
+        {
+            return int.Parse(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentBuildNumber", "0").ToString());
+        }
+
         public static string ReadFile(string filepath)
         {
             return File.ReadAllText(filepath);
@@ -214,6 +251,13 @@ namespace BeautySearch
 
         public static bool WriteFile(string filepath, string text)
         {
+            if(true)
+            {
+                StreamWriter sw = new StreamWriter(filepath);
+                sw.WriteLine(text);
+                sw.Close();
+                return true;
+            }
             try
             {
                 StreamWriter sw = new StreamWriter(filepath);
@@ -221,7 +265,7 @@ namespace BeautySearch
                 sw.Close();
                 return true;
             }
-            catch (Exception)
+            catch
             {
                 return false;
             }
@@ -250,11 +294,23 @@ namespace BeautySearch
             {
                 return;
             }
-            FileSecurity fileS = File.GetAccessControl(filepath);
-            SecurityIdentifier cu = WindowsIdentity.GetCurrent().User;
-            fileS.SetOwner(cu);
-            fileS.SetAccessRule(new FileSystemAccessRule(cu, FileSystemRights.FullControl, AccessControlType.Allow));
-            File.SetAccessControl(filepath, fileS);
+            try
+            {
+                GetFullAccess(filepath);
+            }
+            catch
+            {
+                Process.Start("takeown.exe", "/F \"" + filepath + "\"");
+                Process.Start("icacls.exe", "\"" + filepath + "\" /grant " + Environment.UserName + ":F");
+            }
+        }
+        private static void GetFullAccess(string filepath)
+        {
+            FileSecurity security = File.GetAccessControl(filepath);
+            SecurityIdentifier user = WindowsIdentity.GetCurrent().User;
+            security.SetOwner(user);
+            security.SetAccessRule(new FileSystemAccessRule(user, FileSystemRights.FullControl, AccessControlType.Allow));
+            File.SetAccessControl(filepath, security);
         }
     }
 }
