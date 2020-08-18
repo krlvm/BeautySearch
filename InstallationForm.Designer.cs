@@ -135,7 +135,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "InstallationForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "BeautySearch Installer v1.0";
+            this.Text = "BeautySearch Installer v1.1";
             this.Load += new System.EventHandler(this.InstallationForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
