@@ -40,6 +40,7 @@
 const SETTINGS_DEFAULTS = {
     accentBackground: true,
     darkTheme: true,
+    dynamicDarkTheme: true,
     disableTilesBackground: true,
     contextMenuShadow: true,
     contextMenuRound: true,
@@ -107,6 +108,60 @@ const isSystemLightTheme = () => {
     return document.getElementById('root').classList.contains('lightTheme19H1');
 }
 
+const injectDarkTheme = (parent = '') => {
+    parent += ' ';
+    injectStyle(`
+        {parent}#qfContainer, .bsDark #qfPreviewPane {
+            color: white !important;
+        }
+        {parent}#qfContainer {
+            background-color: #3B3B3B;
+        }
+        {parent}#qfPreviewPane {
+            background-color: #2B2B2B;
+        }
+        {parent}#previewContainer {
+            background-color: black !important;
+        }
+        {parent}.previewDataSection .secondaryText {
+            color: white !important;
+        }
+        {parent}.expanderCircle {
+            background-color: #2B2B2B;
+            border-radius: 15px;
+        }
+        {parent}#previewContainer .divider:not(:hover):not(:focus),  {
+            border: 1px solid #2B2B2B !important;
+        }
+        {parent}#previewContainer .divider {
+            border: 1px solid #2B2B2B;
+		}
+        {parent}.annotation, {parent}.iconContainer:not(.accentColor) {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
+        {parent}.clickable:hover {
+            color: rgba(255, 255, 255, 0.75) !important;
+        }
+        {parent}.openPreviewPaneBtn:hover,
+        {parent}.suggDetailsContainer:hover .openPreviewPaneBtn,
+        {parent}.withOpenPreviewPaneBtn:hover .openPreviewPaneBtn {
+            border-color: rgba(0, 0, 0, 0.3) !important;
+        }
+        {parent}.contextMenu .menuItem:not(.focusable, .menuLabel) {
+            color: #6F777D !important;
+        }
+        {parent}.contextMenu .divider {
+            border-color: #6F777D !important;
+        }
+        {parent}.sectionItem:hover {
+            background-color: rgba(255, 255, 255, 0.25) !important;
+		}
+        {parent}.sectionItem:focus {
+            background-color: rgba(255, 255, 255, 0.3) !important;
+		}
+    `.replace(/{parent}/g, parent));
+}
+
 /** Tweaks */
 
 let lastAccent;
@@ -148,70 +203,25 @@ if(SETTINGS.accentBackground) {
 if(SETTINGS.darkTheme) {
     // Dark theme support for search results
 
-    injectStyle(`
-        .bsDark #qfContainer, .bsDark #qfPreviewPane {
-            color: white !important;
-        }
-        .bsDark #qfContainer {
-            background-color: #3B3B3B;
-        }
-        .bsDark #qfPreviewPane {
-            background-color: #2B2B2B;
-        }
-        .bsDark #previewContainer {
-            background-color: black !important;
-        }
-        .bsDark .previewDataSection .secondaryText {
-            color: white !important;
-        }
-        .bsDark .expanderCircle {
-            background-color: #2B2B2B;
-            border-radius: 15px;
-        }
-        .bsDark #previewContainer .divider:not(:hover):not(:focus),  {
-            border: 1px solid #2B2B2B !important;
-        }
-        .bsDark #previewContainer .divider {
-            border: 1px solid #2B2B2B;
-		}
-        .bsDark .annotation, .bsDark .iconContainer:not(.accentColor) {
-            color: rgba(255, 255, 255, 0.6) !important;
-        }
-        .bsDark .clickable:hover {
-            color: rgba(255, 255, 255, 0.75) !important;
-        }
-        .bsDark .openPreviewPaneBtn:hover,
-        .bsDark .suggDetailsContainer:hover .openPreviewPaneBtn,
-        .bsDark .withOpenPreviewPaneBtn:hover .openPreviewPaneBtn {
-            border-color: rgba(0, 0, 0, 0.3) !important;
-        }
-        .bsDark .contextMenu .menuItem:not(.focusable, .menuLabel) {
-            color: #6F777D !important;
-        }
-        .bsDark .contextMenu .divider {
-            border-color: #6F777D !important;
-        }
-        .bsDark .sectionItem:hover {
-            background-color: rgba(255, 255, 255, 0.25) !important;
-		}
-        .bsDark .sectionItem:focus {
-            background-color: rgba(255, 255, 255, 0.3) !important;
-		}
-    `);
+    if(SETTINGS.dynamicDarkTheme) {
+        injectDarkTheme('.bsDark');
 
-    let darkThemeListener = () => {
-        let systemDarkTheme = !SearchAppWrapper.CortanaApp.appsUseLightTheme && !isSystemLightTheme();
-        let rootClasses = document.getElementById('root').classList;
-        if(rootClasses.contains('bsDark') && !systemDarkTheme) {
-            rootClasses.remove('bsDark');
-        } else if(!rootClasses.contains('bsDark') && systemDarkTheme) {
-            rootClasses.add('bsDark');
-        }
-    };
+        let darkThemeListener = () => {
+            let systemDarkTheme = !SearchAppWrapper.CortanaApp.appsUseLightTheme && !isSystemLightTheme();
+            let rootClasses = document.getElementById('root').classList;
+            if(rootClasses.contains('bsDark') && !systemDarkTheme) {
+                rootClasses.remove('bsDark');
+            } else if(!rootClasses.contains('bsDark') && systemDarkTheme) {
+                rootClasses.add('bsDark');
+            }
+        };
 
-    window.addEventListener('load', darkThemeListener);
-    window.addEventListener('click', darkThemeListener);
-    window.addEventListener('keydown', darkThemeListener);
+        window.addEventListener('load', darkThemeListener);
+        window.addEventListener('click', darkThemeListener);
+        window.addEventListener('keydown', darkThemeListener);
+    } else {
+        injectDarkTheme('');
+    }
 }
 
 if(SETTINGS.disableTilesBackground) {
