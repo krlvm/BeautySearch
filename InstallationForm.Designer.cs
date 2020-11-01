@@ -1,4 +1,6 @@
-﻿namespace BeautySearch
+﻿using System.Reflection;
+
+namespace BeautySearch
 {
     partial class InstallationForm
     {
@@ -139,7 +141,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "InstallationForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "BeautySearch Installer v1.2.2";
+            this.Text = "BeautySearch Installer v" + Assembly.GetEntryAssembly().GetName().Version.ToString();
             this.Load += new System.EventHandler(this.InstallationForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -33,7 +33,7 @@
  * Licensed under the GNU GPLv3 License
  * https://github.com/krlvm/BeautySearch
  *
- * @version 1.2.2
+ * @version 1.2.3
  * @author krlvm
  **/
 
@@ -53,8 +53,8 @@ const SETTINGS_DEFAULTS = {
 // Use defaults if the script is injected manually
 const SETTINGS = SETTINGS_DEFAULTS;
 
-const VERSION = '1.2.2';
-const VERSION_CODE = 6;
+const VERSION = '1.2.3';
+const VERSION_CODE = 7;
 
 console.log('BeautySearch v' + VERSION + ' is loaded');
 
