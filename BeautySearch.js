@@ -108,10 +108,11 @@ const isSystemLightTheme = () => {
     return document.getElementById('root').classList.contains('lightTheme19H1');
 }
 
+const DARK_THEME_CLASS = '.bsDark';
 const injectDarkTheme = (parent = '') => {
     parent += ' ';
     injectStyle(`
-        {parent}#qfContainer, .bsDark #qfPreviewPane {
+        {parent}#qfContainer, {parent}#qfPreviewPane {
             color: white !important;
         }
         {parent}#qfContainer {
@@ -135,7 +136,7 @@ const injectDarkTheme = (parent = '') => {
         }
         {parent}#previewContainer .divider {
             border: 1px solid #2B2B2B;
-		}
+        }
         {parent}.annotation, {parent}.iconContainer:not(.accentColor) {
             color: rgba(255, 255, 255, 0.6) !important;
         }
@@ -155,10 +156,10 @@ const injectDarkTheme = (parent = '') => {
         }
         {parent}.sectionItem:hover {
             background-color: rgba(255, 255, 255, 0.25) !important;
-		}
+        }
         {parent}.sectionItem:focus {
             background-color: rgba(255, 255, 255, 0.3) !important;
-		}
+        }
     `.replace(/{parent}/g, parent));
 }
 
@@ -204,7 +205,7 @@ if(SETTINGS.darkTheme) {
     // Dark theme support for search results
 
     if(SETTINGS.dynamicDarkTheme) {
-        injectDarkTheme('.bsDark');
+        injectDarkTheme(DARK_THEME_CLASS);
 
         let darkThemeListener = () => {
             let systemDarkTheme = !SearchAppWrapper.CortanaApp.appsUseLightTheme && !isSystemLightTheme();
@@ -220,7 +221,7 @@ if(SETTINGS.darkTheme) {
         window.addEventListener('click', darkThemeListener);
         window.addEventListener('keydown', darkThemeListener);
     } else {
-        injectDarkTheme('');
+        injectDarkTheme('.darkTheme19H1');
     }
 }
 
@@ -258,16 +259,23 @@ if(SETTINGS.contextMenuRound) {
 
 if(SETTINGS.contextMenuAcrylic) {
     // Dark  context menu: rgb(48, 48, 48)
-    // Light context menu: rgb(243, 243, 243)
+    // Light context menu: rgb(243, 243, 243)=
+    let targetDark = SETTINGS.dynamicDarkTheme ? DARK_THEME_CLASS : '';
     injectStyle(`
-        .lightTheme19H1 .contextMenu, .darkTheme19H1:not(.bsDark) .contextMenu {
+        .lightTheme19H1 .contextMenu,${targetDark ? '.darkTheme19H1:not(.bsDark) .contextMenu' : ''} {
             background-color: rgba(243, 243, 243, 0.1) !important;
             -webkit-backdrop-filter: blur(50px) saturate(175%);
         }
-        .zeroInput19H1.darkTheme19H1 .contextMenu, .bsDark .contextMenu {
+
+        .zeroInput19H1.darkTheme19H1 .contextMenu,${targetDark ? ' ' + targetDark : ''} .contextMenu {
             background-color: rgba(48, 48, 48, 0.65) !important;
             -webkit-backdrop-filter: blur(50px) saturate(50%);
+        }
+        .zeroInput19H1.darkTheme19H1 .contextMenu .menuItem *,${targetDark ? ' ' + targetDark : ''} .contextMenu .menuItem * {
             color: white !important;
+        }
+        .zeroInput19H1.darkTheme19H1 .contextMenu .menuItem:not(.focusable):not(.menuLabel) *,${targetDark ? ' ' + targetDark : ''} .contextMenu .menuItem:not(.focusable):not(.menuLabel) * {
+            color: #B1B6B0 !important;
         }
     `);
 }
