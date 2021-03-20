@@ -255,7 +255,7 @@ if(SETTINGS.disableTilesBackground) {
 
 if(SETTINGS.contextMenuShadow) {
     injectStyle(`
-        #menuContainer {
+        #menuContainer, #dialog_overlay > div {
             box-shadow: 5px 5px 25px 0px rgba(0, 0, 0, 0.3);
         }
     `);
@@ -267,6 +267,9 @@ if(SETTINGS.contextMenuRound) {
         #menuContainer, .contextMenu {
             border-radius: 5px;
         }
+        body[dir] #dialog_overlay input[type=button] {
+            border-radius: 5px;
+        }
     `);
 }
 
@@ -276,19 +279,29 @@ if(SETTINGS.contextMenuAcrylic) {
     let targetDark = SETTINGS.dynamicDarkTheme ? DARK_THEME_CLASS : '';
     injectStyle(`
         .lightTheme19H1 .contextMenu,${targetDark ? '.darkTheme19H1:not(.bsDark) .contextMenu' : ''},
-        .lightTheme19H1 .dialog_overlay > div {
+        .lightTheme19H1 #dialog_overlay > div {
             background-color: rgba(243, 243, 243, 0.1) !important;
             -webkit-backdrop-filter: blur(50px) saturate(175%);
         }
+        .lightTheme19H1 #dialog_overlay > div {
+            color: #000 !important;
+        }
 
-        .zeroInput19H1.darkTheme19H1 .contextMenu,${targetDark ? ' ' + targetDark : ''} .contextMenu {
+        .zeroInput19H1.darkTheme19H1 .contextMenu,
+        ${targetDark ? ' ' + targetDark : ''} .contextMenu,
+        .zeroInput19H1.darkTheme19H1 #dialog_overlay > div,
+        ${targetDark ? ' ' + targetDark : ''} #dialog_overlay > div {
             background-color: rgba(48, 48, 48, 0.65) !important;
             -webkit-backdrop-filter: blur(50px) saturate(50%);
         }
-        .zeroInput19H1.darkTheme19H1 .contextMenu .menuItem *,${targetDark ? ' ' + targetDark : ''} .contextMenu .menuItem * {
+        .zeroInput19H1.darkTheme19H1 .contextMenu .menuItem *,
+        ${targetDark ? ' ' + targetDark : ''} .contextMenu .menuItem *,
+        .zeroInput19H1.darkTheme19H1 .contextMenu .menuItem *,
+        ${targetDark ? ' ' + targetDark : ''} .contextMenu .menuItem *{
             color: white !important;
         }
-        .zeroInput19H1.darkTheme19H1 .contextMenu .menuItem:not(.focusable):not(.menuLabel) *,${targetDark ? ' ' + targetDark : ''} .contextMenu .menuItem:not(.focusable):not(.menuLabel) * {
+        .zeroInput19H1.darkTheme19H1 .contextMenu .menuItem:not(.focusable):not(.menuLabel) *,
+        ${targetDark ? ' ' + targetDark : ''} .contextMenu .menuItem:not(.focusable):not(.menuLabel) * {
             color: #B1B6B0 !important;
         }
     `);
@@ -296,7 +309,7 @@ if(SETTINGS.contextMenuAcrylic) {
 
 if(SETTINGS.disableContextMenuBorder) {
     injectStyle(`
-        .contextMenu {
+        .contextMenu, #dialog_overlay > div {
             border: none !important;
         }
     `);
