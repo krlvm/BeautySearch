@@ -38,11 +38,16 @@ namespace BeautySearch
 
         public void Enable(string feature)
         {
-            if(!writeable)
+            this.Set(feature, "true");
+        }
+
+        public void Set(string feature, string value)
+        {
+            if (!writeable)
             {
                 throw new InvalidOperationException("FeatureControl is not writeable");
             }
-            sb.Append(feature + ":true,");
+            sb.Append($"{feature}: {value},");
         }
 
         public string Build()
@@ -107,7 +112,7 @@ namespace BeautySearch
             SCRIPT_DEST = TARGET_DIR + @"\BeautySearch.js";
         }
 
-        public static int Install(FeatureControl features)
+        public static int Install(FeatureControl fc)
         {
             if (CURRENT_BUILD < MIN_REQUIRED_BUILD)
             {
@@ -118,7 +123,7 @@ namespace BeautySearch
             KillSearchApp();
 
             //Utility.TakeOwnership(TARGET_DIR);
-            Utility.TakeOwnership(TARGET_FILE);
+            //Utility.TakeOwnership(TARGET_FILE);
             //Utility.TakeOwnership(SCRIPT_DEST);
 
             string target = Utility.ReadFile(TARGET_FILE);
@@ -136,11 +141,21 @@ namespace BeautySearch
                 return ERR_WRITE;
             }
 
+            string features = fc.Build();
+
             string script = LoadScript();
-            script = script.Replace("const SETTINGS = SETTINGS_DEFAULTS;", features.Build());
+            script = script.Replace("const SETTINGS = SETTINGS_DEFAULTS;", features);
             Utility.WriteFile(SCRIPT_DEST, script);
 
-            if(!KillSearchApp())
+
+            // EXPERIMENTAL
+            // Google Search
+            if (features.Contains("onlineSearch"))
+            {
+                InstallGoogleSearch();
+            }
+
+            if (!KillSearchApp())
             {
                 return ERR_KILL_FAILED;
             }
@@ -197,7 +212,7 @@ namespace BeautySearch
             // 0 - disabled, 1 - enabled
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(BING_SEARCH_REGISTRY, true))
             {
-                if (key != null)  //must check for null key
+                if (key != null)  // must check for null key
                 {
                     key.SetValue("BingSearchEnabled", val, RegistryValueKind.DWord);
                     key.Close();
@@ -242,6 +257,42 @@ namespace BeautySearch
                 }
             }
         }
+
+        private static void InstallGoogleSearch()
+        {
+            if (CURRENT_BUILD != (BUILD_MAY_2020 + 1))
+            {
+                MessageBox.Show(
+                    "Google Search feature has not been tested with your version of Windows 10, so it may not work",
+                    "Warning",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+            }
+
+            // Make the controller accessible to BeautySearch Script
+            string CONTROLLER_FILE = FindControllerFile();
+            string controller = Utility.ReadFile(CONTROLLER_FILE);
+            if (!controller.Contains("bsGlobalController"))
+            {
+                const string LISTENER_HANDLE_PATTERN = "var t=n.queryText;";
+                controller = "var bsGlobalController=null;var bsGlobalQuery='';" + controller;
+                controller = controller.Insert(controller.IndexOf("return l.prototype"), "bsGlobalController=l.prototype;")
+                    .Insert(controller.IndexOf(LISTENER_HANDLE_PATTERN)+LISTENER_HANDLE_PATTERN.Length, "bsGlobalQueryUpdated(t);bsGlobalQuery=t;");
+                Utility.WriteFile(CONTROLLER_FILE, controller);
+            }
+        }
+        
+        public static string FindControllerFile()
+        {
+            // Very, very hacky, but it always works
+            foreach (var file in Directory.EnumerateFiles(TARGET_DIR, "*.js"))
+            {
+                string text = Utility.ReadFile(file);
+                if (text.Contains("https://go.microsoft.com/fwlink/?LinkId=780764")) return file;
+            }
+            return null;
+        }
     }
 
     static class Utility
@@ -258,13 +309,7 @@ namespace BeautySearch
 
         public static bool WriteFile(string filepath, string text)
         {
-            if(true)
-            {
-                StreamWriter sw = new StreamWriter(filepath);
-                sw.WriteLine(text);
-                sw.Close();
-                return true;
-            }
+            TakeOwnership(filepath);
             try
             {
                 StreamWriter sw = new StreamWriter(filepath);

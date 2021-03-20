@@ -33,7 +33,7 @@
  * Licensed under the GNU GPLv3 License
  * https://github.com/krlvm/BeautySearch
  *
- * @version 1.2.3
+ * @version 1.3-preview
  * @author krlvm
  **/
 
@@ -46,15 +46,16 @@ const SETTINGS_DEFAULTS = {
     contextMenuRound: true,
     contextMenuAcrylic: true,
     disableContextMenuBorder: false,
-    hideOutlines: true
+    hideOutlines: true,
+    onlineSearch: true // Experimental
 }
 
 // Settings should be written to the file by the installer
 // Use defaults if the script is injected manually
 const SETTINGS = SETTINGS_DEFAULTS;
 
-const VERSION = '1.2.3';
-const VERSION_CODE = 7;
+const VERSION = '1.3-preview';
+const VERSION_CODE = 8;
 
 console.log('BeautySearch v' + VERSION + ' is loaded');
 
@@ -78,6 +79,18 @@ const showTemporaryMessage = (text, icon = 'ⓘ') => {
             </div>
         </div>
     `;
+}
+
+const checkControllerAvailablility = () => {
+    const isAvailable = typeof bsGlobalController !== 'undefined' && bsGlobalController != null;
+    if(!isAvailable) {
+        showTemporaryMessage('<b>WARNING: </b>BeautySearch Controller is not available');
+    }
+    return isAvailable;
+}
+
+const launchUri = (uri) => {
+    if(checkControllerAvailablility()) bsGlobalController.prototype.launchUri(uri);
 }
 
 const subtractPercent = (number, percent) => {
@@ -193,9 +206,9 @@ if(SETTINGS.accentBackground) {
             }
         }
     };
-
+    
     window.addEventListener('load', () => {
-        setTimeout(backgroundListener, 25);
+        setTimeout(backgroundListener, 5000);
     });
     window.addEventListener('click', backgroundListener);
     window.addEventListener('keydown', backgroundListener);
@@ -262,7 +275,8 @@ if(SETTINGS.contextMenuAcrylic) {
     // Light context menu: rgb(243, 243, 243)=
     let targetDark = SETTINGS.dynamicDarkTheme ? DARK_THEME_CLASS : '';
     injectStyle(`
-        .lightTheme19H1 .contextMenu,${targetDark ? '.darkTheme19H1:not(.bsDark) .contextMenu' : ''} {
+        .lightTheme19H1 .contextMenu,${targetDark ? '.darkTheme19H1:not(.bsDark) .contextMenu' : ''},
+        .lightTheme19H1 .dialog_overlay > div {
             background-color: rgba(243, 243, 243, 0.1) !important;
             -webkit-backdrop-filter: blur(50px) saturate(175%);
         }
@@ -301,5 +315,73 @@ if(SETTINGS.hideOutlines) {
     });
     window.addEventListener('mousedown', () => {
         document.body.classList.add('hideOutline');
+    });
+}
+
+// https://www.google.com/search?igu=1
+// https://www.google.com/search?igu=1&ei=&q=SEARCH+QUERY
+let bsHaveModifiedFrame = false;
+const hideBsSearchPreview = () => {
+    const frame = document.getElementById('bsSearchFrame');
+    if(frame != null) {
+        frame.remove();
+    }
+}
+const toggleBsOnlineSearchButton = (show) => {
+    document.getElementById('bsOnlineSearchBtn').style.display = show ? 'none' : null;
+}
+function bsGlobalQueryUpdated(query) {
+    if(!SETTINGS.onlineSearch) return;
+    const isEmpty = query == null || query.trim().length == 0
+    if(isEmpty) {
+        hideBsSearchPreview();
+    }
+    toggleBsOnlineSearchButton(!isEmpty);
+}
+function onlineSearchNavigate(address) {
+    console.log(`Navigate to: ${address}`);
+    bsGlobalController.prototype.launchUri(address);
+}
+let _doSearch = () => {};
+function doSearch() {
+    _doSearch();
+}
+if(SETTINGS.onlineSearch) {
+    window.addEventListener('load', () => {
+        const preview = document.getElementById('previewContainer')
+        const observer = new MutationObserver((mutations) => {
+            toggleBsOnlineSearchButton(document.getElementById('qfPreviewPane').classList.contains('b_hide'));
+            if(bsHaveModifiedFrame) {
+                bsHaveModifiedFrame = false;
+                return;
+            }
+            hideBsSearchPreview();
+        });
+        observer.observe(preview, { 
+            attributes: false,
+            childList: true,
+            characterData: true
+        });
+        _doSearch = () => {
+            bsHaveModifiedFrame = true;
+            preview.innerHTML = `
+                <iframe
+                    id="bsSearchFrame"
+                    onload="onlineSearchNavigate(this);"
+                    style="width: 100%"
+                    frameborder="0"
+                    src="https://www.google.com/search?igu=1&ei=&q=${encodeURIComponent(bsGlobalQuery)}"
+                ></iframe>
+            `;
+            //document.getElementById('bsSearchFrame').addEventListener('load', (e) => {
+            //    
+            //});
+        };
+        document.getElementById('qfContainer').innerHTML += `
+            <div id="bsOnlineSearchBtn" style="display: none" class="groupHeader selectable" style="vertical-align: middle" onclick="doSearch()">
+                <span class="accentColor iconContent cortanaFontIcon" style="margin-right: 8px;line-height: 1.2"></span>
+                <div class="groupTitle"><span>Search the Web</span></div>
+            </div>
+        `;
     });
 }

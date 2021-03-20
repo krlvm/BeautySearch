@@ -67,11 +67,11 @@ namespace BeautySearch
             // 
             this.copyrightLabel.AutoSize = true;
             this.copyrightLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.copyrightLabel.Location = new System.Drawing.Point(184, 447);
+            this.copyrightLabel.Location = new System.Drawing.Point(167, 447);
             this.copyrightLabel.Name = "copyrightLabel";
-            this.copyrightLabel.Size = new System.Drawing.Size(102, 17);
+            this.copyrightLabel.Size = new System.Drawing.Size(139, 17);
             this.copyrightLabel.TabIndex = 5;
-            this.copyrightLabel.Text = "(c) krlvm, 2020";
+            this.copyrightLabel.Text = "(c) krlvm, 2020-2021\r\n";
             // 
             // label1
             // 
@@ -141,7 +141,7 @@ namespace BeautySearch
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "InstallationForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "BeautySearch Installer v" + Assembly.GetEntryAssembly().GetName().Version.ToString();
+            this.Text = "BeautySearch Installer vSystem.CodeDom.CodePropertyReferenceExpression";
             this.Load += new System.EventHandler(this.InstallationForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -28,8 +28,9 @@ namespace BeautySearch
             featureBox.Items.Add(new ListItem("Add acrylic effect to context menus", "contextMenuAcrylic"));
             featureBox.Items.Add(new ListItem("Hide context menu's borders", "disableContextMenuBorder"));
             featureBox.Items.Add(new ListItem("Hide button outlines when using mouse", "hideOutlines"));
+            featureBox.Items.Add(new ListItem("[PREVIEW] Google Search (tested only with 20H2)", "onlineSearch"));
 
-            for(int i = 0; i < featureBox.Items.Count; i++)
+            for (int i = 0; i < featureBox.Items.Count; i++)
             {
                 featureBox.SetItemChecked(i, !disabledByDefault.Contains((featureBox.Items[i] as ListItem).Value));
             }            
