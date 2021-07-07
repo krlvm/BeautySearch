@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySearch", "BeautySearch.csproj", "{8EA3505E-7159-481F-9773-374ED5AC6FFD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySearchServer", "BeautySearchServer\BeautySearchServer.csproj", "{AE364964-34E4-4FAB-A279-9065D6358042}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{8EA3505E-7159-481F-9773-374ED5AC6FFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EA3505E-7159-481F-9773-374ED5AC6FFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EA3505E-7159-481F-9773-374ED5AC6FFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE364964-34E4-4FAB-A279-9065D6358042}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE364964-34E4-4FAB-A279-9065D6358042}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE364964-34E4-4FAB-A279-9065D6358042}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE364964-34E4-4FAB-A279-9065D6358042}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

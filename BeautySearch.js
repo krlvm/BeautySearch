@@ -376,6 +376,8 @@ if(SETTINGS.onlineSearch) {
             characterData: true
         });
         _doSearch = () => {
+            document.head.innerHTML += '<meta http-equiv="Content-Security-Policy" content="frame-src http://localhost:8087/">';
+            const searchUri = '';//`https://www.google.com/search?igu=1&ei=&q=${encodeURIComponent(bsGlobalQuery)}`;
             bsHaveModifiedFrame = true;
             preview.innerHTML = `
                 <iframe
@@ -383,7 +385,7 @@ if(SETTINGS.onlineSearch) {
                     onload="onlineSearchNavigate(this);"
                     style="width: 100%"
                     frameborder="0"
-                    src="https://www.google.com/search?igu=1&ei=&q=${encodeURIComponent(bsGlobalQuery)}"
+                    src="http://localhost:8087/${encodeURIComponent(searchUri)}"
                 ></iframe>
             `;
             //document.getElementById('bsSearchFrame').addEventListener('load', (e) => {
@@ -396,5 +398,19 @@ if(SETTINGS.onlineSearch) {
                 <div class="groupTitle"><span>Search the Web</span></div>
             </div>
         `;
+
+        //document.addEventListener('click', () => document.body.innerHTML = ('<iframe width="100%" height="95%" src="http://localhost:8087/"></iframe>'));
+
+        // EdgeHTML WebView doesn't load localhost for some reason
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == XMLHttpRequest.DONE) {
+                showTemporaryMessage(xhr.responseText);
+                console.log('text', xhr.responseText);
+            }
+            showTemporaryMessage(xhr.readyState)
+        }
+        xhr.open('GET', 'http://localhost/', true);
+        xhr.send(null);
     });
 }
