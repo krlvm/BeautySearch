@@ -46,7 +46,8 @@ const SETTINGS_DEFAULTS = {
     contextMenuRound: true,
     contextMenuAcrylic: true,
     disableContextMenuBorder: false,
-    hideOutlines: true
+    hideOutlines: true,
+    explorerSearchBorder: false
 }
 
 // Settings should be written to the file by the installer
@@ -315,4 +316,19 @@ if(SETTINGS.hideOutlines) {
     window.addEventListener('mousedown', () => {
         document.body.classList.add('hideOutline');
     });
+}
+
+if(SETTINGS.explorerSearchBorder) {
+    // In 19H2 Microsoft introduced new Explorer Search experience
+    // Now it is based on web-technologies too
+    // It is very slow and has HiDPI scaling bug which hiding the bottom border
+    // of the Explorer Search Box
+    injectStyle(`
+        .lightTheme19H1 .scr {
+            border-top: 1px solid #D9D9D9;
+        }
+        .darkTheme19H1 .scr {
+            border-top: 1px solid #535353;
+        }
+    `);
 }

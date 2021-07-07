@@ -17,7 +17,7 @@ namespace BeautySearch
 
         private void InstallationForm_Load(object sender, EventArgs e)
         {
-            List<string> disabledByDefault = new List<string>() { "disableContextMenuBorder" };
+            List<string> disabledByDefault = new List<string>() { "disableContextMenuBorder", "explorerSearchBorder" };
 
             featureBox.Items.Add(new ListItem("Show accent color on Search Window", "accentBackground"));
             featureBox.Items.Add(new ListItem("Show search results in Dark Theme", "darkTheme"));
@@ -28,8 +28,9 @@ namespace BeautySearch
             featureBox.Items.Add(new ListItem("Add acrylic effect to context menus", "contextMenuAcrylic"));
             featureBox.Items.Add(new ListItem("Hide context menu's borders", "disableContextMenuBorder"));
             featureBox.Items.Add(new ListItem("Hide button outlines when using mouse", "hideOutlines"));
+            featureBox.Items.Add(new ListItem("Fix missing 19H2+ Explorer Search Box bottom border on HiDPI", "explorerSearchBorder"));
 
-            for(int i = 0; i < featureBox.Items.Count; i++)
+            for (int i = 0; i < featureBox.Items.Count; i++)
             {
                 featureBox.SetItemChecked(i, !disabledByDefault.Contains((featureBox.Items[i] as ListItem).Value));
             }            
