@@ -217,7 +217,6 @@ if(SETTINGS.darkTheme) {
             }
         };
 
-        window.addEventListener('load', darkThemeListener);
         window.addEventListener('click', darkThemeListener);
         window.addEventListener('keydown', darkThemeListener);
     } else {
