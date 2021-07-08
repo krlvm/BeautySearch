@@ -21,6 +21,7 @@ namespace BeautySearch
             featureBox.Items.Add(new ListItem("Show accent color on Search Window", "accentBackground"));
             featureBox.Items.Add(new ListItem("Show search results in Dark Theme", "darkTheme"));
             featureBox.Items.Add(new ListItem(" - Follow system theme (inaccurate, enable the previous option)", "dynamicDarkTheme"));
+            featureBox.Items.Add(new ListItem("Dark Theme Acrylic Sidebar (and accent color when enabled)", "darkThemeAcrylic"));
             featureBox.Items.Add(new ListItem("Remove background from UWP application icons", "disableTilesBackground"));
             featureBox.Items.Add(new ListItem("Add shadows to context menus", "contextMenuShadow"));
             featureBox.Items.Add(new ListItem("Make context menu's corners rounded", "contextMenuRound"));
