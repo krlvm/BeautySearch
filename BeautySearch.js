@@ -332,10 +332,10 @@ if(SETTINGS.explorerSearchBorder) {
     // It is very slow and has HiDPI scaling bug which hiding the bottom border
     // of the Explorer Search Box
     injectStyle(`
-        .panelCanResize .lightTheme19H1 .scr {
+        .panelCanResize.lightTheme19H1 .scr {
             border-top: 1px solid #D9D9D9;
         }
-        .panelCanResize .darkTheme19H1 .scr {
+        .panelCanResize.darkTheme19H1 .scr {
             border-top: 1px solid #535353;
         }
     `);
