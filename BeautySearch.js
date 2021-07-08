@@ -355,7 +355,7 @@ if(SETTINGS.fakeBackgroundAcrylic) {
         #root.darkTheme19H1 {
             background: rgba(25, 25, 25, 0.75);
         }
-        #root.bsAccent {
+        #root.darkTheme19H1.bsAccent {
             background: rgba(0, 0, 0, 0) !important;
         }
         #root {
