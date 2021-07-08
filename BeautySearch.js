@@ -200,7 +200,7 @@ if(SETTINGS.accentBackground) {
                         rgb[0],
                         rgb[1],
                         rgb[2],
-                        0.5 + (SETTINGS.fakeBackgroundAcrylic ? 0.1 : 0)
+                        0.5 + (SETTINGS.fakeBackgroundAcrylic ? 0.14 : 0)
                     );
                     lastAccent = base;
                 }
@@ -350,7 +350,7 @@ if(SETTINGS.fakeBackgroundAcrylic) {
         if(!document.getElementById('root').classList.contains("panelCanResize")) {
             injectStyle(`
                 body {
-                    background-image: url(${FLUENT_NOISE_TEXTURE}), url(background.png);
+                    background-image: url(background.png);
                     background-size: cover;
                     -webkit-backdrop-filter: blur(50px) saturate(105%);
                 }
@@ -360,7 +360,7 @@ if(SETTINGS.fakeBackgroundAcrylic) {
                     width: 100vw;
                     height: 100vh;
                     background-image: url(${FLUENT_NOISE_TEXTURE});
-                    opacity: 0.1;
+                    opacity: 0.25;
                 }
                 #root.lightTheme19H1 {
                     background: rgba(230, 230, 230, 0.75);
