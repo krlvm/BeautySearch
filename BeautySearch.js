@@ -6,7 +6,10 @@
  * - Windows 10 May 2019 Update (19H1, Build 18362)
  * - Windows 10 Nov 2019 Update (19H2, Build 18363)
  * - Windows 10 May 2020 Update (20H1, Build 19041)
- * - Windows 10 ??? 2020 Update (20H2, Build 19042)
+ * - Windows 10 20H2, Build 19042
+ * - Windows 10 21H1, Build 19043
+ * - Windows 10 21H2, Build 19044
+ * - Windows 10 Next, Build 21390
  * 
  * You should have received an .EXE installer that
  * automatically injects this script and applies your preferences.

@@ -34,16 +34,15 @@ namespace BeautySearch
             this.installBtn = new System.Windows.Forms.Button();
             this.uninstallBtn = new System.Windows.Forms.Button();
             this.copyrightLabel = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.featureBox = new System.Windows.Forms.CheckedListBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // installBtn
             // 
-            this.installBtn.Location = new System.Drawing.Point(15, 437);
+            this.installBtn.Location = new System.Drawing.Point(15, 407);
             this.installBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.installBtn.Name = "installBtn";
             this.installBtn.Size = new System.Drawing.Size(136, 36);
@@ -54,7 +53,7 @@ namespace BeautySearch
             // 
             // uninstallBtn
             // 
-            this.uninstallBtn.Location = new System.Drawing.Point(324, 437);
+            this.uninstallBtn.Location = new System.Drawing.Point(324, 407);
             this.uninstallBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.uninstallBtn.Name = "uninstallBtn";
             this.uninstallBtn.Size = new System.Drawing.Size(136, 36);
@@ -67,26 +66,16 @@ namespace BeautySearch
             // 
             this.copyrightLabel.AutoSize = true;
             this.copyrightLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.copyrightLabel.Location = new System.Drawing.Point(184, 447);
+            this.copyrightLabel.Location = new System.Drawing.Point(167, 417);
             this.copyrightLabel.Name = "copyrightLabel";
-            this.copyrightLabel.Size = new System.Drawing.Size(102, 17);
+            this.copyrightLabel.Size = new System.Drawing.Size(139, 17);
             this.copyrightLabel.TabIndex = 5;
-            this.copyrightLabel.Text = "(c) krlvm, 2020";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(448, 34);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "BeautySearch modifies files of the search application.\r\nRun \"sfc /scannow\" if you" +
-    " are unable to open Search after installation.";
+            this.copyrightLabel.Text = "(c) krlvm, 2020-2021";
             // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(12, 405);
+            this.linkLabel1.Location = new System.Drawing.Point(12, 377);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(250, 17);
             this.linkLabel1.TabIndex = 12;
@@ -97,42 +86,44 @@ namespace BeautySearch
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 388);
+            this.label2.Location = new System.Drawing.Point(12, 339);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(265, 17);
+            this.label2.Size = new System.Drawing.Size(310, 34);
             this.label2.TabIndex = 13;
-            this.label2.Text = "Licensed under the GNU GPLv3 License";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 53);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(213, 51);
-            this.label3.TabIndex = 14;
-            this.label3.Text = "Tested on Windows 10 versions:\r\n1903, 1909,\r\n2004, 2009.";
+            this.label2.Text = "Licensed under the GNU GPLv3 License\r\nVisit GitHub Repository for instructions an" +
+    "d help";
             // 
             // featureBox
             // 
             this.featureBox.CheckOnClick = true;
             this.featureBox.FormattingEnabled = true;
-            this.featureBox.Location = new System.Drawing.Point(15, 117);
+            this.featureBox.Location = new System.Drawing.Point(12, 45);
             this.featureBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.featureBox.Name = "featureBox";
-            this.featureBox.Size = new System.Drawing.Size(445, 242);
+            this.featureBox.Size = new System.Drawing.Size(448, 276);
             this.featureBox.TabIndex = 15;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(182, 23);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Select tweaks to apply:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // InstallationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(472, 485);
+            this.ClientSize = new System.Drawing.Size(472, 455);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.featureBox);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.copyrightLabel);
             this.Controls.Add(this.uninstallBtn);
             this.Controls.Add(this.installBtn);
@@ -141,7 +132,7 @@ namespace BeautySearch
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "InstallationForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "BeautySearch Installer v" + Assembly.GetEntryAssembly().GetName().Version.ToString();
+            this.Text = "BeautySearch Installer vSystem.CodeDom.CodePropertyReferenceExpression";
             this.Load += new System.EventHandler(this.InstallationForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -153,11 +144,10 @@ namespace BeautySearch
         private System.Windows.Forms.Button installBtn;
         private System.Windows.Forms.Button uninstallBtn;
         private System.Windows.Forms.Label copyrightLabel;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.CheckedListBox featureBox;
+        private System.Windows.Forms.Label label1;
     }
 }
 
