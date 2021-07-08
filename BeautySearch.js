@@ -36,7 +36,7 @@
  * Licensed under the GNU GPLv3 License
  * https://github.com/krlvm/BeautySearch
  *
- * @version 1.2.3
+ * @version 1.3
  * @author krlvm
  **/
 
