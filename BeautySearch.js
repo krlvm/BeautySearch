@@ -111,6 +111,10 @@ const injectStyle = (styleString) => {
     document.head.append(style);
 }
 
+const executeOnLoad = (callback) => {
+    window.addEventListener('load', () => setTimeout(callback, 50));
+}
+
 const isSystemLightTheme = () => {
     return document.getElementById('root').classList.contains('lightTheme19H1');
 }
@@ -204,9 +208,7 @@ if(SETTINGS.accentBackground) {
         }
     };
 
-    window.addEventListener('load', () => {
-        setTimeout(backgroundListener, 25);
-    });
+    executeOnLoad(backgroundListener);
     window.addEventListener('click', backgroundListener);
     window.addEventListener('keydown', backgroundListener);
 }
@@ -343,29 +345,33 @@ if(SETTINGS.explorerSearchBorder) {
 }
 
 if(SETTINGS.fakeBackgroundAcrylic) {
-    // Base64 Encoded image is the acrylic noise texture
-    injectStyle(`
-        body {
-            background-image: url(${FLUENT_NOISE_TEXTURE}), url(background.png);
-            background-size: cover;
-            -webkit-backdrop-filter: blur(50px) saturate(105%);
+    // Prevent this tweak from being applied to Explorer Search popup
+    executeOnLoad(() => {
+        if(!document.getElementById('root').classList.contains("panelCanResize")) {
+            injectStyle(`
+                body {
+                    background-image: url(${FLUENT_NOISE_TEXTURE}), url(background.png);
+                    background-size: cover;
+                    -webkit-backdrop-filter: blur(50px) saturate(105%);
+                }
+                #root::before {
+                    content: '';
+                    position: absolute;
+                    width: 100vw;
+                    height: 100vh;
+                    background-image: url(${FLUENT_NOISE_TEXTURE});
+                    opacity: 0.1;
+                }
+                #root.lightTheme19H1 {
+                    background: rgba(230, 230, 230, 0.75);
+                }
+                #root.darkTheme19H1 {
+                    background: rgba(25, 25, 25, 0.75);
+                }
+                #root.darkTheme19H1.bsAccent {
+                    background: rgba(0, 0, 0, 0) !important;
+                }
+            `);
         }
-        #root::before {
-            content: '';
-            position: absolute;
-            width: 100vw;
-            height: 100vh;
-            background-image: url(${FLUENT_NOISE_TEXTURE});
-            opacity: 0.1;
-        }
-        #root.lightTheme19H1 {
-            background: rgba(230, 230, 230, 0.75);
-        }
-        #root.darkTheme19H1 {
-            background: rgba(25, 25, 25, 0.75);
-        }
-        #root.darkTheme19H1.bsAccent {
-            background: rgba(0, 0, 0, 0) !important;
-        }
-    `);
+    });
 }
