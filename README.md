@@ -5,7 +5,7 @@ Windows 10 Search Window appearance tweaker
 <br><br>
 <a href="https://github.com/krlvm/BeautySearch/blob/master/LICENSE"><img src="https://img.shields.io/github/license/krlvm/BeautySearch?style=flat-square" alt="License"/></a>
 <a href="https://github.com/krlvm/BeautySearch/releases/latest"><img src="https://img.shields.io/github/v/release/krlvm/BeautySearch?style=flat-square" alt="Latest release"/></a>
-<!--<a href="https://github.com/krlvm/BeautySearch/releases"><img src="https://img.shields.io/github/downloads/krlvm/BeautySearch/total?style=flat-square" alt="Downloads"/></a>-->
+<a href="https://github.com/krlvm/BeautySearch/releases"><img src="https://img.shields.io/github/downloads/krlvm/BeautySearch/total?style=flat-square" alt="Downloads"/></a>
 <!--<a href="https://github.com/krlvm/BeautySearch/wiki"><img src="https://img.shields.io/badge/help-wiki-yellow?style=flat-square" alt="Help on the Wiki"/></a>-->
 <br>
 <img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/ui.png" alt="BeautySearch Installer" />
@@ -15,6 +15,13 @@ Windows 10 Search User Interface is built on web technologies, so it can be easi
 The [BeautySearch script](https://github.com/krlvm/BeautySearch/blob/master/BeautySearch.js) can be installed automatically using by the Installer written in C# or manually.
 
 ## Available tweaks
+
+### Fake Acrylic for 20H1+
+Search Window Acrylic effect was broken in late 20H1 Insider Builds and apparently won't be fixed, although a fix was already available in Build 19541.
+BeautySearch has a special [*Fake Acrylic*](https://github.com/krlvm/BeautySearch/wiki/Acrylic-effect-in-Windows-10-20H1---Search-Window) tweak which re-implements the acrylic effect in a different way with some limitations.
+
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/fake-acrylic/light.png" width="100%" />
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/fake-acrylic/dark.png" width="100%" />
 
 ### Show accent color on Search Window
 You can show accent color on Start Menu, Action Center and Taskbar with Windows 10, but not on Search Window for now.\
