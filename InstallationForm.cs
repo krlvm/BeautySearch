@@ -16,7 +16,7 @@ namespace BeautySearch
 
         private void InstallationForm_Load(object sender, EventArgs e)
         {
-            List<string> disabledByDefault = new List<string>() { "disableContextMenuBorder", "explorerSearchBorder", "fakeBackgroundAcrylic" };
+            List<string> disabledByDefault = new List<string>() { "disableContextMenuBorder", "explorerSearchBorder", "fakeBackgroundAcrylic", "fluentNoise" };
 
             featureBox.Items.Add(new ListItem("Show accent color on Search Window", "accentBackground"));
             featureBox.Items.Add(new ListItem("Show search results in Dark Theme", "darkTheme"));
@@ -30,6 +30,12 @@ namespace BeautySearch
             featureBox.Items.Add(new ListItem("Hide button outlines when using mouse", "hideOutlines"));
             featureBox.Items.Add(new ListItem("Fix missing 19H2+ Explorer Search Box bottom border on HiDPI", "explorerSearchBorder"));
             featureBox.Items.Add(new ListItem("20H1+ Broken Acrylic Workaround", "fakeBackgroundAcrylic"));
+            featureBox.Items.Add(new ListItem("Fluent Design Noise Texture on Acrylic Surface", "fluentNoise"));
+
+            if (ScriptInstaller.CURRENT_BUILD >= 19041 && ScriptInstaller.CURRENT_BUILD < 19541)
+            {
+                disabledByDefault.Remove("fakeBackgroundAcrylic");
+            }
 
             for (int i = 0; i < featureBox.Items.Count; i++)
             {
