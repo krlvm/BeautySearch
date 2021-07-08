@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FakeBackgroundAcrylic.cs" />
     <Compile Include="FeatureControl.cs" />
     <Compile Include="InstallationForm.cs">
       <SubType>Form</SubType>

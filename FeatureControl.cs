@@ -21,6 +21,11 @@ namespace BeautySearch
             sb.Append(feature + ":true,");
         }
 
+        public bool IsEnabled(string feature)
+        {
+            return sb.ToString().Contains(feature);
+        }
+
         public string Build()
         {
             writeable = false;

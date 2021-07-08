@@ -24,7 +24,7 @@ namespace BeautySearch
         public const int ERR_OLD_BUILD = 5;
 
         // Bing Search
-        private const string BING_SEARCH_REGISTRY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Search\";
+        public  const string SEARCH_APP_REGISTRY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Search\";
         private const int BING_SEARCH_DISABLED = 0;
         private const int BING_SEARCH_ENABLED = 1;
 
@@ -61,6 +61,27 @@ namespace BeautySearch
             if (CURRENT_BUILD < MIN_REQUIRED_BUILD)
             {
                 return ERR_OLD_BUILD;
+            }
+
+            if (features.IsEnabled("fakeBackgroundAcrylic"))
+            {
+                if (CURRENT_BUILD < BUILD_MAY_2020)
+                {
+                    MessageBox.Show(
+                        "Fake Acrylic is available only on 20H1 and higher because native Search Window acrylic was broken. Disable this feature to continue.",
+                        "BeautySearch",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                    return ERR_OLD_BUILD;
+                }
+                MessageBox.Show(
+                    "We need to take a screenshot of the area behind the Search Window, all windows will be minimized.\nDon't move the mouse pointer until we're done.",
+                    "BeautySearch",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+                FakeBackgroundAcrylic.CaptureWallpaper(TARGET_DIR);
             }
 
             SetBingSearchEnabled(BING_SEARCH_DISABLED);
@@ -144,9 +165,9 @@ namespace BeautySearch
         {
             // When Bing Web Search is enabled, the Search App doesn't use the local search instance
             // 0 - disabled, 1 - enabled
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(BING_SEARCH_REGISTRY, true))
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(SEARCH_APP_REGISTRY, true))
             {
-                if (key != null)  //must check for null key
+                if (key != null)
                 {
                     key.SetValue("BingSearchEnabled", val, RegistryValueKind.DWord);
                     key.Close();
