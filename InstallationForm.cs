@@ -16,6 +16,14 @@ namespace BeautySearch
 
         private void InstallationForm_Load(object sender, EventArgs e)
         {
+            string flavour;
+#if DEBUG
+            flavour = "(Debug)";
+#else
+            flavour = "v" + System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
+#endif
+            this.Text = "BeautySearch Installer " + flavour;
+
             List<string> disabledByDefault = new List<string>() { "disableContextMenuBorder", "explorerSearchBorder", "fakeBackgroundAcrylic", "fluentNoise" };
 
             featureBox.Items.Add(new ListItem("Show accent color on Search Window", "accentBackground"));
