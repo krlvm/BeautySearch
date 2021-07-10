@@ -87,24 +87,6 @@ const showTemporaryMessage = (text, icon = 'ⓘ') => {
     `;
 }
 
-const subtractPercent = (number, percent) => {
-    return number - (number*percent);
-}
-
-const getRGB = (str) => {
-    return str.replace('rgb(', '').replace(')').split(', ').map(function(item) {
-        return parseInt(item);
-    });
-}
-
-const toRGB = (r, g, b) => {
-    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
-}
-
-const toRGBa = (r, g, b, a) => {
-    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
-}
-
 const injectStyle = (styleString) => {
     const style = document.createElement('style');
     style.textContent = styleString;
@@ -178,34 +160,12 @@ const injectDarkTheme = (parent = '') => {
 
 /** Tweaks */
 
-let lastAccent;
 if(SETTINGS.accentBackground) {
     // Search window background to follow accent color
 
     let backgroundListener = () => {
-        // May not work in the future
-        //let color = '#' + SearchAppWrapper.CortanaApp.systemTheme.substring(7);
-    
-        document.getElementById('root').classList.add('bsAccent');
-        let scopes = document.querySelectorAll('.accentColor');
-        if(scopes.length > 0) {
-            let base = isSystemLightTheme() ? -1 : window.getComputedStyle(scopes[0]).color;
-            console.log(`Base: ${base} | Last: ${lastAccent}`)
-            if(lastAccent != base) {
-                if(base === -1) {
-                    document.getElementById('rootContainer').style.backgroundColor = '';
-                } else {
-                    let rgb = getRGB(base);
-                    document.getElementById('rootContainer').style.backgroundColor = toRGBa(
-                        rgb[0],
-                        rgb[1],
-                        rgb[2],
-                        0.5 + (SETTINGS.fakeBackgroundAcrylic ? 0.14 : 0)
-                    );
-                    lastAccent = base;
-                }
-            }
-        }
+        const rawAccent = SearchAppWrapper.CortanaApp.themeColors.accentDark1;
+        document.getElementById('rootContainer').style.backgroundColor = '#' + rawAccent.substr(3);
     };
 
     executeOnLoad(backgroundListener);
