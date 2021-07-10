@@ -16,6 +16,11 @@ namespace BeautySearch
             return int.Parse(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentBuildNumber", "0").ToString());
         }
 
+        public static string InsertAfter(string target, string hook, string s)
+        {
+            return target.Insert(target.IndexOf(hook) + hook.Length, s);
+        }
+
         public static string ReadFile(string filepath)
         {
             return File.ReadAllText(filepath);

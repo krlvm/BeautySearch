@@ -106,6 +106,16 @@ namespace BeautySearch
                 return ERR_WRITE;
             }
 
+            if (features.IsEnabled("useController") && !InjectController())
+            {
+                MessageBox.Show(
+                    "Failed to hook the Controller, try to reinstall BeautySearch",
+                    "BeautySearch",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
+
             string script = LoadScript();
             script = script.Replace("const SETTINGS = SETTINGS_DEFAULTS;", features.Build());
             Utility.WriteFile(SCRIPT_DEST, script);
@@ -202,15 +212,43 @@ namespace BeautySearch
         private static string LoadScript()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            const string NAME = "BeautySearch.BeautySearch.js";
 
-            using (Stream stream = assembly.GetManifestResourceStream(NAME))
+            using (Stream stream = assembly.GetManifestResourceStream("BeautySearch.BeautySearch.js"))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();
                 }
             }
+        }
+
+        // Controller Injector
+
+        private static bool InjectController()
+        {
+            string CONTROLLER_FILE = FindControllerFile();
+            Utility.TakeOwnership(CONTROLLER_FILE);
+
+            string controller = Utility.ReadFile(CONTROLLER_FILE);
+            if (!controller.Contains("bsController"))
+            {
+                // Controller is accessible via 'bsController' global variable
+                controller = "var bsController = null;" + controller;
+                controller = controller.Insert(controller.IndexOf("}return l.prototype"), ";bsController=this;");
+                return Utility.WriteFile(CONTROLLER_FILE, controller);
+            }
+            return true;
+        }
+
+        public static string FindControllerFile()
+        {
+            // *laughs*
+            foreach (var file in Directory.EnumerateFiles(TARGET_DIR, "*.js"))
+            {
+                string text = Utility.ReadFile(file);
+                if (text.Contains("return l.prototype")) return file;
+            }
+            return null;
         }
     }
 }

@@ -26,6 +26,7 @@ namespace BeautySearch
 
             List<string> disabledByDefault = new List<string>() { "disableContextMenuBorder", "explorerSearchBorder", "fakeBackgroundAcrylic", "fluentNoise" };
 
+            featureBox.Items.Add(new ListItem("Controller Integration", "useController"));
             featureBox.Items.Add(new ListItem("Show accent color on Search Window", "accentBackground"));
             featureBox.Items.Add(new ListItem("Show search results in Dark Theme", "darkTheme"));
             featureBox.Items.Add(new ListItem(" - Follow system theme (inaccurate, enable the previous option)", "dynamicDarkTheme"));
