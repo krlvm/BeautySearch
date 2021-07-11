@@ -66,19 +66,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FakeBackgroundAcrylic.cs" />
-    <Compile Include="FeatureControl.cs" />
-    <Compile Include="InstallationForm.cs">
+    <Compile Include="Installer\FakeBackgroundAcrylic.cs" />
+    <Compile Include="Installer\FeatureControl.cs" />
+    <Compile Include="UI\InstallationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InstallationForm.Designer.cs">
+    <Compile Include="UI\InstallationForm.Designer.cs">
       <DependentUpon>InstallationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScriptInstaller.cs" />
+    <Compile Include="Installer\ScriptInstaller.cs" />
     <Compile Include="Utility.cs" />
-    <EmbeddedResource Include="InstallationForm.resx">
+    <EmbeddedResource Include="UI\InstallationForm.resx">
       <DependentUpon>InstallationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -53,7 +53,7 @@
     explorerSearchFixes: false,    // true | false
     topAppsCardsOutline: false,    // true | false
     hideOutlines: true,            // true | false
-    acrylicMode: 'fake',           // true | false | 'fake'
+    acrylicMode: false,            // true | false | 'fake'
     backgroundMode: true,          // true | false | 'system' | color: String
     corners: 'sharp',              // 'default' | 'sharp' | 'round'
     theme: 'auto',                 // 'auto'    | 'light' | 'dark'
@@ -231,7 +231,7 @@ let backgroundAcrylicStyle = null;
 const applyFakeAcrylic = (tint) => {
     if(document.getElementById('root').classList.contains('panelCanResize')) return;
 
-    if(tint == null) tint = isSystemLightTheme() ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.75)';
+    if(tint == null) tint = isSystemLightTheme() ? 'rgba(255, 255, 255, 0.75)' : 'rgba(0, 0, 0, 0.75)';
     
     if(backgroundColor == tint) return;
     backgroundColor = tint;

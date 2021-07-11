@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
@@ -24,27 +25,26 @@ namespace BeautySearch
 #endif
             this.Text = "BeautySearch Installer " + flavour;
 
-            List<string> disabledByDefault = new List<string>() { "disableContextMenuBorder", "explorerSearchBorder", "fakeBackgroundAcrylic", "fluentNoise" };
-
-            featureBox.Items.Add(new ListItem("Controller Integration", "useController"));
-            featureBox.Items.Add(new ListItem("Show accent color on Search Window", "accentBackground"));
-            featureBox.Items.Add(new ListItem("Show search results in Dark Theme", "darkTheme"));
-            featureBox.Items.Add(new ListItem(" - Follow system theme (inaccurate, enable the previous option)", "dynamicDarkTheme"));
-            featureBox.Items.Add(new ListItem("Dark Theme Acrylic Sidebar (and accent color when enabled)", "darkThemeAcrylic"));
-            featureBox.Items.Add(new ListItem("Remove background from UWP application icons", "disableTilesBackground"));
-            featureBox.Items.Add(new ListItem("Add shadows to context menus", "contextMenuShadow"));
-            featureBox.Items.Add(new ListItem("Make context menu's corners rounded", "contextMenuRound"));
-            featureBox.Items.Add(new ListItem("Add acrylic effect to context menus", "contextMenuAcrylic"));
-            featureBox.Items.Add(new ListItem("Hide context menu's borders", "disableContextMenuBorder"));
-            featureBox.Items.Add(new ListItem("Hide button outlines when using mouse", "hideOutlines"));
-            featureBox.Items.Add(new ListItem("Fix missing 19H2+ Explorer Search Box bottom border on HiDPI", "explorerSearchBorder"));
-            featureBox.Items.Add(new ListItem("20H1+ Broken Acrylic Workaround", "fakeBackgroundAcrylic"));
-            featureBox.Items.Add(new ListItem("Fluent Design Noise Texture on Acrylic Surface", "fluentNoise"));
-
-            if (ScriptInstaller.CURRENT_BUILD >= 19041 && ScriptInstaller.CURRENT_BUILD < 19541)
+            List<string> disabledByDefault = new List<string>() { "topAppsCardsOutline", "explorerSearchBorder" };
+            if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1 && ScriptInstaller.CURRENT_BUILD < 19541)
             {
-                disabledByDefault.Remove("fakeBackgroundAcrylic");
+                disabledByDefault.Add("acrylicMode");
             }
+
+            featureBox.Items.Add(new ListItem("Show accent color on Search Window", "backgroundMode"));
+            featureBox.Items.Add(new ListItem("Enable Acrylic (or Fake Acrylic on 20H1+)", "acrylicMode"));
+            featureBox.Items.Add(new ListItem("Remove background from UWP application icons", "disableTilesBackground"));
+            featureBox.Items.Add(new ListItem("Fluent Context Menu", "contextMenuFluent"));
+            featureBox.Items.Add(new ListItem("Acrylic Context Menu", "contextMenuAcrylic"));
+            featureBox.Items.Add(new ListItem("Context Menu Shadows", "contextMenuShadows"));
+            featureBox.Items.Add(new ListItem("Align widths of context menus", "unifyMenuWidth"));
+            featureBox.Items.Add(new ListItem("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline"));
+            featureBox.Items.Add(new ListItem("Hide control outlines when using mouse", "hideOutlines"));
+            if (ScriptInstaller.CURRENT_BUILD > ScriptInstaller.BUILD_19H2)
+            {
+                featureBox.Items.Add(new ListItem("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchBorder"));
+            }
+            featureBox.Items.Add(new ListItem("Controller Integration (Recommended)", "useController"));
 
             for (int i = 0; i < featureBox.Items.Count; i++)
             {
@@ -73,6 +73,15 @@ namespace BeautySearch
                 features.Enable((featureBox.Items[i] as ListItem).Value);
             }
 
+            features.Set("theme", themeGroup.Controls.OfType<System.Windows.Forms.RadioButton>()
+                                      .FirstOrDefault(r => r.Checked).Text.ToLower());
+            features.Set("corners", cornersGroup.Controls.OfType<System.Windows.Forms.RadioButton>()
+                                      .FirstOrDefault(r => r.Checked).Text.ToLower());
+
+            if (features.Get("acrylicMode") != null && ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1 && ScriptInstaller.CURRENT_BUILD < 19541)
+            {
+                features.Set("acrylicMode", "fake");
+            }
 
             switch (ScriptInstaller.Install(features))
             {
@@ -90,7 +99,7 @@ namespace BeautySearch
                     MessageBox.Show("Sign out and sign in to finish installation", "BeautySearch", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                 case ScriptInstaller.ERR_OLD_BUILD:
-                    MessageBox.Show("BeautySearch can be installed only on Windows 10 May 2020 Update (20H1, Build 19041) and higher", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("BeautySearch can be installed only on Windows 10 May 2019 Update (19H1, Build 18363) and higher", "Unsupported Build", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
 

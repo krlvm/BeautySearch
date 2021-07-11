@@ -11,10 +11,11 @@ namespace BeautySearch
     {
         public static int CURRENT_BUILD;
 
-        private const int BUILD_MAY_2019 = 18362;
-        private const int BUILD_MAY_2020 = 19041;
+        public const  int BUILD_19H1 = 18362;
+        public const  int BUILD_19H2 = 18363;
+        public const  int BUILD_20H1 = 19041;
 
-        private const int MIN_REQUIRED_BUILD = BUILD_MAY_2019;
+        private const int MIN_REQUIRED_BUILD = BUILD_19H1;
 
         // Error codes
         public const int ERR_READ = 1;
@@ -40,12 +41,12 @@ namespace BeautySearch
         static ScriptInstaller()
         {
             CURRENT_BUILD = Utility.GetBuildNumber();
-            if (CURRENT_BUILD >= BUILD_MAY_2020)
+            if (CURRENT_BUILD >= BUILD_20H1)
             {
                 SEARCH_APP_EXEC = "SearchApp";
                 SEARCH_APP_NAME = "Microsoft.Windows.Search_cw5n1h2txyewy";
             }
-            else if (CURRENT_BUILD >= BUILD_MAY_2019)
+            else if (CURRENT_BUILD >= BUILD_19H1)
             {
                 SEARCH_APP_EXEC = "SearchUI";
                 SEARCH_APP_NAME = "Microsoft.Windows.Cortana_cw5n1h2txyewy";
@@ -63,12 +64,12 @@ namespace BeautySearch
                 return ERR_OLD_BUILD;
             }
 
-            if (features.IsEnabled("fakeBackgroundAcrylic"))
+            if ("'fake'".Equals(features.Get("acrylicMode")))
             {
-                if (CURRENT_BUILD < BUILD_MAY_2020)
+                if (CURRENT_BUILD < BUILD_20H1 || CURRENT_BUILD >= 19541)
                 {
                     MessageBox.Show(
-                        "Fake Acrylic is available only on 20H1 and higher because native Search Window acrylic was broken. Disable this feature to continue.",
+                        "Fake Acrylic is available only on 20H1 and higher because native Search Window acrylic was broken. Use Default mode instead.",
                         "BeautySearch",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Error
@@ -76,7 +77,7 @@ namespace BeautySearch
                     return ERR_OLD_BUILD;
                 }
                 MessageBox.Show(
-                    "We need to take a screenshot of the area behind the Search Window, all windows will be minimized.\nDon't move the mouse pointer until we're done.",
+                    "We need to take a screenshot of the area behind the Search Window for acrylic effect, so all windows will be minimized.\nDon't move the mouse pointer until we're done.",
                     "BeautySearch",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information
@@ -108,6 +109,7 @@ namespace BeautySearch
 
             if (features.IsEnabled("useController") && !InjectController())
             {
+                features.Exclude("useController");
                 MessageBox.Show(
                     "Failed to hook the Controller, try to reinstall BeautySearch",
                     "BeautySearch",
