@@ -39,7 +39,7 @@
  * Licensed under the GNU GPLv3 License
  * https://github.com/krlvm/BeautySearch
  *
- * @version 1.3
+ * @version 1.4
  * @author krlvm
  **/
 
@@ -67,8 +67,8 @@
 // Use defaults if the script is injected manually
 const SETTINGS = SETTINGS_DEFAULTS;
 
-const VERSION = '1.2.3';
-const VERSION_CODE = 7;
+const VERSION = '1.4';
+const VERSION_CODE = 9;
 
 console.log('BeautySearch v' + VERSION + ' is loaded');
 
@@ -231,7 +231,7 @@ let backgroundAcrylicStyle = null;
 const applyFakeAcrylic = (tint) => {
     if(document.getElementById('root').classList.contains('panelCanResize')) return;
 
-    if(tint == null) tint = isSystemLightTheme() ? 'rgba(255, 255, 255, 0.75)' : 'rgba(0, 0, 0, 0.75)';
+    if(tint == null) tint = isSystemLightTheme() ? 'rgba(255, 255, 255, 0.75)' : 'rgba(0, 0, 0, 0.78)';
     
     if(backgroundColor == tint) return;
     backgroundColor = tint;
@@ -266,7 +266,7 @@ if(SETTINGS.disableTilesBackground) {
 if(SETTINGS.unifyMenuWidth) {
     const width = 275;
     injectStyle(`
-        .contextMenu {
+        .contextMenu:not(.moreScopesDropdown):not(.advancedScopesDropdown) {
             width: ${width}px !important;
             max-width: ${width}px !important;
         }
