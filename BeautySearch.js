@@ -109,6 +109,10 @@ const listenQuery = (callback) => {
     awaitController(controller => controller.bindQueryChangedOrInitialized(query => callback(query.originalQuery)));
 }
 
+const isExplorer = () => {
+    return document.getElementById('root').classList.contains('panelCanResize');
+}
+
 const injectStyle = (styleString) => {
     const style = document.createElement('style');
     style.textContent = styleString;
@@ -229,7 +233,7 @@ const injectAcrylicStyle = (parent, tint) => {
 let backgroundColor = null;
 let backgroundAcrylicStyle = null;
 const applyFakeAcrylic = (tint) => {
-    if(document.getElementById('root').classList.contains('panelCanResize')) return;
+    if(isExplorer()) return;
 
     if(tint == null) tint = isSystemLightTheme() ? 'rgba(255, 255, 255, 0.75)' : 'rgba(0, 0, 0, 0.78)';
     
@@ -385,6 +389,8 @@ if(SETTINGS.backgroundMode) {
 
     if(typeof SETTINGS.backgroundMode == 'boolean') {
         backgroundListener = () => {
+            if(isExplorer()) return;
+
             let color;
             if(isSystemLightTheme()) {
                 color = root.style.backgroundColor = null;

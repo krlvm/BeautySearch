@@ -25,7 +25,7 @@ namespace BeautySearch
 #endif
             this.Text = "BeautySearch Installer " + flavour;
 
-            List<string> disabledByDefault = new List<string>() { "topAppsCardsOutline", "explorerSearchBorder" };
+            List<string> disabledByDefault = new List<string>() { "topAppsCardsOutline", "explorerSearchFixes" };
             if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1 && ScriptInstaller.CURRENT_BUILD < 19541)
             {
                 disabledByDefault.Add("acrylicMode");
@@ -42,7 +42,7 @@ namespace BeautySearch
             featureBox.Items.Add(new ListItem("Hide control outlines when using mouse", "hideOutlines"));
             if (ScriptInstaller.CURRENT_BUILD > ScriptInstaller.BUILD_19H2)
             {
-                featureBox.Items.Add(new ListItem("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchBorder"));
+                featureBox.Items.Add(new ListItem("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes"));
             }
             featureBox.Items.Add(new ListItem("Controller Integration (Recommended)", "useController"));
 
