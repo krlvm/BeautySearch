@@ -354,12 +354,13 @@ if(SETTINGS.explorerSearchFixes) {
 
 if(SETTINGS.topAppsCardsOutline) {
     injectStyle(`
+        .topItemsGroup .selectable:hover {
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5) inset !important;
+        }
         .darkTheme19H1 .topItemsGroup .selectable:hover {
-            box-shadow: 0 0 0 2px #9A9A9A inset !important;
             background-color: rgba(255, 255, 255, 0.1) !important;
         }
         .lightTheme19H1 .topItemsGroup .selectable:hover {
-            box-shadow: 0 0 0 2px #F7F7F7 inset !important;
             background-color: rgba(255, 255, 255, 0.4) !important;
         }
     `);
