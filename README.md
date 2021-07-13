@@ -1,6 +1,6 @@
 <div align="center">
-<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/logo.png" height="192px" width="192px" />
-<br><h1>BeautySearch</h1><br>
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/logo.png" height="150px" width="auto" />
+<br><h1>BeautySearch</h1>
 Windows 10 Search Window appearance tweaker
 <br><br>
 <a href="https://github.com/krlvm/BeautySearch/blob/master/LICENSE"><img src="https://img.shields.io/github/license/krlvm/BeautySearch?style=flat-square" alt="License"/></a>
@@ -70,7 +70,8 @@ BeautySearch allows you to make all corners sharp to be consistent with the rest
 No. BeautySearch does not consume RAM and does not affect performance. It is a somewhat like a stylesheet which is embedded in Search App after installation.
 
 ### Does BeautySearch add to startup?
-No. BeautySearch Installer is the only executable file distrubuted and only need automatic and convenient script injection. You can install the script manually (see below).
+No. BeautySearch Installer is the only executable file distrubuted and only need for automatic and convenient script injection. After installation you can delete the Installer.\
+You can also install the script manually without executing any binaries (see below).
 
 ### Does it violate my privacy?
 No. BeautySearch doesn't have any analytics or telemetry, and doesn't even check for updates.
@@ -88,27 +89,28 @@ Also, work is underway to implement search for all regions with any search engin
 
 ### VirusTotal marks BeautySearch Installer as malicious
 Only one antivirus out of 71 considers the file to be malicious, and only because the installer writes files to the system directory (see which directory in the manual installation section).
-The source code for both the installer and the script is published under the GNU GPLv3 free license, and if you don't trust the published binaries, you can easily build the project using Visual Studio 2019.
+The source code for both the installer and the script is published under the GNU GPLv3 license, and if you don't trust the published binaries, you can easily build the project using Visual Studio 2019.
 
 ## Instlallation
 
 ### Using Instaler
-You need to run Windows 10 May 2020 Update (version 2004, 20H1, build 19041) and higher to install BeautySearch using the Installer. BeautySearch was not tested with the older versions of Windows 10.
+You need to run Windows 10 May 2019 Update (19H1 aka version 1903, build 18362) and higher to install BeautySearch using the Installer.
 
 BeautySearch is tested on:
- - Windows 10 May 2020 Update (20H1, Build 19041)
- - Windows 10 ??? 2020 Update (20H2, Build 19042)
+ - Windows 10 19H1, 19H2
+ - Windows 10 20H1, 20H2, 21H1
+ - Windows 10 Next, Insider Preview Build 21390
 
 Download the Installer [here](https://github.com/krlvm/BeautySearch/releases/latest) and run it as administrator.\
 Select the tweaks you want to apply and click "Install".
 
 ### Manual installation
 Download the last version of the BeautySearch script [here](https://raw.githubusercontent.com/krlvm/BeautySearch/master/BeautySearch.js) and modify it in order to get the tweaks you're need.\
-Navigate to `C:\Windows\SystemApps\Microsoft.Windows.Search_cw5n1h2txyewy\cache\Local\` and take full ownership & access over the `Desktop` folder.\
+Navigate to `C:\Windows\SystemApps\Microsoft.Windows.Search_cw5n1h2txyewy\cache\Local\` (or `C:\Windows\SystemApps\Microsoft.Windows.Cortana_cw5n1h2txyewy\cache\Local\` on 19H1 and 19H2) and take full ownership & access over the `Desktop` folder.\
 Open `2.html` in Notepad or any other text editor and add this line to the end of the file:\
 `<script type=\"text/javascript\" src=\"ms-appx-web:///cache/local/Desktop/BeautySearch.js\"></script>`\
 Copy the script to the folder and end task `SearchApp.exe` (you can execute `taskkill /f /im SearchApp.exe` in the terminal).\
-Some additional instructions with screenshots can be found [there](https://github.com/krlvm/BeautySearch/issues/11#issuecomment-860113080)
+Some additional instructions with screenshots can be found [there](https://github.com/krlvm/BeautySearch/issues/11#issuecomment-860113080).
 
 ## Troubleshooting
 If you're unable to open the Search Window after installation, the application files was corrupted. Most likely, BeautySearch is not compatible with your version of Windows 10.\
