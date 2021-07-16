@@ -30,7 +30,8 @@
  * for more correct work of the Dark Theme, Accent Background and other features
  * 
  * Path of install:
- * C:\Windows\SystemApps\Microsoft.Windows.Search_cw5n1h2txyewy\cache\Local\Desktop\2.html
+ * 19H1+: C:\Windows\SystemApps\Microsoft.Windows.Cortana_cw5n1h2txyewy\cache\Local\Desktop\2.html
+ * 20H1+: C:\Windows\SystemApps\Microsoft.Windows.Search_cw5n1h2txyewy\cache\Local\Desktop\2.html
  * 
  * Installation can be corrupted after Windows update, system repair or
  * Search application update.
