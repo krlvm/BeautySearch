@@ -29,24 +29,13 @@ namespace BeautySearch
 
             bool searchBoxVisible = IsSearchBoxVisible();
             TaskbarSide side = GetTaskbarSide();
-
-            int offsetX, offsetY;
-            if (side == TaskbarSide.BOTTOM || side == TaskbarSide.TOP)
+            if(side == TaskbarSide.BOTTOM)
             {
-                int taskbarHeight = bounds.Height - wkArea.Height;
-                int startButtonWidth = taskbarHeight + (taskbarHeight / 5); // Tested on 100-200% DPI Scaling
-                offsetX = startButtonWidth;
-                offsetY = side == TaskbarSide.BOTTOM ? bounds.Height - taskbarHeight - wndHeight /*+ (searchBoxVisible ? 0 : taskbarHeight)*/
-                    : taskbarHeight;
+                if(!IsSearchBoxVisible())
+                {
+                    wndHeight -= bounds.Height - wkArea.Height; // -taskbarHeight
+                }
             }
-            else // LEFT || RIGHT
-            {
-                int taskbarWidth = bounds.Width - wkArea.Width;
-                offsetX = side == TaskbarSide.LEFT ? taskbarWidth : bounds.Width - wndWidth - taskbarWidth;
-                offsetY = 0;
-            }
-
-            System.Diagnostics.Debug.WriteLine($"offsetX: {offsetX}");
 
             using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
             {
@@ -55,14 +44,12 @@ namespace BeautySearch
                     g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
                 }
 
-                using (Bitmap screen = bitmap.Clone(new Rectangle(offsetX, offsetY, wndWidth, wndHeight), bitmap.PixelFormat))
+                using (Bitmap screen = bitmap.Clone(new Rectangle(wnd.Left, wnd.Top, wndWidth, wndHeight), bitmap.PixelFormat))
                 {
                     screen.Save(directory + @"\background.png", ImageFormat.Png);
                 }
             }
         }
-
-        // 2 - bar ______ 1 - btn
 
         static void MinimizeAllWindows()
         {
