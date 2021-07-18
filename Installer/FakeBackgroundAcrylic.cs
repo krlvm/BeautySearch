@@ -46,7 +46,7 @@ namespace BeautySearch
 
                 using (Bitmap screen = bitmap.Clone(new Rectangle(wnd.Left, wnd.Top, wndWidth, wndHeight), bitmap.PixelFormat))
                 {
-                    screen.Save(directory + @"\background.png", ImageFormat.Png);
+                    screen.Save(directory + @"\" + ScriptInstaller.SID + ".png", ImageFormat.Png);
                 }
             }
         }

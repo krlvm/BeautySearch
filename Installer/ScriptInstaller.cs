@@ -2,6 +2,8 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Management;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -118,9 +120,10 @@ namespace BeautySearch
                 );
             }
 
-            string script = LoadScript();
+            string script = LoadScript("BeautySearch");
             script = script.Replace("const SETTINGS = SETTINGS_DEFAULTS;", features.Build());
-            Utility.WriteFile(SCRIPT_DEST, script);
+            Utility.WriteFile(SCRIPT_DEST, LoadScript("BeautySearchLoader"));
+            Utility.WriteFile(TARGET_DIR + @"\" + SID + ".js", script);
 
             if (!KillSearchApp())
             {
@@ -211,11 +214,11 @@ namespace BeautySearch
             return File.Exists(SCRIPT_DEST);
         }
 
-        private static string LoadScript()
+        private static string LoadScript(string name)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
 
-            using (Stream stream = assembly.GetManifestResourceStream("BeautySearch.BeautySearch.js"))
+            using (Stream stream = assembly.GetManifestResourceStream($"BeautySearch.{name}.js"))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
@@ -251,6 +254,22 @@ namespace BeautySearch
                 if (text.Contains("return l.prototype")) return file;
             }
             return null;
+        }
+
+        // Multi User
+        private static string _sid;
+        public  static string SID
+        {
+            get
+            {
+                if (_sid == null) {
+                    ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT UserName FROM Win32_ComputerSystem");
+                    ManagementObjectCollection collection = searcher.Get();
+                    string username = (string)collection.Cast<ManagementBaseObject>().First()["UserName"];
+                    _sid = (new System.Security.Principal.NTAccount(username)).Translate(typeof(System.Security.Principal.SecurityIdentifier)).Value.ToString();
+                }
+                return _sid;
+            }
         }
     }
 }

@@ -246,7 +246,7 @@ const applyFakeAcrylic = (tint) => {
 
     injectStyle(`
         body {
-            background-image: url(background.png);
+            background-image: url(${CortanaApp.queryFormulationView.deviceSearch.getUserSID()}.png);
             background-size: cover;
         }
     `);
