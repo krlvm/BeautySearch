@@ -231,6 +231,8 @@ const injectAcrylicStyle = (parent, tint) => {
     `);
 }
 
+const SID = CortanaApp.queryFormulationView.deviceSearch.getUserSID();
+
 let backgroundColor = null;
 let backgroundAcrylicStyle = null;
 const applyFakeAcrylic = (tint) => {
@@ -246,7 +248,7 @@ const applyFakeAcrylic = (tint) => {
 
     injectStyle(`
         body {
-            background-image: url(${CortanaApp.queryFormulationView.deviceSearch.getUserSID()}.png);
+            background-image: url(${SID}.png);
             background-size: cover;
         }
     `);
