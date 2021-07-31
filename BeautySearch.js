@@ -40,7 +40,7 @@
  * Licensed under the GNU GPLv3 License
  * https://github.com/krlvm/BeautySearch
  *
- * @version 1.4.1
+ * @version 1.5
  * @author krlvm
  **/
 
@@ -68,8 +68,8 @@
 // Use defaults if the script is injected manually
 const SETTINGS = SETTINGS_DEFAULTS;
 
-const VERSION = '1.4.1';
-const VERSION_CODE = 10;
+const VERSION = '1.5';
+const VERSION_CODE = 11;
 
 console.log('BeautySearch v' + VERSION + ' is loaded');
 
@@ -458,7 +458,7 @@ if(SETTINGS.theme) {
 
     // Temporary disabling this as Forced Dark Theme does not work as expected
     //if(SETTINGS.theme == 'auto') {
-    if(SETTINGS.theme != 'light')
+    if(SETTINGS.theme != 'light') {
         injectDarkTheme(DARK_THEME_CLASS);
 
         let darkThemeListener = () => {
