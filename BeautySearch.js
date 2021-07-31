@@ -456,7 +456,9 @@ if(SETTINGS.corners != 'default') {
 if(SETTINGS.theme) {
     // Dark theme support for search results
 
-    if(SETTINGS.theme == 'auto') {
+    // Temporary disabling this as Forced Dark Theme does not work as expected
+    //if(SETTINGS.theme == 'auto') {
+    if(SETTINGS.theme != 'light')
         injectDarkTheme(DARK_THEME_CLASS);
 
         let darkThemeListener = () => {
