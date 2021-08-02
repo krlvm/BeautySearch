@@ -25,7 +25,7 @@ namespace BeautySearch
 #endif
             this.Text = "BeautySearch Installer " + flavour;
 
-            List<string> disabledByDefault = new List<string>() { "topAppsCardsOutline", "explorerSearchFixes" };
+            List<string> disabledByDefault = new List<string>() { "topAppsCardsOutline", "explorerSearchFixes", "restyleOnLoad" };
             if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1 && ScriptInstaller.CURRENT_BUILD < 19541)
             {
                 disabledByDefault.Add("acrylicMode");
@@ -38,12 +38,13 @@ namespace BeautySearch
             featureBox.Items.Add(new ListItem("Acrylic Context Menu", "contextMenuAcrylic"));
             featureBox.Items.Add(new ListItem("Context Menu Shadows", "contextMenuShadows"));
             featureBox.Items.Add(new ListItem("Align widths of context menus", "unifyMenuWidth"));
-            featureBox.Items.Add(new ListItem("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline"));
             featureBox.Items.Add(new ListItem("Hide control outlines when using mouse", "hideOutlines"));
+            featureBox.Items.Add(new ListItem("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline"));
             if (ScriptInstaller.CURRENT_BUILD > ScriptInstaller.BUILD_19H2)
             {
                 featureBox.Items.Add(new ListItem("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes"));
             }
+            featureBox.Items.Add(new ListItem("Check theme changes more frequently (19H1, 19H2)", "restyleOnLoad"));
             featureBox.Items.Add(new ListItem("Controller Integration (Recommended)", "useController"));
 
             for (int i = 0; i < featureBox.Items.Count; i++)
