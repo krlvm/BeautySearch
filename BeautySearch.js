@@ -46,6 +46,7 @@
 
  const SETTINGS_DEFAULTS = {
     useController: true,           // true | false
+    restyleOnLoad: false,          // true | false
     unifyMenuWidth: true,          // true | false
     disableTilesBackground: true,  // true | false
     contextMenuFluent: true,       // true | false
@@ -105,6 +106,10 @@ const executeOnLoad = (callback, executeOnShown = true) => {
     }
 }
 const executeOnRestyle = (callback) => {
+    if(SETTINGS.restyleOnLoad) {
+        executeOnLoad(callback);
+        return;
+    }
     window.addEventListener('load', () => setTimeout(callback, 50));
     if(SETTINGS.useController) {
         awaitController(controller => controller.bindAccentColorAndThemeRefreshed(callback));
