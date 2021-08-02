@@ -164,24 +164,24 @@ const injectDarkTheme = (parent = '') => {
             background-color: rgba(255, 255, 255, 0.05);
         }
         ${parent} #qfPreviewPane {
-            background-color: #2F2F2F;
+            background-color: #272727;
         }
         ${parent} #previewContainer {
-            background-color: black !important;
+            background-color: #1F1F1F !important;
         }
+
         ${parent} .previewDataSection .secondaryText {
             color: white !important;
         }
         ${parent} .expanderCircle {
-            background-color: #2F2F2F;
+            background-color: #272727;
             border-radius: 15px;
         }
-        ${parent} #previewContainer .divider:not(:hover):not(:focus),  {
-            border: 1px solid #2F2F2F !important;
-        }
+
         ${parent} #previewContainer .divider {
-            border: 1px solid #2F2F2F;
+            border: 1px solid #272727;
         }
+
         ${parent} .annotation, ${parent} .iconContainer:not(.accentColor) {
             color: rgba(255, 255, 255, 0.6) !important;
         }
@@ -191,8 +191,9 @@ const injectDarkTheme = (parent = '') => {
         ${parent} .openPreviewPaneBtn:hover,
         ${parent} .suggDetailsContainer:hover .openPreviewPaneBtn,
         ${parent} .withOpenPreviewPaneBtn:hover .openPreviewPaneBtn {
-            border-color: rgba(0, 0, 0, 0.3) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
         }
+
         ${parent} .contextMenu .menuItem * {
             color: white !important;
         }
@@ -202,11 +203,19 @@ const injectDarkTheme = (parent = '') => {
         ${parent} .contextMenu .divider {
             border-color: #6F777D !important;
         }
+
         ${parent} .sectionItem:hover {
             background-color: rgba(255, 255, 255, 0.25) !important;
         }
         ${parent} .sectionItem:focus {
             background-color: rgba(255, 255, 255, 0.3) !important;
+        }
+
+        ${parent} .suggestions .selectable:not(.sa_hv):hover, ${parent} .suggestions .previewPaneOpened:not(.sa_hv) {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        ${parent} .suggestions .selectable:not(.sa_hv):active {
+            background-color: rgba(255, 255, 255, 0.25) !important;
         }
     `);
 }
