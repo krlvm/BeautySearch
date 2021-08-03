@@ -46,7 +46,8 @@
 
  const SETTINGS_DEFAULTS = {
     useController: true,           // true | false
-    restyleOnLoad: false,          // true | false
+    restyleOnLoadAccent: false,    // true | false
+    restyleOnLoadTheme: false,     // true | false
     unifyMenuWidth: true,          // true | false
     disableTilesBackground: true,  // true | false
     contextMenuFluent: true,       // true | false
@@ -105,8 +106,8 @@ const executeOnLoad = (callback, executeOnShown = true) => {
         window.addEventListener('click', () => callback);
     }
 }
-const executeOnRestyle = (callback) => {
-    if(SETTINGS.restyleOnLoad) {
+const executeOnRestyle = (callback, condition) => {
+    if(!condition) {
         executeOnLoad(callback);
         return;
     }
@@ -465,7 +466,7 @@ if(SETTINGS.backgroundMode) {
         }
     }
 
-    executeOnRestyle(backgroundListener);
+    executeOnRestyle(backgroundListener, , SETTINGS.restyleOnLoadAccent);
 }
 
 if(SETTINGS.corners != 'default') {
@@ -509,7 +510,7 @@ if(SETTINGS.theme) {
             }
         };
 
-        executeOnRestyle(darkThemeListener);
+        executeOnRestyle(darkThemeListener, SETTINGS.restyleOnLoadTheme);
     } else if(SETTINGS.theme == 'dark') {
         injectDarkTheme('.darkTheme19H1');
     }

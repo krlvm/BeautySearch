@@ -25,7 +25,7 @@ namespace BeautySearch
 #endif
             this.Text = "BeautySearch Installer " + flavour;
 
-            List<string> disabledByDefault = new List<string>() { "topAppsCardsOutline", "explorerSearchFixes", "restyleOnLoad" };
+            List<string> disabledByDefault = new List<string>() { "topAppsCardsOutline", "explorerSearchFixes", "restyleOnLoadAccent" };
             if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1 && ScriptInstaller.CURRENT_BUILD < 19541)
             {
                 disabledByDefault.Add("acrylicMode");
@@ -44,7 +44,8 @@ namespace BeautySearch
             {
                 featureBox.Items.Add(new ListItem("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes"));
             }
-            featureBox.Items.Add(new ListItem("Check theme changes more frequently (19H1, 19H2)", "restyleOnLoad"));
+            featureBox.Items.Add(new ListItem("Check theme changes more frequently [Accent Color]", "restyleOnLoadAccent"));
+            featureBox.Items.Add(new ListItem("Check theme changes more frequently [Theme]", "restyleOnLoadTheme"));
             featureBox.Items.Add(new ListItem("Controller Integration (Recommended)", "useController"));
 
             for (int i = 0; i < featureBox.Items.Count; i++)
