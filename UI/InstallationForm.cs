@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.UI.WebControls;
@@ -25,41 +24,43 @@ namespace BeautySearch
 #endif
             this.Text = "BeautySearch Installer " + flavour;
 
-            List<string> disabledByDefault = new List<string>() { "topAppsCardsOutline", "explorerSearchFixes", "restyleOnLoadAccent" };
-            if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1 && ScriptInstaller.CURRENT_BUILD < 19541)
-            {
-                disabledByDefault.Add("acrylicMode");
-            }
-
-            featureBox.Items.Add(new ListItem("Show accent color on Search Window", "backgroundMode"));
-            featureBox.Items.Add(new ListItem("Enable Acrylic (or Fake Acrylic on 20H1+)", "acrylicMode"));
-            featureBox.Items.Add(new ListItem("Remove background from UWP application icons", "disableTilesBackground"));
-            featureBox.Items.Add(new ListItem("Fluent Context Menu", "contextMenuFluent"));
-            featureBox.Items.Add(new ListItem("Acrylic Context Menu", "contextMenuAcrylic"));
-            featureBox.Items.Add(new ListItem("Context Menu Shadows", "contextMenuShadows"));
-            featureBox.Items.Add(new ListItem("Align widths of context menus", "unifyMenuWidth"));
-            featureBox.Items.Add(new ListItem("Hide control outlines when using mouse", "hideOutlines"));
-            featureBox.Items.Add(new ListItem("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline"));
-            if (ScriptInstaller.CURRENT_BUILD > ScriptInstaller.BUILD_19H2)
-            {
-                featureBox.Items.Add(new ListItem("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes"));
-            }
-            featureBox.Items.Add(new ListItem("Check theme changes more frequently [Accent Color]", "restyleOnLoadAccent"));
-            featureBox.Items.Add(new ListItem("Check theme changes more frequently [Theme]", "restyleOnLoadTheme"));
-            featureBox.Items.Add(new ListItem("Controller Integration (Recommended)", "useController"));
-
-            for (int i = 0; i < featureBox.Items.Count; i++)
-            {
-                featureBox.SetItemChecked(i, !disabledByDefault.Contains((featureBox.Items[i] as ListItem).Value));
-            }            
-
-            UpdateInstallStatus();
+            EnumerateFeatures();
+            UpdateInstallationStatus();
         }
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        #region Features
+
+        private void EnumerateFeatures()
         {
-            Process.Start(new ProcessStartInfo(linkLabel1.Text));
+            AddFeature("Show accent color on Search Window", "backgroundMode");
+            AddFeature("Enable Acrylic (or Fake Acrylic on 20H1+)", "acrylicMode");
+            AddFeature("Remove background from UWP application icons", "disableTilesBackground");
+            AddFeature("Fluent Context Menu", "contextMenuFluent");
+            AddFeature("Acrylic Context Menu", "contextMenuAcrylic");
+            AddFeature("Context Menu Shadows", "contextMenuShadows");
+            AddFeature("Align widths of context menus", "unifyMenuWidth");
+            AddFeature("Hide control outlines when using mouse", "hideOutlines");
+            AddFeature("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline", false);
+            AddFeature("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes", false);
+            AddFeature("Check theme changes more frequently [Accent Color]", "restyleOnLoadAccent", false);
+            AddFeature("Check theme changes more frequently [Theme]", "restyleOnLoadTheme");
+            AddFeature("Controller Integration (Recommended)", "useController");
         }
+
+        private void AddFeature(string name, string id)
+        {
+            AddFeature(name, id, true);
+        }
+
+        private void AddFeature(string name, string id, bool isEnabled)
+        {
+            featureBox.Items.Add(new ListItem(name, id));
+            featureBox.SetItemChecked(featureBox.Items.Count - 1, isEnabled);
+        }
+
+        #endregion
+
+        #region Install / Uninstall
 
         private void installBtn_Click(object sender, EventArgs e)
         {
@@ -105,9 +106,8 @@ namespace BeautySearch
                     break;
             }
 
-            UpdateInstallStatus();
+            UpdateInstallationStatus();
         }
-
 
         private void uninstallBtn_Click(object sender, EventArgs e)
         {
@@ -135,12 +135,19 @@ namespace BeautySearch
                     break;
             }
 
-            UpdateInstallStatus();
+            UpdateInstallationStatus();
         }
 
-        private void UpdateInstallStatus()
+        #endregion
+
+        private void UpdateInstallationStatus()
         {
             installBtn.Text = ScriptInstaller.IsInstalled() ? "Reinstall" : "Install";
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(linkLabel1.Text));
         }
     }
 }
