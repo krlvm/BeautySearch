@@ -183,7 +183,7 @@ namespace BeautySearch
         {
             // When Bing Web Search is enabled, the Search App doesn't use the local search instance
             // 0 - disabled, 1 - enabled
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(SEARCH_APP_REGISTRY, true))
+            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY, true))
             {
                 if (key != null)
                 {

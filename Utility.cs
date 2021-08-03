@@ -47,10 +47,15 @@ namespace BeautySearch
                 return false;
             }
         }
+        
+        public static RegistryKey OpenCurrentUserRegistryKey(string key, bool writable)
+        {
+            return Registry.Users.OpenSubKey(ScriptInstaller.SID + "\\" + key, writable);
+        }
 
         public static int GetDPIScaling()
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop\", true))
+            using (RegistryKey key = OpenCurrentUserRegistryKey(@"Control Panel\Desktop\", false))
             {
                 return key == null ? 0 : (int)key.GetValue("LogPixels", 0);
             }
@@ -58,7 +63,7 @@ namespace BeautySearch
 
         public static bool IsPersonalizationFeatureEnabled(string feature)
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize\", true))
+            using (RegistryKey key = OpenCurrentUserRegistryKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize\", false))
             {
                 return key == null ? false : ((int)key.GetValue(feature, 0)) == 1;
             }
