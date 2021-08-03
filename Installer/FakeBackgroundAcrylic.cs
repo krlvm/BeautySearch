@@ -46,7 +46,7 @@ namespace BeautySearch
 
                 using (Bitmap screen = bitmap.Clone(new Rectangle(wnd.Left, wnd.Top, wndWidth, wndHeight), bitmap.PixelFormat))
                 {
-                    screen.Save(directory + @"\" + ScriptInstaller.SID + ".png", ImageFormat.Png);
+                    screen.Save(GetCroppedWallpaperPath(directory), ImageFormat.Png);
                 }
             }
         }
@@ -66,6 +66,11 @@ namespace BeautySearch
                 if (key == null) return false;
                 return key.GetValue("SearchboxTaskbarMode").ToString() == "2";
             }
+        }
+
+        public static string GetCroppedWallpaperPath(string rootDirectory)
+        {
+            return rootDirectory + @"\" + ScriptInstaller.SID + ".png";
         }
     }
 }

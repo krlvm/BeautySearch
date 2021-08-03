@@ -78,13 +78,16 @@ namespace BeautySearch
                     );
                     return ERR_OLD_BUILD;
                 }
-                MessageBox.Show(
-                    "We need to take a screenshot of the area behind the Search Window for acrylic effect, so all windows will be minimized.\nDon't move the mouse pointer until we're done. Click \"OK\" to continue.",
-                    "BeautySearch",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
-                FakeBackgroundAcrylic.CaptureWallpaper(TARGET_DIR);
+                if (!features.IsEnabled("skipFakeAcrylic") || !File.Exists(FakeBackgroundAcrylic.GetCroppedWallpaperPath(TARGET_DIR)))
+                {
+                    MessageBox.Show(
+                        "We need to take a screenshot of the area behind the Search Window for acrylic effect, so all windows will be minimized.\nDon't move the mouse pointer until we're done. Click \"OK\" to continue.",
+                        "BeautySearch",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
+                    FakeBackgroundAcrylic.CaptureWallpaper(TARGET_DIR);
+                }
             }
 
             SetBingSearchEnabled(BING_SEARCH_DISABLED);
