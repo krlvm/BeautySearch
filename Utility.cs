@@ -48,6 +48,22 @@ namespace BeautySearch
             }
         }
 
+        public static int GetDPIScaling()
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop\", true))
+            {
+                return key == null ? 0 : (int)key.GetValue("LogPixels", 0);
+            }
+        }
+
+        public static bool IsPersonalizationFeatureEnabled(string feature)
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize\", true))
+            {
+                return key == null ? false : ((int)key.GetValue(feature, 0)) == 1;
+            }
+        }
+
         public static bool RequireAdministrator()
         {
             if (!IsAdministrator())

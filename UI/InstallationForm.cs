@@ -32,19 +32,28 @@ namespace BeautySearch
 
         private void EnumerateFeatures()
         {
-            AddFeature("Show accent color on Search Window", "backgroundMode");
-            AddFeature("Enable Acrylic (or Fake Acrylic on 20H1+)", "acrylicMode");
-            AddFeature("Remove background from UWP application icons", "disableTilesBackground");
+            bool acrylicEnabled = Utility.IsPersonalizationFeatureEnabled("EnableTransparency");
+
+            AddFeature("Show accent color on Search Window", "backgroundMode", Utility.IsPersonalizationFeatureEnabled("ColorPrevalence"));
+            AddFeature("Enable Acrylic (or Fake Acrylic on 20H1+)", "acrylicMode", acrylicEnabled);
+            AddFeature("Remove background from UWP application icons", "disableTilesBackground", ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1+1);
             AddFeature("Fluent Context Menu", "contextMenuFluent");
-            AddFeature("Acrylic Context Menu", "contextMenuAcrylic");
-            AddFeature("Context Menu Shadows", "contextMenuShadows");
+            AddFeature("Acrylic Context Menu", "contextMenuAcrylic", acrylicEnabled);
+            AddFeature("Context Menu Shadows", "contextMenuShadows", acrylicEnabled);
             AddFeature("Align widths of context menus", "unifyMenuWidth");
             AddFeature("Hide control outlines when using mouse", "hideOutlines");
             AddFeature("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline", false);
-            AddFeature("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes", false);
-            AddFeature("Check theme changes more frequently [Accent Color]", "restyleOnLoadAccent", false);
+            if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_19H2)
+            {
+                AddFeature("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes", Utility.GetDPIScaling() == 120);
+            }
+            if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1)
+            {
+                AddFeature("[20H1+] Don't override Fake Acrylic wallpaper for now", "skipFakeAcrylic", false);
+            }
+            AddFeature("Check theme changes more frequently [Accent Color]", "restyleOnLoadAccent", ScriptInstaller.CURRENT_BUILD < ScriptInstaller.BUILD_20H1);
             AddFeature("Check theme changes more frequently [Theme]", "restyleOnLoadTheme");
-            AddFeature("Controller Integration (Recommended)", "useController");
+            AddFeature("Controller Integration (Recommended for 20H1+)", "useController", ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1);
         }
 
         private void AddFeature(string name, string id)
