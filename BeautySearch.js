@@ -40,7 +40,7 @@
  * Licensed under the GNU GPLv3 License
  * https://github.com/krlvm/BeautySearch
  *
- * @version 1.5.1
+ * @version 1.6
  * @author krlvm
  **/
 
@@ -71,8 +71,8 @@
 // Use defaults if the script is injected manually
 const SETTINGS = SETTINGS_DEFAULTS;
 
-const VERSION = '1.5';
-const VERSION_CODE = 11;
+const VERSION = '1.6';
+const VERSION_CODE = 12;
 
 console.log('BeautySearch v' + VERSION + ' is loaded');
 
@@ -112,7 +112,7 @@ const executeOnRestyle = (callback, condition) => {
         executeOnLoad(callback);
         return;
     }
-    window.addEventListener('load', () => setTimeout(callback, 50));
+    window.addEventListener('load', () => setTimeout(callback, 100));
     if(SETTINGS.useController) {
         awaitController(controller => controller.bindAccentColorAndThemeRefreshed(callback));
     } else {
