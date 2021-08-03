@@ -214,19 +214,19 @@ const injectDarkTheme = (parent = '') => {
             background-color: rgba(255, 255, 255, 0.3) !important;
         }
 
-        ${parent} .suggestions .selectable:not(.sa_hv):hover,
-        ${parent} .suggestions .previewPaneOpened:not(.sa_hv) {
+        ${parent}:not(.zeroInput19H1) .suggestions .selectable:not(.sa_hv):hover,
+        ${parent}:not(.zeroInput19H1) .suggestions .previewPaneOpened:not(.sa_hv) {
             background-color: rgba(255, 255, 255, 0.1) !important;
         }
-        ${parent} .suggestions .selectable:not(.sa_hv):active {
+        ${parent}:not(.zeroInput19H1) .suggestions .selectable:not(.sa_hv):active {
             background-color: rgba(255, 255, 255, 0.25) !important;
         }
         
-        .${ACCENT_BACKGROUND_CLASS_NAME} ${parent} .suggestions .selectable:not(.sa_hv):hover,
-        .${ACCENT_BACKGROUND_CLASS_NAME} ${parent} .suggestions .previewPaneOpened:not(.sa_hv) {
+        .${ACCENT_BACKGROUND_CLASS_NAME} ${parent}:not(.zeroInput19H1) .suggestions .selectable:not(.sa_hv):hover,
+        .${ACCENT_BACKGROUND_CLASS_NAME} ${parent}:not(.zeroInput19H1) .suggestions .previewPaneOpened:not(.sa_hv) {
             background-color: rgba(255, 255, 255, 0.2) !important;
         }
-        .${ACCENT_BACKGROUND_CLASS_NAME} ${parent} .suggestions .selectable:not(.sa_hv):active {
+        .${ACCENT_BACKGROUND_CLASS_NAME} ${parent}:not(.zeroInput19H1) .suggestions .selectable:not(.sa_hv):active {
             background-color: rgba(255, 255, 255, 0.3) !important;
         }
     `);
@@ -393,13 +393,38 @@ if(SETTINGS.topAppsCardsOutline) {
         .topItemsGroup .selectable:hover {
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5) inset !important;
         }
-        .darkTheme19H1 .topItemsGroup .selectable:hover {
-            background-color: rgba(255, 255, 255, 0.1) !important;
-        }
-        .lightTheme19H1 .topItemsGroup .selectable:hover {
-            background-color: rgba(255, 255, 255, 0.4) !important;
+        .topItemsGroup .selectable:active {
+            box-shadow: none !important;
         }
     `);
+    if(SETTINGS.acrylicMode) {
+        injectStyle(`
+            .topItemsGroup .selectable {
+                transition: background-color 25ms linear, box-shadow 25ms linear;
+            }
+
+            .darkTheme19H1 .topItemsGroup .selectable:hover, {
+                background-color: rgba(255, 255, 255, 0.05) !important;
+            }
+            .darkTheme19H1 .topItemsGroup .selectable:active {
+                background-color: rgba(255, 255, 255, 0.2) !important;
+            }
+        
+            .lightTheme19H1 .topItemsGroup .selectable:hover, {
+                background-color: rgba(255, 255, 255, 0.2) !important;
+            }
+            .lightTheme19H1 .topItemsGroup .selectable:active {
+                background-color: rgba(255, 255, 255, 0.3) !important;
+            }
+        `);
+    } else {
+        injectStyle(`
+            .topItemsGroup .selectable:hover,
+            .topItemsGroup .selectable:active {
+                background-color: rgba(255, 255, 255, 0.1) !important; !important;
+            }
+        `);
+    }
 }
 
 if(SETTINGS.hideOutlines) {
