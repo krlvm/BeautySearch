@@ -466,7 +466,7 @@ if(SETTINGS.backgroundMode) {
         }
     }
 
-    executeOnRestyle(backgroundListener, , SETTINGS.restyleOnLoadAccent);
+    executeOnRestyle(backgroundListener, SETTINGS.restyleOnLoadAccent);
 }
 
 if(SETTINGS.corners != 'default') {
