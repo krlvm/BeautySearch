@@ -46,8 +46,9 @@
 
  const SETTINGS_DEFAULTS = {
     useController: true,           // true | false
-    restyleOnLoadAccent: false,    // true | false
-    restyleOnLoadTheme: false,     // true | false
+    restyleOnLoadAcrylic: true,   // true | false
+    restyleOnLoadAccent: true,    // true | false
+    restyleOnLoadTheme: true,     // true | false
     unifyMenuWidth: true,          // true | false
     disableTilesBackground: true,  // true | false
     contextMenuFluent: true,       // true | false
@@ -107,7 +108,7 @@ const executeOnLoad = (callback, executeOnShown = true) => {
     }
 }
 const executeOnRestyle = (callback, condition) => {
-    if(!condition) {
+    if(!condition || !SETTINGS.useController) {
         executeOnLoad(callback);
         return;
     }
@@ -416,7 +417,7 @@ if(SETTINGS.hideOutlines) {
 if(SETTINGS.acrylicMode == 'fake') {
     // It will be called from Accent Background Tweak if it is enabled
     // Prevent this tweak from being applied to Explorer Search popup
-    executeOnLoad(() => applyFakeAcrylic(), false);
+    executeOnRestyle(() => applyFakeAcrylic(), SETTINGS.restyleOnLoadAcrylic);
 }
 
 if(SETTINGS.backgroundMode) {

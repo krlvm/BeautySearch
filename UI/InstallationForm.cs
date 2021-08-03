@@ -51,8 +51,11 @@ namespace BeautySearch
             {
                 AddFeature("[20H1+] Don't override Fake Acrylic wallpaper for now", "skipFakeAcrylic", false);
             }
+            /*
             AddFeature("Check theme changes more frequently [Accent Color]", "restyleOnLoadAccent", ScriptInstaller.CURRENT_BUILD < ScriptInstaller.BUILD_20H1);
+            AddFeature("Check theme changes more frequently [Acrylic & Theme]", "restyleOnLoadAcrylic");
             AddFeature("Check theme changes more frequently [Theme]", "restyleOnLoadTheme");
+            */
             AddFeature("Controller Integration (Recommended for 20H1+)", "useController", ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1);
         }
 
