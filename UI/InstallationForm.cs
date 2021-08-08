@@ -42,7 +42,7 @@ namespace BeautySearch
             AddFeature("Context Menu Shadows", "contextMenuShadows", acrylicEnabled);
             AddFeature("Align widths of context menus", "unifyMenuWidth");
             AddFeature("Hide control outlines when using mouse", "hideOutlines");
-            AddFeature("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline", false);
+            AddFeature("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline");
             if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_19H2)
             {
                 AddFeature("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes", Utility.GetDPIScaling() == 120);
