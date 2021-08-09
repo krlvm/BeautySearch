@@ -64,7 +64,8 @@ namespace BeautySearch
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(ScriptInstaller.SEARCH_APP_REGISTRY, true))
             {
                 if (key == null) return false;
-                return key.GetValue("SearchboxTaskbarMode").ToString() == "2";
+                object value = key.GetValue("SearchboxTaskbarMode");
+                return value == null ? false : value.ToString() == "2";
             }
         }
 
