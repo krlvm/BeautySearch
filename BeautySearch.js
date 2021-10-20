@@ -390,38 +390,55 @@ if(SETTINGS.explorerSearchFixes) {
 
 if(SETTINGS.topAppsCardsOutline) {
     injectStyle(`
+        .lightTheme19H1 .topItemsGroup .selectable {
+            background-color: rgba(255, 255, 255, 0.4) !important;
+        }
+        .darkTheme19H1 .topItemsGroup .selectable {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
         .topItemsGroup .selectable:hover {
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5) inset !important;
         }
         .topItemsGroup .selectable:active {
             box-shadow: none !important;
+            transform: scale(0.98);
         }
     `);
     if(SETTINGS.acrylicMode) {
         injectStyle(`
             .topItemsGroup .selectable {
-                transition: background-color 25ms linear, box-shadow 25ms linear;
-            }
-
-            .darkTheme19H1 .topItemsGroup .selectable:hover, {
-                background-color: rgba(255, 255, 255, 0.05) !important;
-            }
-            .darkTheme19H1 .topItemsGroup .selectable:active {
-                background-color: rgba(255, 255, 255, 0.2) !important;
+                transition: all 25ms ease-out;
+                -webkit-backdrop-filter: brightness(101%);
             }
         
             .lightTheme19H1 .topItemsGroup .selectable:hover, {
-                background-color: rgba(255, 255, 255, 0.2) !important;
+                background-color: rgba(255, 255, 255, 0.48) !important;
             }
             .lightTheme19H1 .topItemsGroup .selectable:active {
-                background-color: rgba(255, 255, 255, 0.3) !important;
+                background-color: rgba(255, 255, 255, 0.5) !important;
+            }
+
+            .darkTheme19H1 .topItemsGroup .selectable:hover, {
+                background-color: rgba(255, 255, 255, 0.14) !important;
+            }
+            .darkTheme19H1 .topItemsGroup .selectable:active {
+                background-color: rgba(255, 255, 255, 0.18) !important;
             }
         `);
     } else {
         injectStyle(`
-            .topItemsGroup .selectable:hover,
-            .topItemsGroup .selectable:active {
-                background-color: rgba(255, 255, 255, 0.1) !important; !important;
+            .topItemsGroup .selectable {
+                transition: transform 25ms ease-out;
+            }
+
+            .lightTheme19H1 .topItemsGroup .selectable:hover,
+            .lightTheme19H1 .topItemsGroup .selectable:active {
+                background-color: rgba(255, 255, 255, 0.4) !important;
+            }
+            .darkTheme19H1 .topItemsGroup .selectable:hover,
+            .darkTheme19H1 .topItemsGroup .selectable:active {
+                background-color: rgba(255, 255, 255, 0.1) !important;
             }
         `);
     }
