@@ -419,7 +419,7 @@ if(SETTINGS.topAppsCardsOutline) {
                 background-color: rgba(255, 255, 255, 0.5) !important;
             }
 
-            .darkTheme19H1 .topItemsGroup .selectable:hover, {
+            .darkTheme19H1 .topItemsGroup .selectable:hover {
                 background-color: rgba(255, 255, 255, 0.14) !important;
             }
             .darkTheme19H1 .topItemsGroup .selectable:active {
