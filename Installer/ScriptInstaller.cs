@@ -54,7 +54,7 @@ namespace BeautySearch
                 SEARCH_APP_NAME = "Microsoft.Windows.Cortana_cw5n1h2txyewy";
             }
 
-            TARGET_DIR = Path.GetPathRoot(Environment.SystemDirectory) + @"Windows\SystemApps\" + SEARCH_APP_NAME + @"\cache\Local\Desktop";
+            TARGET_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Windows\SystemApps\{SEARCH_APP_NAME}\cache\Local\Desktop";
             TARGET_FILE = TARGET_DIR + @"\2.html";
             SCRIPT_DEST = TARGET_DIR + @"\BeautySearch.js";
         }
@@ -259,16 +259,34 @@ namespace BeautySearch
             return null;
         }
 
+        public static void ClearIconCache()
+        {
+            string localUsername = username.Substring(username.IndexOf("\\"));
+            string ICON_CACHE_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Users\{localUsername}\AppData\Local\Packages\{SEARCH_APP_NAME}\LocalState\AppIconCache";
+            Directory.Delete(ICON_CACHE_DIR, true);
+        }
+
         // Multi User
+        private static string _username;
+        public static string username
+        {
+            get
+            {
+                if (_username == null)
+                {
+                    _username = Utility.GetUsername();
+                }
+                return _username;
+            }
+        }
+
         private static string _sid;
         public  static string SID
         {
             get
             {
-                if (_sid == null) {
-                    ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT UserName FROM Win32_ComputerSystem");
-                    ManagementObjectCollection collection = searcher.Get();
-                    string username = (string)collection.Cast<ManagementBaseObject>().First()["UserName"];
+                if (_sid == null)
+                {
                     _sid = (new System.Security.Principal.NTAccount(username)).Translate(typeof(System.Security.Principal.SecurityIdentifier)).Value.ToString();
                 }
                 return _sid;

@@ -161,7 +161,7 @@ namespace BeautySearch
 
         private void clearIconCacheBtn_Click(object sender, EventArgs e)
         {
-
+            ScriptInstaller.ClearIconCache();
         }
 
         #endregion
