@@ -49,7 +49,7 @@ namespace BeautySearch
             }
             if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1)
             {
-                AddFeature("[20H1+] Crop real desktop to apply Fake Acrylic", "fakeAcrylicDesktopCrop", false);
+                AddFeature("[20H1+] Capture desktop to apply Fake Acrylic", "fakeAcrylicDesktopCrop", false);
                 AddFeature("[20H1+] Don't override Fake Acrylic wallpaper for now", "skipFakeAcrylic", false);
             }
             /*
