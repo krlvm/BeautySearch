@@ -71,6 +71,14 @@ namespace BeautySearch
             }
         }
 
+        public static int GetWallpaperStyle()
+        {
+            using (RegistryKey key = OpenCurrentUserRegistryKey(@"Control Panel\Desktop", false))
+            {
+                return Int32.Parse(key == null ? "10" : ((string)key.GetValue("WallpaperStyle", "10")));
+            }
+        }
+
         public static bool RequireAdministrator()
         {
             if (!IsAdministrator())
@@ -148,6 +156,8 @@ namespace BeautySearch
         {
             KeyboardSend.KeyDown(Keys.Escape);
             KeyboardSend.KeyUp(Keys.Escape);
+
+            NativeHelper.SetForegroundWindow(NativeHelper.FindWindow("Shell_TrayWnd", null));
         }
     }
 
@@ -155,6 +165,12 @@ namespace BeautySearch
     {
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]

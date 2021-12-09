@@ -80,13 +80,14 @@ namespace BeautySearch
                 }
                 if (!features.IsEnabled("skipFakeAcrylic") || !File.Exists(FakeBackgroundAcrylic.GetCroppedWallpaperPath(TARGET_DIR)))
                 {
-                    MessageBox.Show(
-                        "We need to take a screenshot of the area behind the Search Window for acrylic effect, so all windows will be minimized.\nDon't move the mouse pointer until we're done. Click \"OK\" to continue.",
-                        "BeautySearch",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                    );
-                    FakeBackgroundAcrylic.CaptureWallpaper(TARGET_DIR);
+                    if (features.IsEnabled("fakeAcrylicDesktopCrop"))
+                    {
+                        FakeBackgroundAcrylic.CaptureRealDesktop(TARGET_DIR);
+                    }
+                    else
+                    {
+                        FakeBackgroundAcrylic.CaptureWallpaper(TARGET_DIR);
+                    }
                 }
             }
 
@@ -261,9 +262,11 @@ namespace BeautySearch
 
         public static void ClearIconCache()
         {
-            string localUsername = username.Substring(username.IndexOf("\\"));
             string ICON_CACHE_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Users\{localUsername}\AppData\Local\Packages\{SEARCH_APP_NAME}\LocalState\AppIconCache";
-            Directory.Delete(ICON_CACHE_DIR, true);
+            if (Directory.Exists(ICON_CACHE_DIR))
+            {
+                Directory.Delete(ICON_CACHE_DIR, true);
+            }
         }
 
         // Multi User
@@ -277,6 +280,13 @@ namespace BeautySearch
                     _username = Utility.GetUsername();
                 }
                 return _username;
+            }
+        }
+        public static string localUsername
+        {
+            get
+            {
+                return username.Substring(username.IndexOf("\\"));
             }
         }
 
