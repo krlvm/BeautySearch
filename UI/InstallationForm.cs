@@ -152,6 +152,20 @@ namespace BeautySearch
 
         #endregion
 
+        #region Service Buttons
+
+        private void searchRestartBtn_Click(object sender, EventArgs e)
+        {
+            ScriptInstaller.KillSearchApp();
+        }
+
+        private void clearIconCacheBtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        #endregion
+
         private void UpdateInstallationStatus()
         {
             installBtn.Text = ScriptInstaller.IsInstalled() ? "Reinstall" : "Install";

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InstallationForm));
             this.installBtn = new System.Windows.Forms.Button();
             this.uninstallBtn = new System.Windows.Forms.Button();
@@ -43,6 +44,10 @@
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.radioButton5 = new System.Windows.Forms.RadioButton();
             this.radioButton6 = new System.Windows.Forms.RadioButton();
+            this.searchRestartBtn = new System.Windows.Forms.Button();
+            this.clearIconCacheBtn = new System.Windows.Forms.Button();
+            this.clearIconCacheTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.restartSearchAppTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.themeGroup.SuspendLayout();
             this.cornersGroup.SuspendLayout();
             this.SuspendLayout();
@@ -198,12 +203,38 @@
             this.radioButton6.Text = "Default";
             this.radioButton6.UseVisualStyleBackColor = true;
             // 
+            // searchRestartBtn
+            // 
+            this.searchRestartBtn.Font = new System.Drawing.Font("Segoe MDL2 Assets", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.searchRestartBtn.Location = new System.Drawing.Point(393, 416);
+            this.searchRestartBtn.Name = "searchRestartBtn";
+            this.searchRestartBtn.Size = new System.Drawing.Size(67, 57);
+            this.searchRestartBtn.TabIndex = 18;
+            this.searchRestartBtn.Text = "";
+            this.restartSearchAppTooltip.SetToolTip(this.searchRestartBtn, "Restart Search App");
+            this.searchRestartBtn.UseVisualStyleBackColor = true;
+            this.searchRestartBtn.Click += new System.EventHandler(this.searchRestartBtn_Click);
+            // 
+            // clearIconCacheBtn
+            // 
+            this.clearIconCacheBtn.Font = new System.Drawing.Font("Segoe MDL2 Assets", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.clearIconCacheBtn.Location = new System.Drawing.Point(324, 416);
+            this.clearIconCacheBtn.Name = "clearIconCacheBtn";
+            this.clearIconCacheBtn.Size = new System.Drawing.Size(67, 57);
+            this.clearIconCacheBtn.TabIndex = 20;
+            this.clearIconCacheBtn.Text = "";
+            this.clearIconCacheTooltip.SetToolTip(this.clearIconCacheBtn, "Clear Search App Icon Cache");
+            this.clearIconCacheBtn.UseVisualStyleBackColor = true;
+            this.clearIconCacheBtn.Click += new System.EventHandler(this.clearIconCacheBtn_Click);
+            // 
             // InstallationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(472, 525);
+            this.Controls.Add(this.clearIconCacheBtn);
+            this.Controls.Add(this.searchRestartBtn);
             this.Controls.Add(this.cornersGroup);
             this.Controls.Add(this.themeGroup);
             this.Controls.Add(this.featureBox);
@@ -244,6 +275,10 @@
         private System.Windows.Forms.RadioButton radioButton4;
         private System.Windows.Forms.RadioButton radioButton5;
         private System.Windows.Forms.RadioButton radioButton6;
+        private System.Windows.Forms.Button searchRestartBtn;
+        private System.Windows.Forms.Button clearIconCacheBtn;
+        private System.Windows.Forms.ToolTip restartSearchAppTooltip;
+        private System.Windows.Forms.ToolTip clearIconCacheTooltip;
     }
 }
 
