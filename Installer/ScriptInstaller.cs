@@ -207,7 +207,7 @@ namespace BeautySearch
                 {
                     // We will try to kill the Search App using TASKKILL instead of asking to re-login
                     //success = false;
-                    Process.Start("taskkill.exe", "/F /IM " + SEARCH_APP_EXEC + ".exe");
+                    Utility.ExecuteCommand("taskkill.exe", "/F /IM " + SEARCH_APP_EXEC + ".exe");
                 }
             }
             return success;

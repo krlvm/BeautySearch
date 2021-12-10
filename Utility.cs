@@ -96,6 +96,16 @@ namespace BeautySearch
             return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
+        public static void ExecuteCommand(string exec, string args)
+        {
+            Process proc = new Process();
+            proc.StartInfo.FileName = exec;
+            proc.StartInfo.Arguments = args;
+            proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            proc.Start();
+            proc.WaitForExit();
+        }
+
         public static string GetUsername()
         {
             ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT UserName FROM Win32_ComputerSystem");
@@ -115,8 +125,8 @@ namespace BeautySearch
             }
             catch
             {
-                Process.Start("takeown.exe", "/F \"" + filepath + "\"");
-                Process.Start("icacls.exe", "\"" + filepath + "\" /grant " + Environment.UserName + ":F");
+                ExecuteCommand("takeown.exe", "/F \"" + filepath + "\"");
+                ExecuteCommand("icacls.exe", "\"" + filepath + "\" /grant " + Environment.UserName + ":F");
             }
         }
         private static void GetFullAccess(string filepath)
