@@ -70,9 +70,7 @@ BeautySearch allows you to make all corners sharp to be consistent with the rest
 
 BeautySearch provides a tweak which allows you to use more acrylic in Search Window design:
 
-<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/light.png" width="100%" />
-<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/dark.png" width="100%" />
-<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/accent.png" width="100%" />
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/light.png" width="33%" /><img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/dark.png" width="33%" /><img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/accent.png" width="33%" />
 
 ## FAQ
 
