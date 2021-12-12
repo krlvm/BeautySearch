@@ -103,7 +103,7 @@ namespace BeautySearch
             switch (ScriptInstaller.Install(features))
             {
                 case 0:
-                    MessageBox.Show("BeautySearch successfully installed", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //MessageBox.Show("BeautySearch successfully installed", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     Utility.ShowSearchWindow();
                     break;
                 case ScriptInstaller.ERR_READ:
