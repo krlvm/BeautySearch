@@ -39,6 +39,8 @@ It also looks great with Accent Background enabled:
 
 <img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/dark-theme/accent.png" width="100%" />
 
+It's also possible to use dark themed search results when light themed apps - check radio buttons in the installer.
+
 ### Remove background from UWP applications icons
 UWP icons background was removed from the Start Menu in the last Insider Builds, but it still present in other pieces of the OS.\
 BeautySearch helps you to get rid of that inconsistency for the Search Window.
@@ -63,6 +65,14 @@ BeautySearch can show the outlines only when you're using keyboard to make the U
 
 ### Adjusting corners
 BeautySearch allows you to make all corners sharp to be consistent with the rest of Windows 10 Shell, or rounded to be consistent with the new Fluent Design guidelines.
+
+### Enhanced look
+
+BeautySearch provides a tweak which allows you to use more acrylic in Search Window design:
+
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/light.png" width="100%" />
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/dark.png" width="100%" />
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/accent.png" width="100%" />
 
 ## FAQ
 
@@ -103,6 +113,19 @@ BeautySearch is tested on:
 
 Download the Installer [here](https://github.com/krlvm/BeautySearch/releases/latest) and run it as administrator.\
 Select the tweaks you want to apply and click "Install".
+
+> Since version 1.7, BeautySearch supports silent installation using CLI. You can set preferred theme and disable design enhancements (optional):
+
+Silent install:
+```
+$ BeautySearch.exe auto
+```
+Advanced silent install
+```
+$ BeautySearch.exe auto [auto/light/dark] [disable-enhancements]
+$ BeautySearch.exe auto dark disable-enhancements
+$ BeautySearch.exe auto light
+```
 
 ### Manual installation
 Download the last version of the BeautySearch script [here](https://raw.githubusercontent.com/krlvm/BeautySearch/master/BeautySearch.js) and modify it in order to get the tweaks you're need.\
