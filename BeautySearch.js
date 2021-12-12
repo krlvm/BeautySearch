@@ -46,9 +46,9 @@
 
  const SETTINGS_DEFAULTS = {
     useController: true,           // true | false
-    restyleOnLoadAcrylic: true,   // true | false
-    restyleOnLoadAccent: true,    // true | false
-    restyleOnLoadTheme: true,     // true | false
+    restyleOnLoadAcrylic: true,    // true | false
+    restyleOnLoadAccent: true,     // true | false
+    restyleOnLoadTheme: true,      // true | false
     unifyMenuWidth: true,          // true | false
     disableTilesBackground: true,  // true | false
     contextMenuFluent: true,       // true | false
@@ -59,6 +59,7 @@
     hideOutlines: true,            // true | false
     acrylicMode: false,            // true | false | 'fake'
     backgroundMode: true,          // true | false | 'system' | color: String
+    enhancedAcrylic: true,         // true | false
     corners: 'sharp',              // 'default' | 'sharp' | 'round'
     theme: 'auto',                 // 'auto'    | 'light' | 'dark'
 }
@@ -159,6 +160,7 @@ const FLUENT_NOISE_TEXTURE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIA
 const ACCENT_BACKGROUND_CLASS_NAME = 'bsAccentBackground';
 const DARK_THEME_CLASS_NAME = SETTINGS.theme == 'dark' ? 'darkTheme19H1' : 'bsDark', DARK_THEME_CLASS = '.' + DARK_THEME_CLASS_NAME;
 const injectDarkTheme = (parent = '') => {
+    const backdropShade = 'rgba(245, 245, 245, 0.1)';
     injectStyle(`
         ${parent} #qfContainer, ${parent} #qfPreviewPane {
             color: white !important;
@@ -167,22 +169,23 @@ const injectDarkTheme = (parent = '') => {
             background-color: rgba(255, 255, 255, 0.05);
         }
         ${parent} #qfPreviewPane {
-            background-color: #272727;
+            background-color: ${SETTINGS.enhancedAcrylic ? (SETTINGS.backgroundMode ? 'rgba(39, 39, 39, 0.25)' : 'rgba(200, 200, 200, 0.1)') : '#272727' };
         }
         ${parent} #previewContainer {
-            background-color: #1F1F1F !important;
+            background-color: ${SETTINGS.enhancedAcrylic ? 'rgba(31, 31, 31, 0.25)' : '#1F1F1F' } !important;
         }
 
         ${parent} .previewDataSection .secondaryText {
             color: white !important;
         }
         ${parent} .expanderCircle {
-            background-color: #272727;
             border-radius: 15px;
+            background-color: ${SETTINGS.enhancedAcrylic ? backdropShade : '#272727' };
+            ${SETTINGS.enhancedAcrylic ? '-webkit-backdrop-filter: blur(5px)' : '' }
         }
 
         ${parent} #previewContainer .divider {
-            border: 1px solid #272727;
+            border: 1px solid ${SETTINGS.enhancedAcrylic ? backdropShade : '#272727' };
         }
 
         ${parent} .annotation, ${parent} .iconContainer:not(.accentColor) {
@@ -288,6 +291,27 @@ const applyFakeAcrylic = (tint) => {
 }
 
 /** Tweaks */
+
+if(SETTINGS.enhancedAcrylic) {
+    const parent = '.lightTheme19H1';
+    const backdropShade = 'rgba(194, 194, 194, 0.3)';
+    injectStyle(`
+        ${parent} #qfPreviewPane {
+            background-color: rgba(245, 245, 245, 0.3);
+        }
+        ${parent} #previewContainer {
+            background-color: rgba(255, 255, 255, 0.3) !important;
+        }
+        ${parent} .expanderCircle {
+            border-radius: 15px;
+            background-color: ${backdropShade};
+            -webkit-backdrop-filter: blur(5px);
+        }
+        ${parent} #previewContainer .divider {
+            border: 1px solid ${backdropShade};
+        }
+    `);
+}
 
 if(SETTINGS.disableTilesBackground) {
     injectStyle(`

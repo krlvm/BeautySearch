@@ -36,6 +36,7 @@ namespace BeautySearch
 
             AddFeature("Show accent color on Search Window", "backgroundMode", Utility.IsPersonalizationFeatureEnabled("ColorPrevalence"));
             AddFeature("Enable Acrylic (or Fake Acrylic on 20H1+)", "acrylicMode", acrylicEnabled);
+            AddFeature("Enhanced design with more Acrylic", "enhancedAcrylic", acrylicEnabled);
             AddFeature("Remove background from UWP application icons", "disableTilesBackground", ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1+1);
             AddFeature("Fluent Context Menu", "contextMenuFluent");
             AddFeature("Acrylic Context Menu", "contextMenuAcrylic", acrylicEnabled);
