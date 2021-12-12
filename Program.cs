@@ -11,15 +11,19 @@ namespace BeautySearch
         [STAThread]
         static void Main(string[] args)
         {
-            if (args.Length == 1 && args[0].Equals("auto"))
+            if (args.Length > 0 && args[0].Equals("auto"))
             {
                 FeatureControl features = new FeatureControl();
 
+                if (args.Length != 3 || !args[2].Equals("disable-enhancements"))
+                {
+                    features.Enable("enhancedAcrylic");
+                }
                 features.Enable("contextMenuFluent");
                 features.Enable("unifyMenuWidth");
                 features.Enable("hideOutlines");
                 features.Enable("topAppsCardsOutline");
-                features.Set("theme", "auto");
+                features.Set("theme", args.Length > 1 ? args[1].ToLower() : "auto");
                 features.Set("corners", "sharp");
                 if (Utility.IsPersonalizationFeatureEnabled("EnableTransparency"))
                 {
