@@ -133,11 +133,6 @@ Open `2.html` in Notepad or any other text editor and add this line to the end o
 Copy the script to the folder and end task `SearchApp.exe` (you can execute `taskkill /f /im SearchApp.exe` in the terminal).\
 Some additional instructions with screenshots can be found [there](https://github.com/krlvm/BeautySearch/issues/11#issuecomment-860113080).
 
-Since version 1.7, you can install BeautySearch silently with standard options:
-```
-$ BeautySearch.exe auto
-```
-
 ## Troubleshooting
 If you're unable to open the Search Window after installation, the application files was corrupted. Most likely, BeautySearch is not compatible with your version of Windows 10.\
 Execute `sfc /scannow` in the terminal to repair the application files. If you're still can't open the Search Window run this command in PowerShell to reinstall the Search app:\
