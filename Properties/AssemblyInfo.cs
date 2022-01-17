@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("krlvm")]
 [assembly: AssemblyProduct("BeautySearch")]
-[assembly: AssemblyCopyright("Copyright © krlvm 2020-2021")]
+[assembly: AssemblyCopyright("Copyright © krlvm 2020-2022")]
 [assembly: AssemblyTrademark("krlvm")]
 [assembly: AssemblyCulture("")]
 

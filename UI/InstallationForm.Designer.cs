@@ -82,7 +82,7 @@
             this.copyrightLabel.Name = "copyrightLabel";
             this.copyrightLabel.Size = new System.Drawing.Size(139, 17);
             this.copyrightLabel.TabIndex = 5;
-            this.copyrightLabel.Text = "(c) krlvm, 2020-2021";
+            this.copyrightLabel.Text = "(c) krlvm, 2020-2022";
             // 
             // linkLabel1
             // 
