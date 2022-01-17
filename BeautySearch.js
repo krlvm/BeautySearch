@@ -177,6 +177,9 @@ const injectDarkTheme = (parent = '') => {
         ${parent} .previewDataSection .secondaryText {
             color: white !important;
         }
+        ${parent} .previewDataSection .uninstallMessage .message, ${parent} .previewDataSection .uninstallMessage .message .iconContent {
+            color: rgba(255, 255, 255, 0.6) !important;
+        }
         ${parent} .expanderCircle {
             border-radius: 15px;
             background-color: ${SETTINGS.enhancedAcrylic ? backdropShade : '#272727' };
