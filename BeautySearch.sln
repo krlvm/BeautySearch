@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.30320.27
+VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySearch", "BeautySearch.csproj", "{8EA3505E-7159-481F-9773-374ED5AC6FFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeautySearch", "BeautySearch\BeautySearch.csproj", "{8EA3505E-7159-481F-9773-374ED5AC6FFD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C2164337-39D0-4248-A17E-C35D27E1CC78}
+		SolutionGuid = {259E97E8-8CE2-4076-85E3-CE5115782C0E}
 	EndGlobalSection
 EndGlobal
