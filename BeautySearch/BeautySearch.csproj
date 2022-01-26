@@ -86,6 +86,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Installer\ScriptInstaller.cs" />
+    <Compile Include="UI\TopAppsEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\TopAppsEditorForm.Designer.cs">
+      <DependentUpon>TopAppsEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utility.cs" />
     <EmbeddedResource Include="UI\InstallationForm.resx">
       <DependentUpon>InstallationForm.cs</DependentUpon>
@@ -100,6 +106,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\TopAppsEditorForm.resx">
+      <DependentUpon>TopAppsEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -130,6 +139,7 @@
     <EmbeddedResource Include="BeautySearch.js" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="TopAppsEditor.html" />
     <EmbeddedResource Include="BeautySearchLoader.js" />
     <Content Include="icon.ico" />
   </ItemGroup>

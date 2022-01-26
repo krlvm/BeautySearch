@@ -1,0 +1,225 @@
+<!--
+
+    BeautySearch - Windows 10 Search Window appearance tweaker
+
+    This file provides user interface for editing Top Apps section
+    It is being loaded into Internet Explorer WebView, so it is not
+    possible to use ES6 language features in JavaScript code
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Top Apps section editor</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=11">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -ms-user-select: none;
+        }
+
+        html, body {
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #controls {
+            display: flex;
+            margin: 8px;
+        }
+        #controls > * {
+            flex-grow: 1;
+        }
+
+        #table-wrapper {
+            flex-grow: 1;
+            margin: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #apps-table {
+            height: 100vh;
+            width: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        #apps-table, #apps-table td {
+            border: 0.1px solid rgb(36, 36, 36);
+            border-collapse: collapse;
+        }
+        #apps-table td {
+            padding: 6px;
+            cursor: default;
+            display: flex;
+            align-items: center;
+        }
+        #apps-table tr:hover {
+            background-color: rgb(220, 220, 220);
+        }
+
+        .selected {
+            background-color: rgb(210, 210, 210) !important;
+        }
+
+        .app-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 12px;
+        }
+    </style>
+    
+    <script>
+        var data;
+
+        var selected;
+        var selectedId = -1;
+
+        var total;
+        var maxUsage;
+
+        function importJson(raw) {
+            data = JSON.parse(raw);
+            
+            var apps = [];
+            for (var i = 0; i < data.length; i++) {
+                var entry = data[i];
+                if (entry['System.Kind'].Value != 'program') continue;
+
+                var encodedPath = entry['System.Tile.EncodedTargetPath'].Value;
+                var tilePath = entry['System.Tile.SmallLogoPath'].Value;
+
+                var iconPath;
+                if (tilePath == 'N/A') {
+                    iconPath = encodedPath;
+                } else {
+                    var identity = entry['System.Identity'].Value;
+                    iconPath = entry['System.AppUserModel.PackageFullName'].Value + '?ms-resource://' + identity.substring(0, identity.indexOf('_')) + '/Files/' + tilePath;
+                }
+
+                var used = parseInt(entry['System.Software.TimesUsed'].Value);
+                maxUsage = Math.max(maxUsage, used);
+
+                apps.push({
+                    id: i,
+                    name: entry['System.ItemNameDisplay'].Value,
+                    used: used,
+                    icon: window.external.LoadIcon(iconPath, tilePath != 'N/A')
+                });
+            }
+            apps = apps.sort(function(a, b) {
+                return b.used - a.used;
+            });
+            total = apps.length;
+
+            var table = document.getElementById('apps-table');
+            for (var i = 0; i < apps.length; i++) {
+                var app = apps[i];
+                var style = i == 4 ? ' style="border-bottom: 3px double darkblue !important"' : '';
+                var icon = app.icon != null ? app.icon : 'Qk1CAAAAAAAAAD4AAAAoAAAAAQAAAAEAAAABAAEAAAAAAAQAAAB0EgAAdBIAAAAAAAAAAAAAAAAAAP///wCAAAAA';
+                table.innerHTML += '<tr class="app-row"' + style + '><td data-id="' + app.id + '"><img class="app-icon" src="data:image/png;base64,' + app.icon + '"/>' + app.name + '</td></tr>'
+            }
+
+            var rows = queryRows();
+            for (var i = 0; i < rows.length; i++) {
+                (function() {
+                    var row = rows[i];
+                    var id = i;
+                    row.addEventListener('click', function(event) {
+                        select(row, id);
+                    });
+                })();
+            }
+
+            document.getElementById('controls').style.display = null;
+        }
+
+        function exportJson() {
+            var cur = 5000;
+            var rows = queryRows();
+            for (var i = 0; i < rows.length; i++) {
+                var id = rows[i].querySelector('td').dataset.id;
+                data[id]['System.Software.TimesUsed'].Value = Math.max(0, cur -= 250 * (i <= 5 ? 2 : 0.5));
+            }
+
+            return JSON.stringify(data);
+        }
+
+
+        function queryRows() {
+            return document.querySelectorAll('.app-row');
+        }
+
+        function select(row, id) {
+            if (selected != null) {
+                selected.classList.remove('selected');
+            }
+            row.classList.add('selected');
+            selected = row;
+            selectedId = id;
+        }
+
+
+        function swapSelectedWith(id) {
+            var target = queryRows()[id];
+            var buf = target.innerHTML;
+            target.innerHTML = selected.innerHTML;
+            selected.innerHTML = buf;
+            select(target, id);
+            return target;
+        }
+
+        function moveUp() {
+            if (selectedId == -1 || selectedId == 0) return;
+            swapSelectedWith(selectedId - 1);
+        }
+        function moveDown() {
+            if (selectedId == -1 || selectedId == total - 1) return;
+            swapSelectedWith(selectedId + 1);
+        }
+        function moveTop() {
+            if (selectedId == -1 || selectedId == 0) return;
+            for (var id = selectedId; id >= 0; id--) {
+                var target = swapSelectedWith(id);
+                if (id == 0) target.scrollIntoView();
+            }
+        }
+        function moveBottom() {
+            if (selectedId == -1 || selectedId == total - 1) return;
+            for (var id = selectedId; id <= total - 1; id++) {
+                var target = swapSelectedWith(id);
+                if (id == total - 1) target.scrollIntoView();
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="controls">
+            <button onclick="moveTop()" style="margin-right: 16px;">Move to the Top</button>
+            <button onclick="moveUp()" style="margin-right: 16px;">Move Up</button>
+            <button onclick="moveDown()" style="margin-right: 16px;">Move Down</button>
+            <button onclick="moveBottom()">Move to the Bottom</button>
+        </div>
+        <div id="table-wrapper">
+            <table id="apps-table"></table>
+        </div>
+    </div>
+</body>
+
+</html>

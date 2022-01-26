@@ -48,13 +48,14 @@
             this.clearIconCacheBtn = new System.Windows.Forms.Button();
             this.clearIconCacheTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.restartSearchAppTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.topAppsBtn = new System.Windows.Forms.Button();
             this.themeGroup.SuspendLayout();
             this.cornersGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // installBtn
             // 
-            this.installBtn.Location = new System.Drawing.Point(12, 478);
+            this.installBtn.Location = new System.Drawing.Point(12, 518);
             this.installBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.installBtn.Name = "installBtn";
             this.installBtn.Size = new System.Drawing.Size(136, 36);
@@ -65,7 +66,7 @@
             // 
             // uninstallBtn
             // 
-            this.uninstallBtn.Location = new System.Drawing.Point(324, 478);
+            this.uninstallBtn.Location = new System.Drawing.Point(324, 518);
             this.uninstallBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.uninstallBtn.Name = "uninstallBtn";
             this.uninstallBtn.Size = new System.Drawing.Size(136, 36);
@@ -78,7 +79,7 @@
             // 
             this.copyrightLabel.AutoSize = true;
             this.copyrightLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.copyrightLabel.Location = new System.Drawing.Point(167, 488);
+            this.copyrightLabel.Location = new System.Drawing.Point(167, 528);
             this.copyrightLabel.Name = "copyrightLabel";
             this.copyrightLabel.Size = new System.Drawing.Size(139, 17);
             this.copyrightLabel.TabIndex = 5;
@@ -87,7 +88,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(12, 447);
+            this.linkLabel1.Location = new System.Drawing.Point(11, 489);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(250, 17);
             this.linkLabel1.TabIndex = 12;
@@ -98,7 +99,8 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 413);
+            this.label2.Location = new System.Drawing.Point(11, 455);
+            this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(310, 34);
             this.label2.TabIndex = 13;
@@ -120,7 +122,7 @@
             this.themeGroup.Controls.Add(this.radioButton3);
             this.themeGroup.Controls.Add(this.radioButton2);
             this.themeGroup.Controls.Add(this.radioButton1);
-            this.themeGroup.Location = new System.Drawing.Point(15, 310);
+            this.themeGroup.Location = new System.Drawing.Point(12, 309);
             this.themeGroup.Name = "themeGroup";
             this.themeGroup.Size = new System.Drawing.Size(200, 100);
             this.themeGroup.TabIndex = 16;
@@ -164,7 +166,7 @@
             this.cornersGroup.Controls.Add(this.radioButton4);
             this.cornersGroup.Controls.Add(this.radioButton5);
             this.cornersGroup.Controls.Add(this.radioButton6);
-            this.cornersGroup.Location = new System.Drawing.Point(260, 310);
+            this.cornersGroup.Location = new System.Drawing.Point(260, 309);
             this.cornersGroup.Name = "cornersGroup";
             this.cornersGroup.Size = new System.Drawing.Size(200, 100);
             this.cornersGroup.TabIndex = 17;
@@ -206,7 +208,7 @@
             // searchRestartBtn
             // 
             this.searchRestartBtn.Font = new System.Drawing.Font("Segoe MDL2 Assets", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.searchRestartBtn.Location = new System.Drawing.Point(393, 416);
+            this.searchRestartBtn.Location = new System.Drawing.Point(393, 455);
             this.searchRestartBtn.Name = "searchRestartBtn";
             this.searchRestartBtn.Size = new System.Drawing.Size(67, 57);
             this.searchRestartBtn.TabIndex = 18;
@@ -218,7 +220,7 @@
             // clearIconCacheBtn
             // 
             this.clearIconCacheBtn.Font = new System.Drawing.Font("Segoe MDL2 Assets", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clearIconCacheBtn.Location = new System.Drawing.Point(324, 416);
+            this.clearIconCacheBtn.Location = new System.Drawing.Point(324, 455);
             this.clearIconCacheBtn.Name = "clearIconCacheBtn";
             this.clearIconCacheBtn.Size = new System.Drawing.Size(67, 57);
             this.clearIconCacheBtn.TabIndex = 20;
@@ -227,12 +229,23 @@
             this.clearIconCacheBtn.UseVisualStyleBackColor = true;
             this.clearIconCacheBtn.Click += new System.EventHandler(this.clearIconCacheBtn_Click);
             // 
+            // topAppsBtn
+            // 
+            this.topAppsBtn.Location = new System.Drawing.Point(12, 415);
+            this.topAppsBtn.Name = "topAppsBtn";
+            this.topAppsBtn.Size = new System.Drawing.Size(448, 34);
+            this.topAppsBtn.TabIndex = 21;
+            this.topAppsBtn.Text = "Edit \"Top Apps\" section";
+            this.topAppsBtn.UseVisualStyleBackColor = true;
+            this.topAppsBtn.Click += new System.EventHandler(this.topAppsBtn_Click);
+            // 
             // InstallationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(472, 525);
+            this.ClientSize = new System.Drawing.Size(472, 563);
+            this.Controls.Add(this.topAppsBtn);
             this.Controls.Add(this.clearIconCacheBtn);
             this.Controls.Add(this.searchRestartBtn);
             this.Controls.Add(this.cornersGroup);
@@ -279,6 +292,7 @@
         private System.Windows.Forms.Button clearIconCacheBtn;
         private System.Windows.Forms.ToolTip restartSearchAppTooltip;
         private System.Windows.Forms.ToolTip clearIconCacheTooltip;
+        private System.Windows.Forms.Button topAppsBtn;
     }
 }
 

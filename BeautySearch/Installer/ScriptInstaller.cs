@@ -247,6 +247,11 @@ namespace BeautySearch
             return true;
         }
 
+        public static string GetCurrentUserSearchAppDataDirectory()
+        {
+            return $@"{Path.GetPathRoot(Environment.SystemDirectory)}Users\{localUsername}\AppData\Local\Packages\{SEARCH_APP_NAME}";
+        }
+
         public static string FindControllerFile()
         {
             // *laughs*
@@ -260,7 +265,8 @@ namespace BeautySearch
 
         public static void ClearIconCache()
         {
-            string ICON_CACHE_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Users\{localUsername}\AppData\Local\Packages\{SEARCH_APP_NAME}\LocalState\AppIconCache";
+            string ICON_CACHE_DIR = $@"{GetCurrentUserSearchAppDataDirectory()}\LocalState\AppIconCache";
+            MessageBox.Show(ICON_CACHE_DIR);
             if (Directory.Exists(ICON_CACHE_DIR))
             {
                 Directory.Delete(ICON_CACHE_DIR, true);

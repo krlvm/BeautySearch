@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeautySearch.UI;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.UI.WebControls;
@@ -164,6 +165,11 @@ namespace BeautySearch
         private void clearIconCacheBtn_Click(object sender, EventArgs e)
         {
             ScriptInstaller.ClearIconCache();
+        }
+
+        private void topAppsBtn_Click(object sender, EventArgs e)
+        {
+            TopAppsEditorForm.Launch();
         }
 
         #endregion
