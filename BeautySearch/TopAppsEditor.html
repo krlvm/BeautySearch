@@ -45,12 +45,12 @@
 
         #table-wrapper {
             flex-grow: 1;
-            margin: 12px 0 12px 2px;
+            margin: 0 8px 4px 8px;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
             overflow-x: hidden;
-            border-bottom: 0.1px solid rgb(36, 36, 36);
+            border: 0.1px solid rgb(36, 36, 36);
         }
 
         #apps-table {
@@ -130,7 +130,7 @@
             var table = document.getElementById('apps-table');
             for (var i = 0; i < apps.length; i++) {
                 var app = apps[i];
-                var style = i == 4 ? ' style="border-bottom: 3px double darkblue !important"' : '';
+                var style = i == 4 ? ' style="border-bottom: 3px solid darkblue !important"' : '';
                 var icon = app.icon != null ? app.icon : 'Qk1CAAAAAAAAAD4AAAAoAAAAAQAAAAEAAAABAAEAAAAAAAQAAAB0EgAAdBIAAAAAAAAAAAAAAAAAAP///wCAAAAA';
                 table.innerHTML += '<tr class="app-row"' + style + '><td data-id="' + app.id + '"><img class="app-icon" src="data:image/png;base64,' + app.icon + '"/>' + app.name + '</td></tr>'
             }
