@@ -160,11 +160,13 @@ namespace BeautySearch
         private void searchRestartBtn_Click(object sender, EventArgs e)
         {
             ScriptInstaller.KillSearchApp();
+            Utility.ShowSearchWindow();
         }
 
         private void clearIconCacheBtn_Click(object sender, EventArgs e)
         {
             ScriptInstaller.ClearIconCache();
+            Utility.ShowSearchWindow();
         }
 
         private void topAppsBtn_Click(object sender, EventArgs e)

@@ -123,6 +123,7 @@ namespace BeautySearch.UI
             }
             ScriptInstaller.KillSearchApp();
             MessageBox.Show("Changes to Top Apps have been saved", "BeautySearch", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Utility.ShowSearchWindow();
         }
 
         private void cancelBtn_Click(object sender, EventArgs e)
