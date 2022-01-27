@@ -72,6 +72,12 @@ BeautySearch provides a tweak which allows you to use more acrylic in Search Win
 
 <img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/light.png" width="33%" /><img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/dark.png" width="33%" /><img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/tweaks/enhanced-look/accent.png" width="33%" />
 
+### Top Apps section editor
+
+BeautySearch allows you to get rid of useless icons in Top Apps section.
+
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/top-apps.png" width="100%" />
+
 ## FAQ
 
 ### Does BeautySearch have a performance impact?
