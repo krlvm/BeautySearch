@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -13,13 +14,9 @@ namespace BeautySearch.UI
 {
     public partial class TopAppsEditorForm : Form
     {
-        private readonly string file;
-
-        public TopAppsEditorForm(string file, string data)
+        public TopAppsEditorForm(string data)
         {
             InitializeComponent();
-
-            this.file = file;
 
             webBrowser.DocumentStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BeautySearch.TopAppsEditor.html");
             //webBrowser.Navigate(@"C:\Users\krlvm\Desktop\TopAppsEditor.html");
@@ -120,7 +117,10 @@ namespace BeautySearch.UI
         private void saveBtn_Click(object sender, EventArgs e)
         {
             string json = webBrowser.Document.InvokeScript("exportJson").ToString();
-            Utility.WriteFile(file, json);
+            foreach (string file in CollectDataFiles())
+            {
+                Utility.WriteFile(file, json);
+            }
             ScriptInstaller.KillSearchApp();
             MessageBox.Show("Changes to Top Apps have been saved", "BeautySearch", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -130,13 +130,19 @@ namespace BeautySearch.UI
             Dispose();
         }
 
-        public static void Launch()
+        static IEnumerable<string> CollectDataFiles()
         {
             string directory = $@"{ScriptInstaller.GetCurrentUserSearchAppDataDirectory()}\LocalState\DeviceSearchCache";
-            var file = Directory.EnumerateFiles(directory, "*", SearchOption.TopDirectoryOnly)
-                .Where(filename => filename.Substring(directory.Length + 1).StartsWith("AppCache"))
+            return Directory.EnumerateFiles(directory, "*", SearchOption.TopDirectoryOnly)
+                .Where(filename => filename.Substring(directory.Length + 1).StartsWith("AppCache"));
+        }
+
+        public static void Launch()
+        {
+            var file = CollectDataFiles()
                 .OrderByDescending(filename => File.GetLastWriteTime(filename))
                 .FirstOrDefault();
+
             if (file == null)
             {
                 MessageBox.Show("Failed to read Top Apps section storage", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -144,7 +150,7 @@ namespace BeautySearch.UI
             }
 
             string data = File.ReadAllText(file);
-            new TopAppsEditorForm(file, data).Show();
+            new TopAppsEditorForm(data).Show();
         }
 
         /** https://stackoverflow.com/a/48701660 **/
