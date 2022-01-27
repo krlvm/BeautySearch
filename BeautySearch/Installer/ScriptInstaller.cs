@@ -266,7 +266,6 @@ namespace BeautySearch
         public static void ClearIconCache()
         {
             string ICON_CACHE_DIR = $@"{GetCurrentUserSearchAppDataDirectory()}\LocalState\AppIconCache";
-            MessageBox.Show(ICON_CACHE_DIR);
             if (Directory.Exists(ICON_CACHE_DIR))
             {
                 Directory.Delete(ICON_CACHE_DIR, true);
