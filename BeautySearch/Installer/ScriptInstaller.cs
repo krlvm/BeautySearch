@@ -249,7 +249,7 @@ namespace BeautySearch
 
         public static string GetCurrentUserSearchAppDataDirectory()
         {
-            return $@"{Path.GetPathRoot(Environment.SystemDirectory)}Users\{localUsername}\AppData\Local\Packages\{SEARCH_APP_NAME}";
+            return $@"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\Packages\{SEARCH_APP_NAME}";
         }
 
         public static string FindControllerFile()
