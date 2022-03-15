@@ -112,6 +112,8 @@ namespace BeautySearch
             Utility.TakeOwnership(TARGET_FILE);
             //Utility.TakeOwnership(SCRIPT_DEST);
 
+            // Read and modify HTML entry point
+
             string target = Utility.ReadFile(TARGET_FILE);
             if (target == null)
             {
@@ -122,6 +124,19 @@ namespace BeautySearch
             {
                 target += INJECT_LINE;
             }
+
+            target = ToggleEntrypointFeature(target, "enableTwoPanesZI", !features.IsEnabled("disableTwoPanel"));
+            target = ToggleEntrypointFeature(target, "userProfileButtonEnabled", !features.IsEnabled("hideUserProfile"));
+            target = ToggleEntrypointFeature(target, "showCloseButton", !features.IsEnabled("hideCloseButton"));
+
+            if (features.IsEnabled("limitActivity"))
+            {
+                target = target.Replace("\"activityInZI\":9", "\"activityInZI\":4");
+            } else
+            {
+                target = target.Replace("\"activityInZI\":4", "\"activityInZI\":9");
+            }
+
             if (!Utility.WriteFile(TARGET_FILE, target))
             {
                 return ERR_WRITE;
@@ -285,6 +300,17 @@ namespace BeautySearch
             return null;
         }
 
+        private static string ToggleEntrypointFeature(string raw, string feature, bool isEnabled)
+        {
+            if (isEnabled)
+            {
+                return raw.Replace("\"" + feature + "\":0", "\"" + feature + "\":1");
+            } else
+            {
+                return raw.Replace("\"" + feature + "\":1", "\"" + feature + "\":0");
+            }
+        }
+
         public static void ClearIconCache()
         {
             string ICON_CACHE_DIR = $@"{GetCurrentUserSearchAppDataDirectory()}\LocalState\AppIconCache";
@@ -293,6 +319,7 @@ namespace BeautySearch
                 Directory.Delete(ICON_CACHE_DIR, true);
             }
         }
+
 
         // Multi User
         private static string _username;

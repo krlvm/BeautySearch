@@ -593,6 +593,13 @@ if(SETTINGS.version2022) {
             border-color: rgba(255, 255, 255, 0.5) !important;
         }
     `);
+    if (SETTINGS.hideCloseButton) {
+        injectStyle(`
+            .scopes-list {
+                font-size: 0;
+            }
+        `);
+    }
     injectDarkTheme(DARK_THEME_CLASS);
 } else if(SETTINGS.theme) {
     // Dark theme support for search results

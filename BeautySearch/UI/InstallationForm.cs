@@ -57,6 +57,13 @@ namespace BeautySearch
                 AddFeature("[20H1+] Capture desktop to apply Fake Acrylic", "fakeAcrylicDesktopCrop", false);
                 AddFeature("[20H1+] Don't override Fake Acrylic wallpaper for now", "skipFakeAcrylic", false);
             }
+            else
+            {
+                AddFeature("Disable two-panel mode", "disableTwoPanel", true);
+                AddFeature("Limit recent activity items to 4", "limitActivity", true);
+                AddFeature("Hide user profile icon", "hideUserProfile", true);
+                AddFeature("Hide close button", "hideCloseButton", true);
+            }
             /*
             AddFeature("Check theme changes more frequently [Accent Color]", "restyleOnLoadAccent", ScriptInstaller.CURRENT_BUILD < ScriptInstaller.BUILD_20H1);
             AddFeature("Check theme changes more frequently [Acrylic & Theme]", "restyleOnLoadAcrylic");
