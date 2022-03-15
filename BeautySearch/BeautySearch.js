@@ -40,7 +40,7 @@
  * Licensed under the GNU GPLv3 License
  * https://github.com/krlvm/BeautySearch
  *
- * @version 1.8.1
+ * @version 1.9
  * @author krlvm
  **/
 
@@ -73,7 +73,7 @@
 // Use defaults if the script is injected manually
 const SETTINGS = SETTINGS_DEFAULTS;
 
-const VERSION = '1.8.1';
+const VERSION = '1.10';
 
 console.log('BeautySearch v' + VERSION + ' is loaded');
 
@@ -589,6 +589,9 @@ if(SETTINGS.corners != 'default') {
 
 if(SETTINGS.version2022) {
     injectStyle(`
+        #preBootstrapBuildInfo {
+            display: none;
+        }
         .${DEF_LIGHT} .selected .openPreviewPaneBtn {
             border-color: rgba(255, 255, 255, 0.5) !important;
         }
