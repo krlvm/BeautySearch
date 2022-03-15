@@ -45,6 +45,7 @@
  **/
 
  const SETTINGS_DEFAULTS = {
+    version2022: false,            // true | false
     useController: true,           // true | false
     restyleOnLoadAcrylic: true,    // true | false
     restyleOnLoadAccent: true,     // true | false
@@ -95,7 +96,7 @@ const launchUri = (uri) => {
 }
 
 const isSystemLightTheme = () => {
-    return document.getElementById('root').classList.contains('lightTheme19H1');
+    return document.getElementById('root').classList.contains('${DEF_LIGHT}');
 }
 
 const executeOnLoad = (callback, executeOnShown = true) => {
@@ -155,9 +156,13 @@ const layeredColor = (color) => {
     return `linear-gradient(${color} 100%, #000 0%)`;
 }
 
+const DEF_LIGHT = 'lightTheme' + (SETTINGS.version2022 ? '' : '19H1');
+const DEF_DARK  = 'darkTheme'  + (SETTINGS.version2022 ? '' : '19H1');
+
+const PREVIEW_CONTAINER = (SETTINGS.version2022 ? '.' : '#') + 'previewContainer';
 const FLUENT_NOISE_TEXTURE = 'data:image/png;base64,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';
 const ACCENT_BACKGROUND_CLASS_NAME = 'bsAccentBackground';
-const DARK_THEME_CLASS_NAME = SETTINGS.theme == 'dark' ? 'darkTheme19H1' : 'bsDark', DARK_THEME_CLASS = '.' + DARK_THEME_CLASS_NAME;
+const DARK_THEME_CLASS_NAME = SETTINGS.version2022 || SETTINGS.theme == 'dark' ? DEF_DARK : 'bsDark', DARK_THEME_CLASS = '.' + DARK_THEME_CLASS_NAME;
 const injectDarkTheme = (parent = '') => {
     const backdropShade = 'rgba(245, 245, 245, 0.1)';
     injectStyle(`
@@ -170,7 +175,7 @@ const injectDarkTheme = (parent = '') => {
         ${parent} #qfPreviewPane {
             background-color: ${SETTINGS.enhancedAcrylic ? (SETTINGS.backgroundMode ? 'rgba(39, 39, 39, 0.25)' : 'rgba(200, 200, 200, 0.1)') : '#272727' };
         }
-        ${parent} #previewContainer {
+        ${parent} ${PREVIEW_CONTAINER} {
             background-color: ${SETTINGS.enhancedAcrylic ? 'rgba(31, 31, 31, 0.25)' : '#1F1F1F' } !important;
         }
 
@@ -186,8 +191,9 @@ const injectDarkTheme = (parent = '') => {
             ${SETTINGS.enhancedAcrylic ? '-webkit-backdrop-filter: blur(5px)' : '' }
         }
 
-        ${parent} #previewContainer .divider {
+        ${parent} ${PREVIEW_CONTAINER} .divider {
             border: 1px solid ${SETTINGS.enhancedAcrylic ? backdropShade : '#272727' };
+            //background: ${SETTINGS.enhancedAcrylic ? backdropShade : '#272727' };
         }
 
         ${parent} .annotation, ${parent} .iconContainer:not(.accentColor) {
@@ -196,10 +202,14 @@ const injectDarkTheme = (parent = '') => {
         ${parent} .clickable:hover {
             color: rgba(255, 255, 255, 0.75) !important;
         }
+
         ${parent} .openPreviewPaneBtn:hover,
         ${parent} .suggDetailsContainer:hover .openPreviewPaneBtn,
         ${parent} .withOpenPreviewPaneBtn:hover .openPreviewPaneBtn {
             border-color: rgba(255, 255, 255, 0.2) !important;
+        }
+        ${parent} .selected .openPreviewPaneBtn {
+            border-color: rgba(255, 255, 255, 0.1) !important;
         }
 
         ${parent} .contextMenu .menuItem * {
@@ -238,8 +248,8 @@ const injectDarkTheme = (parent = '') => {
 }
 
 const selectors = {
-    light: (target) => target.map(t => `.lightTheme19H1 ${t}, .darkTheme19H1:not(.zeroInput19H1):not(${DARK_THEME_CLASS}) ${t}`),
-    dark:  (target) => target.map(t => `.darkTheme19H1.zeroInput19H1 ${t}, ${DARK_THEME_CLASS} ${t}`)
+    light: (target) => target.map(t => `.${DEF_LIGHT} ${t}, .${DEF_DARK}:not(.zeroInput19H1):not(${DARK_THEME_CLASS}) ${t}`),
+    dark:  (target) => target.map(t => `.${DEF_DARK}.zeroInput19H1 ${t}, ${DARK_THEME_CLASS} ${t}`)
 }
 
 const getAcrylicBackgrounds = (tint) => [
@@ -295,22 +305,22 @@ const applyFakeAcrylic = (tint) => {
 /** Tweaks */
 
 if(SETTINGS.enhancedAcrylic) {
-    const parent = '.lightTheme19H1';
     const backdropShade = 'rgba(194, 194, 194, 0.3)';
     injectStyle(`
-        ${parent} #qfPreviewPane {
+        .${DEF_LIGHT} #qfPreviewPane {
             background-color: rgba(245, 245, 245, 0.3);
         }
-        ${parent} #previewContainer {
+        .${DEF_LIGHT} ${PREVIEW_CONTAINER} {
             background-color: rgba(255, 255, 255, 0.3) !important;
         }
-        ${parent} .expanderCircle {
+        .${DEF_LIGHT} .expanderCircle {
             border-radius: 15px;
             background-color: ${backdropShade};
             -webkit-backdrop-filter: blur(5px);
         }
-        ${parent} #previewContainer .divider {
+        .${DEF_LIGHT} .previewContainer .divider {
             border: 1px solid ${backdropShade};
+            //background: ${backdropShade};
         }
     `);
 }
@@ -405,10 +415,10 @@ if(SETTINGS.explorerSearchFixes) {
     // It is very slow and has HiDPI scaling bug which hiding the bottom border
     // of the Explorer Search Box
     injectStyle(`
-        .panelCanResize.lightTheme19H1 .scr {
+        .panelCanResize.${DEF_LIGHT} .scr {
             border-top: 1px solid #D9D9D9;
         }
-        .panelCanResize.darkTheme19H1 .scr {
+        .panelCanResize.${DEF_DARK} .scr {
             border-top: 1px solid #535353;
         }
     `);
@@ -416,10 +426,10 @@ if(SETTINGS.explorerSearchFixes) {
 
 if(SETTINGS.topAppsCardsOutline) {
     injectStyle(`
-        .lightTheme19H1 .topItemsGroup .selectable {
+        .${DEF_LIGHT} .topItemsGroup .selectable {
             background-color: rgba(255, 255, 255, 0.4) !important;
         }
-        .darkTheme19H1 .topItemsGroup .selectable {
+        .${DEF_DARK} .topItemsGroup .selectable {
             background-color: rgba(255, 255, 255, 0.1) !important;
         }
 
@@ -430,6 +440,10 @@ if(SETTINGS.topAppsCardsOutline) {
             box-shadow: none !important;
             transform: scale(0.98);
         }
+
+        .suggsList > li {
+            box-shadow: none !important;
+        }
     `);
     if(SETTINGS.acrylicMode) {
         injectStyle(`
@@ -438,17 +452,17 @@ if(SETTINGS.topAppsCardsOutline) {
                 -webkit-backdrop-filter: brightness(101%);
             }
         
-            .lightTheme19H1 .topItemsGroup .selectable:hover, {
+            .${DEF_LIGHT} .topItemsGroup .selectable:hover, {
                 background-color: rgba(255, 255, 255, 0.48) !important;
             }
-            .lightTheme19H1 .topItemsGroup .selectable:active {
+            .${DEF_LIGHT} .topItemsGroup .selectable:active {
                 background-color: rgba(255, 255, 255, 0.5) !important;
             }
 
-            .darkTheme19H1 .topItemsGroup .selectable:hover {
+            .${DEF_DARK} .topItemsGroup .selectable:hover {
                 background-color: rgba(255, 255, 255, 0.14) !important;
             }
-            .darkTheme19H1 .topItemsGroup .selectable:active {
+            .${DEF_DARK} .topItemsGroup .selectable:active {
                 background-color: rgba(255, 255, 255, 0.18) !important;
             }
         `);
@@ -458,12 +472,12 @@ if(SETTINGS.topAppsCardsOutline) {
                 transition: transform 25ms ease-out;
             }
 
-            .lightTheme19H1 .topItemsGroup .selectable:hover,
-            .lightTheme19H1 .topItemsGroup .selectable:active {
+            .${DEF_LIGHT} .topItemsGroup .selectable:hover,
+            .${DEF_LIGHT} .topItemsGroup .selectable:active {
                 background-color: rgba(255, 255, 255, 0.4) !important;
             }
-            .darkTheme19H1 .topItemsGroup .selectable:hover,
-            .darkTheme19H1 .topItemsGroup .selectable:active {
+            .${DEF_DARK} .topItemsGroup .selectable:hover,
+            .${DEF_DARK} .topItemsGroup .selectable:active {
                 background-color: rgba(255, 255, 255, 0.1) !important;
             }
         `);
@@ -476,6 +490,18 @@ if(SETTINGS.hideOutlines) {
             outline: none !important;
         }
     `);
+    if (SETTINGS.version2022) {
+        injectStyle(`
+            .hideOutline #root.darkTheme:not(.zeroInput19H1) .sa_hv.arrowOrTabAction,
+            .hideOutline #root.darkTheme:not(.zeroInput19H1) .groupContainer .sa_hv.selectable,
+            .hideOutline #root.darkTheme:not(.zeroInput19H1) .sectionItem.selectable.sa_hv,
+            .hideOutline #root:not(.zeroInput19H1) .sa_hv.arrowOrTabAction,
+            .hideOutline #root:not(.zeroInput19H1) .groupContainer .sa_hv.selectable,
+            .hideOutline #root:not(.zeroInput19H1) .sectionItem.selectable.sa_hv {
+                border-color: transparent !important;
+            }
+        `);
+    }
     document.body.classList.add('hideOutline');
     // Show outlines on keyboard and hide on mouse
     window.addEventListener('keydown', () => document.body.classList.remove('hideOutline'));
@@ -517,10 +543,10 @@ if(SETTINGS.backgroundMode) {
         if(SETTINGS.backgroundMode == 'system') {
             if(!SETTINGS.acrylicMode) {
                 injectStyle(`
-                    .zeroInput19H1.lightTheme19H1 #qfContainer {
+                    .zeroInput19H1.${DEF_LIGHT} #qfContainer {
                         background-color: #E4E4E4 !important;
                     }
-                    .zeroInput19H1.darkTheme19H1 #qfContainer {
+                    .zeroInput19H1.${DEF_DARK} #qfContainer {
                         background-color: #1F1F1F !important;
                     }
                 `);
@@ -561,7 +587,14 @@ if(SETTINGS.corners != 'default') {
     }
 }
 
-if(SETTINGS.theme) {
+if(SETTINGS.version2022) {
+    injectStyle(`
+        .${DEF_LIGHT} .selected .openPreviewPaneBtn {
+            border-color: rgba(255, 255, 255, 0.5) !important;
+        }
+    `);
+    injectDarkTheme(DARK_THEME_CLASS);
+} else if(SETTINGS.theme) {
     // Dark theme support for search results
 
     if(SETTINGS.theme != 'light') {

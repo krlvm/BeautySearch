@@ -35,8 +35,11 @@ namespace BeautySearch
         {
             bool acrylicEnabled = Utility.IsPersonalizationFeatureEnabled("EnableTransparency");
 
-            AddFeature("Show accent color on Search Window", "backgroundMode", Utility.IsPersonalizationFeatureEnabled("ColorPrevalence"));
-            AddFeature("Enable Acrylic (or Fake Acrylic on 20H1+)", "acrylicMode", acrylicEnabled);
+            if (!ScriptInstaller.is20H1() || !ScriptInstaller.is20H1Fixed())
+            {
+                AddFeature("Show accent color on Search Window", "backgroundMode", Utility.IsPersonalizationFeatureEnabled("ColorPrevalence"));
+            }
+            AddFeature("Enable Acrylic" + (!ScriptInstaller.is20H1Fixed() ? " (or Fake Acrylic on 20H1+)" : ""), "acrylicMode", acrylicEnabled);
             AddFeature("Enhanced design with more Acrylic", "enhancedAcrylic", acrylicEnabled);
             AddFeature("Remove background from UWP application icons", "disableTilesBackground", ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1+1);
             AddFeature("Fluent Context Menu", "contextMenuFluent");
@@ -49,7 +52,7 @@ namespace BeautySearch
             {
                 AddFeature("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes", Utility.GetDPIScaling() == 120);
             }
-            if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1)
+            if (!ScriptInstaller.is20H1Fixed())
             {
                 AddFeature("[20H1+] Capture desktop to apply Fake Acrylic", "fakeAcrylicDesktopCrop", false);
                 AddFeature("[20H1+] Don't override Fake Acrylic wallpaper for now", "skipFakeAcrylic", false);
@@ -96,7 +99,7 @@ namespace BeautySearch
             features.Set("corners", cornersGroup.Controls.OfType<System.Windows.Forms.RadioButton>()
                                       .FirstOrDefault(r => r.Checked).Text.ToLower());
 
-            if (features.Get("acrylicMode") != null && ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1 && ScriptInstaller.CURRENT_BUILD < 19541)
+            if (features.Get("acrylicMode") != null && !ScriptInstaller.is20H1Fixed())
             {
                 features.Set("acrylicMode", "fake");
             }

@@ -10,12 +10,14 @@ namespace BeautySearch
     static class ScriptInstaller
     {
         public static int CURRENT_BUILD;
+        public static int CURRENT_BUILD_PATCH;
 
         public const  int BUILD_19H1 = 18362;
         public const  int BUILD_19H2 = 18363;
         public const  int BUILD_20H1 = 19041;
 
         private const int MIN_REQUIRED_BUILD = BUILD_19H1;
+        public  const int MIN_20H1_PATCH_FIX = 1618;
 
         // Error codes
         public const int ERR_READ = 1;
@@ -41,6 +43,7 @@ namespace BeautySearch
         static ScriptInstaller()
         {
             CURRENT_BUILD = Utility.GetBuildNumber();
+            CURRENT_BUILD_PATCH = Utility.GetBuildMinorVersion();
             if (CURRENT_BUILD >= BUILD_20H1)
             {
                 SEARCH_APP_EXEC = "SearchApp";
@@ -57,11 +60,24 @@ namespace BeautySearch
             SCRIPT_DEST = TARGET_DIR + @"\BeautySearch.js";
         }
 
+        public static bool is20H1()
+        {
+            return CURRENT_BUILD >= BUILD_20H1 && CURRENT_BUILD < 19500;
+        }
+        public static bool is20H1Fixed()
+        {
+            return CURRENT_BUILD < BUILD_20H1 || CURRENT_BUILD >= 19500 || CURRENT_BUILD_PATCH >= MIN_20H1_PATCH_FIX;
+        }
+
         public static int Install(FeatureControl features)
         {
             if (CURRENT_BUILD < MIN_REQUIRED_BUILD)
             {
                 return ERR_OLD_BUILD;
+            }
+            if (is20H1Fixed())
+            {
+                features.Enable("version2022");
             }
 
             if ("'fake'".Equals(features.Get("acrylicMode")))
@@ -241,7 +257,13 @@ namespace BeautySearch
             {
                 // Controller is accessible via 'bsController' global variable
                 controller = "var bsController = null;" + controller;
-                controller = controller.Insert(controller.IndexOf("}return l.prototype"), ";bsController=this;");
+                if (CURRENT_BUILD_PATCH < MIN_20H1_PATCH_FIX)
+                {
+                    controller = controller.Insert(controller.IndexOf("}return l.prototype"), ";bsController=this;");
+                } else
+                {
+                    controller = controller.Insert(controller.IndexOf("return l.isBingWallpaperAppInstalled"), "bsController=this;");
+                }
                 return Utility.WriteFile(CONTROLLER_FILE, controller);
             }
             return true;
@@ -258,7 +280,7 @@ namespace BeautySearch
             foreach (var file in Directory.EnumerateFiles(TARGET_DIR, "*.js"))
             {
                 string text = Utility.ReadFile(file);
-                if (text.Contains("return l.prototype")) return file;
+                if (text.Contains("return l.prototype") || text.Contains("return l.isBingWallpaperAppInstalled")) return file;
             }
             return null;
         }
