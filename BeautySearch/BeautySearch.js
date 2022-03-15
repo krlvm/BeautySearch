@@ -244,6 +244,10 @@ const injectDarkTheme = (parent = '') => {
         .${ACCENT_BACKGROUND_CLASS_NAME} ${parent}:not(.zeroInput19H1) .suggestions .selectable:not(.sa_hv):active {
             background-color: rgba(255, 255, 255, 0.3) !important;
         }
+
+        ${parent} #temporaryMessage {
+            color: white;
+        }
     `);
 }
 
