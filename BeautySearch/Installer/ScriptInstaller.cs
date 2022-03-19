@@ -274,7 +274,7 @@ namespace BeautySearch
                 controller = "var bsController = null;" + controller;
                 if (CURRENT_BUILD_PATCH < MIN_20H1_PATCH_FIX)
                 {
-                    controller = controller.Insert(controller.IndexOf("}return l.prototype"), ";bsController=this;");
+                    controller = controller.Insert(controller.IndexOf("}return l.prototype"), ";bsController=l;");
                 } else
                 {
                     controller = controller.Insert(controller.IndexOf("return l.isBingWallpaperAppInstalled"), "bsController=this;");
