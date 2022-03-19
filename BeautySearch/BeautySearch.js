@@ -609,20 +609,12 @@ if(SETTINGS.version2022) {
             border-color: rgba(255, 255, 255, 0.5) !important;
         }
     `);
-    if (SETTINGS.acrylicMode) {
-        injectStyle(`
-            .${DEF_LIGHT} {
-                background-color: rgba(0, 0, 0, 0.036) !important;
-            }
-            //.resultsContainer { display: none; }
-        `);
-    } else {
-        injectStyle(`
-            .${DEF_LIGHT} {
-                background-color: rgba(0, 0, 0, 0.053941909) !important;
-            }
-        `);
-    }
+    injectStyle(`
+        .${DEF_LIGHT} {
+            -webkit-backdrop-filter: brightness(0.945) saturate(150%);
+        }
+        //.resultsContainer { display: none; }
+    `);
     if (SETTINGS.hideCloseButton) {
         injectStyle(`
             .scopes-list {
