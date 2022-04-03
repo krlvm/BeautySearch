@@ -78,6 +78,20 @@ BeautySearch allows you to get rid of useless icons in Top Apps section.
 
 <img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/top-apps.png" width="100%" />
 
+### Disable 19H2+ File Explorer Search Experience
+
+BeautySearch allows you to get rid of slow, web-powered File Explorer Search Experience.
+
+### Change Search Box Text
+
+BeautySearch allows you to edit the text which is displayed on Search Box by default.
+
+### Enforce Dark Search Box when Taskbar is Dark
+
+BeautySearch allows you get Dark Search box when System Theme is set to Dark, but Apps Theme is set to Dark.
+
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/searchbox-dark-text.png" width="50%" />
+
 ## FAQ
 
 ### Does BeautySearch have a performance impact?
