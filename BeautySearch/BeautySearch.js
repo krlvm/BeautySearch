@@ -608,6 +608,14 @@ if(SETTINGS.version2022) {
         .${DEF_LIGHT} .selected .openPreviewPaneBtn {
             border-color: rgba(255, 255, 255, 0.5) !important;
         }
+        .${DEF_LIGHT} .openPreviewPaneBtn:hover,
+        .${DEF_LIGHT} .suggDetailsContainer:hover .openPreviewPaneBtn,
+        .${DEF_LIGHT} .withOpenPreviewPaneBtn:hover .openPreviewPaneBtn {
+            border-color: rgba(255, 255, 255, 0.8) !important;
+        }
+        .${DEF_LIGHT} #qfContainer #temporaryMessage {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+        }
     `);
     injectStyle(`
         .${DEF_LIGHT} {
@@ -673,7 +681,7 @@ if(SETTINGS.version2022) {
             ${parent} .openPreviewPaneBtn:hover,
             ${parent} .suggDetailsContainer:hover .openPreviewPaneBtn,
             ${parent} .withOpenPreviewPaneBtn:hover .openPreviewPaneBtn {
-                border-color: white !important;
+                border-color: rgba(255, 255, 255, 0.8) !important;
             }
             ${parent} .selected .openPreviewPaneBtn {
                 border-color: rgba(255, 255, 255, 0.5) !important;
@@ -709,6 +717,10 @@ if(SETTINGS.version2022) {
             }
             ${parent} #temporaryMessage .message {
                 border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            .${DEF_LIGHT} #qfContainer #temporaryMessage {
+                background-color: rgba(255, 255, 255, 0.5) !important;
             }
 
             body:not(.hideOutline) #root.darkTheme:not(.zeroInput19H1) .sa_hv.arrowOrTabAction,
