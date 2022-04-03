@@ -63,6 +63,11 @@
     enhancedAcrylic: true,         // true | false
     corners: 'sharp',              // 'default' | 'sharp' | 'round'
     theme: 'auto',                 // 'auto'    | 'light' | 'dark'
+    disableTwoPanel: true,         // true | false
+    hideUserProfile: true,         // true | false
+    hideCloseButton: true,         // true | false
+    activityItemCount: 4,          // number
+    showBeautySearchVer: false,    // number
 }
 
 // Setting 'useController' should be enabled
@@ -154,6 +159,16 @@ const hexToRGBA = (hex, alpha) => {
 
 const layeredColor = (color) => {
     return `linear-gradient(${color} 100%, #000 0%)`;
+}
+
+if(SETTINGS.version2022 && sa_config != null) {
+    sa_config.enableTwoPanesZI = !SETTINGS.disableTwoPanel;
+    sa_config.userProfileButtonEnabled = !SETTINGS.hideUserProfile;
+    sa_config.showCloseButton = !SETTINGS.hideCloseButton;
+    sa_config.activityInZI = SETTINGS.activityItemCount;
+    if (SETTINGS.showBeautySearchVer) {
+        sa_config.snrVersion += '\nBeautySearch v' + VERSION;
+    }
 }
 
 const DEF_LIGHT = 'lightTheme' + (SETTINGS.version2022 ? '' : '19H1');

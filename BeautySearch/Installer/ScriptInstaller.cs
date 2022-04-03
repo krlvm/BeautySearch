@@ -134,17 +134,18 @@ namespace BeautySearch
                 target += INJECT_LINE;
             }
 
-            target = ToggleEntrypointFeature(target, "enableTwoPanesZI", !features.IsEnabled("disableTwoPanel"));
-            target = ToggleEntrypointFeature(target, "userProfileButtonEnabled", !features.IsEnabled("hideUserProfile"));
-            target = ToggleEntrypointFeature(target, "showCloseButton", !features.IsEnabled("hideCloseButton"));
-
-            if (features.IsEnabled("limitActivity"))
-            {
-                target = target.Replace("\"activityInZI\":9", "\"activityInZI\":4");
-            } else
-            {
-                target = target.Replace("\"activityInZI\":4", "\"activityInZI\":9");
-            }
+            //target = ToggleEntrypointFeature(target, "enableTwoPanesZI", !features.IsEnabled("disableTwoPanel"));
+            //target = ToggleEntrypointFeature(target, "userProfileButtonEnabled", !features.IsEnabled("hideUserProfile"));
+            //target = ToggleEntrypointFeature(target, "showCloseButton", !features.IsEnabled("hideCloseButton"));
+            //
+            //if (features.IsEnabled("limitActivity"))
+            //{
+            //    target = target.Replace("\"activityInZI\":9", "\"activityInZI\":4");
+            //} else
+            //{
+            //    target = target.Replace("\"activityInZI\":4", "\"activityInZI\":9");
+            //}
+            features.Set("activityItemCount", features.IsEnabled("limitActivity") ? "4" : "8");
 
             if (!Utility.WriteFile(TARGET_FILE, target))
             {
