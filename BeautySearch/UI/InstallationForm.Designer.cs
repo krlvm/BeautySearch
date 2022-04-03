@@ -49,6 +49,7 @@
             this.clearIconCacheTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.restartSearchAppTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.topAppsBtn = new System.Windows.Forms.Button();
+            this.searchBoxTextBtn = new System.Windows.Forms.Button();
             this.themeGroup.SuspendLayout();
             this.cornersGroup.SuspendLayout();
             this.SuspendLayout();
@@ -233,11 +234,21 @@
             // 
             this.topAppsBtn.Location = new System.Drawing.Point(12, 415);
             this.topAppsBtn.Name = "topAppsBtn";
-            this.topAppsBtn.Size = new System.Drawing.Size(448, 34);
+            this.topAppsBtn.Size = new System.Drawing.Size(249, 34);
             this.topAppsBtn.TabIndex = 21;
             this.topAppsBtn.Text = "Edit \"Top Apps\" section";
             this.topAppsBtn.UseVisualStyleBackColor = true;
             this.topAppsBtn.Click += new System.EventHandler(this.topAppsBtn_Click);
+            // 
+            // searchBoxTextBtn
+            // 
+            this.searchBoxTextBtn.Location = new System.Drawing.Point(268, 415);
+            this.searchBoxTextBtn.Name = "searchBoxTextBtn";
+            this.searchBoxTextBtn.Size = new System.Drawing.Size(192, 34);
+            this.searchBoxTextBtn.TabIndex = 22;
+            this.searchBoxTextBtn.Text = "Edit Search Box Text";
+            this.searchBoxTextBtn.UseVisualStyleBackColor = true;
+            this.searchBoxTextBtn.Click += new System.EventHandler(this.searchBoxTextBtn_Click);
             // 
             // InstallationForm
             // 
@@ -245,6 +256,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(472, 563);
+            this.Controls.Add(this.searchBoxTextBtn);
             this.Controls.Add(this.topAppsBtn);
             this.Controls.Add(this.clearIconCacheBtn);
             this.Controls.Add(this.searchRestartBtn);
@@ -293,6 +305,7 @@
         private System.Windows.Forms.ToolTip restartSearchAppTooltip;
         private System.Windows.Forms.ToolTip clearIconCacheTooltip;
         private System.Windows.Forms.Button topAppsBtn;
+        private System.Windows.Forms.Button searchBoxTextBtn;
     }
 }
 

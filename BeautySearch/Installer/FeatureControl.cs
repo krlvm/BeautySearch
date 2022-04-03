@@ -21,7 +21,10 @@ namespace BeautySearch
 
         public void Exclude(string feature)
         {
-            features.Remove(feature);
+            if (features.ContainsKey(feature))
+            {
+                features.Remove(feature);
+            }
         }
 
         public string Get(string feature)

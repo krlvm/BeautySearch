@@ -56,7 +56,9 @@ namespace BeautySearch
         
         public static RegistryKey OpenCurrentUserRegistryKey(string key, bool writable)
         {
-            return Registry.Users.OpenSubKey(ScriptInstaller.SID + "\\" + key, writable);
+            string path = ScriptInstaller.SID + "\\" + key;
+            RegistryKey hKey = Registry.Users.OpenSubKey(path, writable);
+            return hKey != null ? hKey : Registry.Users.CreateSubKey(path, writable);
         }
 
         public static int GetDPIScaling()

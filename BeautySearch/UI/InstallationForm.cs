@@ -48,6 +48,7 @@ namespace BeautySearch
             AddFeature("Align widths of context menus", "unifyMenuWidth");
             AddFeature("Hide control outlines when using mouse", "hideOutlines");
             AddFeature("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline");
+            AddFeature("Enforce Dark Search Box when Taskbar is Dark", "enforceDarkSearchBox");
             if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_19H2)
             {
                 AddFeature("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes", Utility.GetDPIScaling() == 120);
@@ -182,6 +183,19 @@ namespace BeautySearch
         private void topAppsBtn_Click(object sender, EventArgs e)
         {
             TopAppsEditorForm.Launch();
+        }
+
+        private void searchBoxTextBtn_Click(object sender, EventArgs e)
+        {
+            SearchBoxTextInput dialog = new SearchBoxTextInput();
+            DialogResult result = dialog.ShowDialog(this);
+
+            if (result != DialogResult.Cancel)
+            {
+                ScriptInstaller.SetSearchBoxText(result == DialogResult.OK ? dialog.textInput.Text : null);
+                MessageBox.Show("Search Box Text has been changed. Restart File Explorer to fully apply the changes.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            dialog.Dispose();
         }
 
         #endregion

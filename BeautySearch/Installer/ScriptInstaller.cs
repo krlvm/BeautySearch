@@ -80,6 +80,15 @@ namespace BeautySearch
                 features.Enable("version2022");
             }
 
+            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY, true))
+            {
+                if (key != null)
+                {
+                    key.SetValue("SearchBoxTheme", features.IsEnabled("enforceDarkSearchBox") ? 2 : 0, RegistryValueKind.DWord);
+                }
+            }
+            features.Exclude("enforceDarkSearchBox");
+
             if ("'fake'".Equals(features.Get("acrylicMode")))
             {
                 if (CURRENT_BUILD < BUILD_20H1 || CURRENT_BUILD >= 19541)
@@ -319,6 +328,50 @@ namespace BeautySearch
                 Directory.Delete(ICON_CACHE_DIR, true);
             }
         }
+
+        #region Search Box Text
+        private const string SEARCH_BOX_TEXT_REGISTRY_VALUE = "SearchBoxText";
+        private const string SEARCH_BOX_TASKBAR_MODE_REGISTRY_VALUE = "SearchboxTaskbarMode";
+
+        public static void SetSearchBoxText(string text)
+        {
+            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY + @"Flighting\Override", true))
+            {
+                if (key != null)
+                {
+                    if (text != null)
+                    {
+                        key.SetValue(SEARCH_BOX_TEXT_REGISTRY_VALUE, text, RegistryValueKind.String);
+                    }
+                    else if (key.GetValue(SEARCH_BOX_TEXT_REGISTRY_VALUE) != null)
+                    {
+                        key.DeleteValue(SEARCH_BOX_TEXT_REGISTRY_VALUE);
+                    }
+                    key.Close();
+                }
+            }
+
+            KillSearchApp();
+        }
+
+        public static bool IsSearchBoxVisible()
+        {
+            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY, true))
+            {
+                if (key == null) return false;
+                object value = key.GetValue(SEARCH_BOX_TASKBAR_MODE_REGISTRY_VALUE);
+                return value == null ? false : value.ToString() == "2";
+            }
+        }
+        public static void SetSearchBoxVisibility(bool visible)
+        {
+            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY, true))
+            {
+                if (key == null) return;
+                key.SetValue(SEARCH_BOX_TASKBAR_MODE_REGISTRY_VALUE, visible ? 2 : 1, RegistryValueKind.DWord);
+            }
+        }
+        #endregion
 
 
         // Multi User
