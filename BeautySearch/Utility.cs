@@ -54,6 +54,21 @@ namespace BeautySearch
             }
         }
         
+        public static bool CheckIfMachineHasKey(string key)
+        {
+            return Registry.LocalMachine.OpenSubKey(key, true) != null;
+        }
+
+        public static bool CheckIfCurrentUserHasKey(string key)
+        {
+            return Registry.Users.OpenSubKey(ScriptInstaller.SID + "\\" + key, false) != null;
+        }
+
+        public static void DeleteCurrentUserSubKeyTree(string key)
+        {
+            Registry.Users.DeleteSubKeyTree(ScriptInstaller.SID + "\\" + key);
+        }
+
         public static RegistryKey OpenCurrentUserRegistryKey(string key, bool writable)
         {
             string path = ScriptInstaller.SID + "\\" + key;

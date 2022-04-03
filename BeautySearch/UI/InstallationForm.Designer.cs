@@ -50,6 +50,7 @@
             this.restartSearchAppTooltip = new System.Windows.Forms.ToolTip(this.components);
             this.topAppsBtn = new System.Windows.Forms.Button();
             this.searchBoxTextBtn = new System.Windows.Forms.Button();
+            this.legacyExplorerSearchBtn = new System.Windows.Forms.Button();
             this.themeGroup.SuspendLayout();
             this.cornersGroup.SuspendLayout();
             this.SuspendLayout();
@@ -234,21 +235,31 @@
             // 
             this.topAppsBtn.Location = new System.Drawing.Point(12, 415);
             this.topAppsBtn.Name = "topAppsBtn";
-            this.topAppsBtn.Size = new System.Drawing.Size(249, 34);
+            this.topAppsBtn.Size = new System.Drawing.Size(156, 34);
             this.topAppsBtn.TabIndex = 21;
-            this.topAppsBtn.Text = "Edit \"Top Apps\" section";
+            this.topAppsBtn.Text = "Customize \"Top Apps\"";
             this.topAppsBtn.UseVisualStyleBackColor = true;
             this.topAppsBtn.Click += new System.EventHandler(this.topAppsBtn_Click);
             // 
             // searchBoxTextBtn
             // 
-            this.searchBoxTextBtn.Location = new System.Drawing.Point(268, 415);
+            this.searchBoxTextBtn.Location = new System.Drawing.Point(171, 415);
             this.searchBoxTextBtn.Name = "searchBoxTextBtn";
-            this.searchBoxTextBtn.Size = new System.Drawing.Size(192, 34);
+            this.searchBoxTextBtn.Size = new System.Drawing.Size(150, 34);
             this.searchBoxTextBtn.TabIndex = 22;
             this.searchBoxTextBtn.Text = "Edit Search Box Text";
             this.searchBoxTextBtn.UseVisualStyleBackColor = true;
             this.searchBoxTextBtn.Click += new System.EventHandler(this.searchBoxTextBtn_Click);
+            // 
+            // legacyExplorerSearchBtn
+            // 
+            this.legacyExplorerSearchBtn.Location = new System.Drawing.Point(324, 415);
+            this.legacyExplorerSearchBtn.Name = "legacyExplorerSearchBtn";
+            this.legacyExplorerSearchBtn.Size = new System.Drawing.Size(136, 34);
+            this.legacyExplorerSearchBtn.TabIndex = 23;
+            this.legacyExplorerSearchBtn.Text = "Old File Search";
+            this.legacyExplorerSearchBtn.UseVisualStyleBackColor = true;
+            this.legacyExplorerSearchBtn.Click += new System.EventHandler(this.legacyExplorerSearchBtn_Click);
             // 
             // InstallationForm
             // 
@@ -256,6 +267,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(472, 563);
+            this.Controls.Add(this.legacyExplorerSearchBtn);
             this.Controls.Add(this.searchBoxTextBtn);
             this.Controls.Add(this.topAppsBtn);
             this.Controls.Add(this.clearIconCacheBtn);
@@ -306,6 +318,7 @@
         private System.Windows.Forms.ToolTip clearIconCacheTooltip;
         private System.Windows.Forms.Button topAppsBtn;
         private System.Windows.Forms.Button searchBoxTextBtn;
+        private System.Windows.Forms.Button legacyExplorerSearchBtn;
     }
 }
 
