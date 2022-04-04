@@ -616,6 +616,13 @@ let darkThemeListener = () => {
     }
 };
 if(SETTINGS.version2022) {
+    // Align preview pane jumplist item icons vertically
+    injectStyle(`
+        .previewDataSection .sectionItem {
+            display: flex;
+            align-items: center;
+        }
+    `);
     injectStyle(`
         #preBootstrapBuildInfo {
             display: none;
