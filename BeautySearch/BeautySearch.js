@@ -66,7 +66,7 @@
     disableTwoPanel: true,         // true | false
     hideUserProfile: true,         // true | false
     hideCloseButton: true,         // true | false
-    activityItemCount: 4,          // number
+    activityItemCount: -1,          // number
     showBeautySearchVer: false,    // number
 }
 
@@ -84,16 +84,22 @@ console.log('BeautySearch v' + VERSION + ' is loaded');
 
 /** Helper functions */
 
+let _controller = null;
 const getController = (callback) => {
     const isAvailable = typeof bsController !== 'undefined' && bsController != null;
     if(isAvailable) {
-        callback(bsController);
+        _controller = bsController;
+        callback(_controller);
     } else {
         showTemporaryMessage('<b>WARNING:</b> BeautySearch Controller is not available, some features may not work correctly. Reinstall BeautySearch or disable Controller Integration.');
     }
 }
 const awaitController = (callback) => {
-    setTimeout(() => getController(callback), 50);
+    if (_controller) {
+        callback(_controller);
+    } else {
+        setTimeout(() => getController(callback), SETTINGS.version2022 ? 2800 : 50);
+    }
 }
 
 const launchUri = (uri) => {
@@ -165,7 +171,29 @@ if(SETTINGS.version2022 && sa_config != null) {
     sa_config.enableTwoPanesZI = !SETTINGS.disableTwoPanel;
     sa_config.userProfileButtonEnabled = !SETTINGS.hideUserProfile;
     sa_config.showCloseButton = !SETTINGS.hideCloseButton;
-    sa_config.activityInZI = SETTINGS.activityItemCount;
+    if (SETTINGS.activityItemCount != -1) {
+        sa_config.activityInZI = SETTINGS.activityItemCount;
+    } else {
+        sa_config.activityInZI = 4;
+        executeOnLoad(() => {
+            setTimeout(() => {
+                let padding = window.getComputedStyle(document.querySelector('.suggestions')).paddingTop;
+                padding = parseInt(padding.substring(0, padding.length - 2));
+
+                let margin = window.getComputedStyle(document.querySelector('.suggestions #groups .groupContainer.mruHistory')).marginTop;
+                margin = parseInt(margin.substring(0, margin.length - 2));
+
+                let availableHeight = window.outerHeight;
+                availableHeight -= document.querySelector('.scopes-list').offsetHeight;
+                availableHeight -= padding;
+                availableHeight -= margin;
+                availableHeight -= document.querySelector('.suggestions #groups .groupContainer.topItemsGroup').offsetHeight;
+                availableHeight -= document.querySelector('#groups .groupHeader').offsetHeight;
+
+                sa_config.activityInZI = Math.floor(availableHeight / 64) - 1;
+            }, 500);
+        });
+    }
     if (SETTINGS.showBeautySearchVer) {
         sa_config.snrVersion += '\nBeautySearch v' + VERSION;
     }

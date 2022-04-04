@@ -145,7 +145,7 @@ namespace BeautySearch
             //{
             //    target = target.Replace("\"activityInZI\":4", "\"activityInZI\":9");
             //}
-            features.Set("activityItemCount", features.IsEnabled("limitActivity") ? "4" : "8");
+            features.Set("activityItemCount", features.IsEnabled("adaptiveActivityCount") ? "-1" : "8");
 
             if (!Utility.WriteFile(TARGET_FILE, target))
             {

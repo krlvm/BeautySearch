@@ -62,7 +62,7 @@ namespace BeautySearch
             else
             {
                 AddFeature("Disable two-panel mode", "disableTwoPanel", true);
-                AddFeature("Limit recent activity items to 4", "limitActivity", true);
+                AddFeature("Automatically recent last activity items count", "adaptiveActivityCount", true);
                 AddFeature("Hide user profile icon", "hideUserProfile", true);
                 AddFeature("Hide close button", "hideCloseButton", true);
             }
