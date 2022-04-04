@@ -78,7 +78,7 @@
 // Use defaults if the script is injected manually
 const SETTINGS = SETTINGS_DEFAULTS;
 
-const VERSION = '1.11.1';
+const VERSION = '1.12';
 
 console.log('BeautySearch v' + VERSION + ' is loaded');
 
@@ -113,6 +113,9 @@ const isSystemLightTheme = () => {
 const executeOnLoad = (callback, executeOnShown = true) => {
     window.addEventListener('load', () => setTimeout(callback, 50));
     if(!executeOnShown) return;
+    executeOnShown(callback);
+}
+const executeOnShown = (callback) => {
     if(SETTINGS.useController) {
         awaitController(controller => controller.bindShown(callback));
     } else {
@@ -175,7 +178,7 @@ if(SETTINGS.version2022 && sa_config != null) {
         sa_config.activityInZI = SETTINGS.activityItemCount;
     } else {
         sa_config.activityInZI = 4;
-        executeOnLoad(() => {
+        executeOnShown(() => {
             setTimeout(() => {
                 let padding = window.getComputedStyle(document.querySelector('.suggestions')).paddingTop;
                 padding = parseInt(padding.substring(0, padding.length - 2));
