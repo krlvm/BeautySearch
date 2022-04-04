@@ -92,6 +92,13 @@ BeautySearch allows you get Dark Search box when System Theme is set to Dark, bu
 
 <img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/searchbox-dark-text.png" width="50%" />
 
+### Dynamic Recent Activity Items Count
+
+BeautySearch can adjust count of recent activity items to fit the height of the Search Window.
+Height of the Search Window can be resized by resizing the Start Menu.
+
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/dynamic-activity.png" width="100%" />
+
 ## FAQ
 
 ### Does BeautySearch have a performance impact?
