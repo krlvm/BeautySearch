@@ -66,7 +66,8 @@
     disableTwoPanel: true,         // true | false
     hideUserProfile: true,         // true | false
     hideCloseButton: true,         // true | false
-    activityItemCount: -1,          // number
+    activityItemCount: -1,         // number
+    activityDynamicDOM: false,     // true | false
     showBeautySearchVer: false,    // number
 }
 
@@ -110,9 +111,9 @@ const isSystemLightTheme = () => {
     return document.getElementById('root').classList.contains('${DEF_LIGHT}');
 }
 
-const executeOnLoad = (callback, executeOnShown = true) => {
+const executeOnLoad = (callback, executeOnShow = true) => {
     window.addEventListener('load', () => setTimeout(callback, 50));
-    if(!executeOnShown) return;
+    if(!executeOnShow) return;
     executeOnShown(callback);
 }
 const executeOnShown = (callback) => {
@@ -178,24 +179,30 @@ if(SETTINGS.version2022 && sa_config != null) {
         sa_config.activityInZI = SETTINGS.activityItemCount;
     } else {
         sa_config.activityInZI = 4;
-        executeOnShown(() => {
-            setTimeout(() => {
-                let padding = window.getComputedStyle(document.querySelector('.suggestions')).paddingTop;
-                padding = parseInt(padding.substring(0, padding.length - 2));
+        if (SETTINGS.activityDynamicDOM) {
+            executeOnShown(() => {
+                setTimeout(() => {
+                    let padding = window.getComputedStyle(document.querySelector('.suggestions')).paddingTop;
+                    padding = parseInt(padding.substring(0, padding.length - 2));
 
-                let margin = window.getComputedStyle(document.querySelector('.suggestions #groups .groupContainer.mruHistory')).marginTop;
-                margin = parseInt(margin.substring(0, margin.length - 2));
+                    let margin = window.getComputedStyle(document.querySelector('.suggestions #groups .groupContainer.mruHistory')).marginTop;
+                    margin = parseInt(margin.substring(0, margin.length - 2));
 
-                let availableHeight = window.outerHeight;
-                availableHeight -= document.querySelector('.scopes-list').offsetHeight;
-                availableHeight -= padding;
-                availableHeight -= margin;
-                availableHeight -= document.querySelector('.suggestions #groups .groupContainer.topItemsGroup').offsetHeight;
-                availableHeight -= document.querySelector('#groups .groupHeader').offsetHeight;
-
-                sa_config.activityInZI = Math.floor(availableHeight / 64) - 1;
-            }, 500);
-        });
+                    let availableHeight = window.outerHeight;
+                    availableHeight -= document.querySelector('.scopes-list').offsetHeight;
+                    availableHeight -= padding;
+                    availableHeight -= margin;
+                    availableHeight -= document.querySelector('.suggestions #groups .groupContainer.topItemsGroup').offsetHeight;
+                    availableHeight -= document.querySelector('#groups .groupHeader').offsetHeight;
+                    
+                    sa_config.activityInZI = Math.floor(availableHeight / 64);
+                }, 500);
+            });
+        } else {
+            executeOnLoad(() => {
+                sa_config.activityInZI = Math.floor((CortanaApp.height - 244) / 64);
+            })
+        }
     }
     if (SETTINGS.showBeautySearchVer) {
         sa_config.snrVersion += '\nBeautySearch v' + VERSION;
