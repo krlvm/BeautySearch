@@ -236,6 +236,7 @@ namespace BeautySearch
                     {
                         Registry.LocalMachine.DeleteSubKeyTree(NEW_SEARCH_DISABLE_KEY_ROOT);
                     }
+                    MessageBox.Show("Restart File Explorer to apply the changes", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             } else
             {
