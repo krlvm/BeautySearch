@@ -225,6 +225,7 @@ namespace BeautySearch
             return 0;
         }
 
+        private const string VALUE_BING_SEARCH_ENABLED = "BingSearchEnabled";
         public static void SetBingSearchEnabled(int val)
         {
             // When Bing Web Search is enabled, the Search App doesn't use the local search instance
@@ -233,10 +234,21 @@ namespace BeautySearch
             {
                 if (key != null)
                 {
-                    key.SetValue("BingSearchEnabled", val, RegistryValueKind.DWord);
+                    key.SetValue(VALUE_BING_SEARCH_ENABLED, val, RegistryValueKind.DWord);
                     key.Close();
                 }
             }
+        }
+        public static bool IsBingSearchEnabled()
+        {
+            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY, false))
+            {
+                if (key != null)
+                {
+                    return (int)key.GetValue(VALUE_BING_SEARCH_ENABLED) == 1;
+                }
+            }
+            return true;
         }
 
         public static bool KillSearchApp()

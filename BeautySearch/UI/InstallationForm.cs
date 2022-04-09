@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Web.UI.WebControls;
@@ -93,6 +94,23 @@ namespace BeautySearch
 
         private void installBtn_Click(object sender, EventArgs e)
         {
+            if (!Utility.IsAdministrator() && ScriptInstaller.IsInstalled())
+            {
+                var dialogResult = MessageBox.Show(
+                    "Do you want to enable the existing BeautySearch installation? Press No to reinstall.",
+                    "BeautySearch",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+                if (dialogResult == DialogResult.Yes)
+                {
+                    ScriptInstaller.SetBingSearchEnabled(0);
+                    ScriptInstaller.KillSearchApp();
+                    Utility.ShowSearchWindow();
+                    return;
+                }
+            }
+
             FeatureControl features = new FeatureControl();
 
             foreach (int i in featureBox.CheckedIndices)
