@@ -50,7 +50,6 @@ namespace BeautySearch
             AddFeature("Align widths of context menus", "unifyMenuWidth");
             AddFeature("Hide control outlines when using mouse", "hideOutlines");
             AddFeature("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline");
-            AddFeature("Enforce Dark Search Box when Taskbar is Dark", "enforceDarkSearchBox");
             if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_19H2)
             {
                 AddFeature("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes", Utility.GetDPIScaling() == 120);
@@ -66,6 +65,7 @@ namespace BeautySearch
                 AddFeature("Automatically recent last activity items count", "adaptiveActivityCount", true);
                 AddFeature("Hide user profile icon", "hideUserProfile", true);
                 AddFeature("Hide close button", "hideCloseButton", true);
+                AddFeature("Install for all users", "globalInstall", true);
             }
             /*
             AddFeature("Check theme changes more frequently [Accent Color]", "restyleOnLoadAccent", ScriptInstaller.CURRENT_BUILD < ScriptInstaller.BUILD_20H1);

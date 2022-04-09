@@ -69,6 +69,7 @@
     activityItemCount: -1,         // number
     activityDynamicDOM: false,     // true | false
     showBeautySearchVer: false,    // number
+    globalInstall: true,
 }
 
 // Setting 'useController' should be enabled
@@ -86,6 +87,7 @@ console.log('BeautySearch v' + VERSION + ' is loaded');
 /** Helper functions */
 
 let _controller = null;
+let _controllerQueue = [];
 const getController = (callback) => {
     const isAvailable = typeof bsController !== 'undefined' && bsController != null;
     if(isAvailable) {
@@ -111,17 +113,17 @@ const isSystemLightTheme = () => {
     return document.getElementById('root').classList.contains('${DEF_LIGHT}');
 }
 
-const executeOnLoad = (callback, executeOnShow = true) => {
-    window.addEventListener('load', () => setTimeout(callback, 50));
-    if(!executeOnShow) return;
-    executeOnShown(callback);
-}
 const executeOnShown = (callback) => {
     if(SETTINGS.useController) {
         awaitController(controller => controller.bindShown(callback));
     } else {
         window.addEventListener('click', () => callback);
     }
+}
+const executeOnLoad = (callback, always = true) => {
+    window.addEventListener('load', () => setTimeout(callback, 50));
+    if(!always) return;
+    executeOnShown(callback);
 }
 const executeOnRestyle = (callback, condition) => {
     if(!condition || !SETTINGS.useController) {
@@ -211,6 +213,9 @@ if(SETTINGS.version2022 && sa_config != null) {
 
 const DEF_LIGHT = 'lightTheme' + (SETTINGS.version2022 ? '' : '19H1');
 const DEF_DARK  = 'darkTheme'  + (SETTINGS.version2022 ? '' : '19H1');
+
+const CLASS_VISUAL_EFFECTS_NAME = 'bsVisualEffects';
+const CLASS_VISUAL_EFFECTS = '.' + CLASS_VISUAL_EFFECTS_NAME;
 
 const PREVIEW_CONTAINER = (SETTINGS.version2022 ? '.' : '#') + 'previewContainer';
 const FLUENT_NOISE_TEXTURE = 'data:image/png;base64,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';
@@ -305,8 +310,8 @@ const injectDarkTheme = (parent = '') => {
 }
 
 const selectors = {
-    light: (target) => target.map(t => `.${DEF_LIGHT} ${t}, .${DEF_DARK}:not(.zeroInput19H1):not(${DARK_THEME_CLASS}) ${t}`),
-    dark:  (target) => target.map(t => `.${DEF_DARK}.zeroInput19H1 ${t}, ${DARK_THEME_CLASS} ${t}`)
+    light: (target, prefix='') => target.map(t => `${prefix}.${DEF_LIGHT} ${t}, ${prefix}.${DEF_DARK}:not(.zeroInput19H1):not(${DARK_THEME_CLASS}) ${t}`),
+    dark:  (target, prefix='') => target.map(t => `${prefix}.${DEF_DARK}.zeroInput19H1 ${t}, ${prefix}${DARK_THEME_CLASS} ${t}`)
 }
 
 const getAcrylicBackgrounds = (tint) => [
@@ -326,10 +331,10 @@ const injectAcrylicStyle = (parent, tint) => {
                 background: ${getAcrylicBackgrounds(tint)};
             }
         ` : `
-            ${selectors.light([parent])} {
+            ${selectors.light([parent], (SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : ''))} {
                 background: ${getAcrylicBackgrounds('rgba(255, 255, 255, 0.6)')};
             }
-            ${selectors.dark([parent])} {
+            ${selectors.dark([parent], (SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : ''))} {
                 background: ${getAcrylicBackgrounds('rgba(0, 0, 0, 0.6)')};
             }
         `)}
@@ -448,22 +453,64 @@ if(SETTINGS.contextMenuFluent) {
     }
 }
 
-if(SETTINGS.contextMenuShadows) {
+if(SETTINGS.contextMenuShadows || SETTINGS.globalInstall) {
     injectStyle(`
-        #menuContainer, #dialog_overlay > div {
+        ${SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : ''}#menuContainer, #dialog_overlay > div {
             box-shadow: 0px 5px 16px 1px rgba(0, 0, 0, 0.3);
         }
     `);
 }
 
-if(SETTINGS.contextMenuAcrylic) {
+if(SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
     injectAcrylicStyle('.contextMenu');
     injectAcrylicStyle('#dialog_overlay > div');
     injectStyle(`
-        ${selectors.dark(['.contextMenu .menuItem.focusable:hover'])} {
+        ${selectors.dark(['.contextMenu .menuItem.focusable:hover'], (SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : ''))} {
             background-color: rgba(255, 255, 255, 0.2) !important;
         }
     `);
+}
+
+let bs_config = null;
+if (SETTINGS.globalInstall) {
+    bs_config = localStorage.getItem('beautysearch');
+    if (bs_config == null) {
+        bs_config = { visualEffects: SETTINGS.contextMenuShadows && SETTINGS.contextMenuAcrylic };
+        localStorage.setItem('beautysearch', JSON.stringify(bs_config));
+    } else {
+        bs_config = JSON.parse(bs_config);
+    }
+
+    if (bs_config.visualEffects) {
+        document.body.classList.add(CLASS_VISUAL_EFFECTS_NAME);
+    }
+
+    const toggleVisualEffects = () => {
+        document.body.classList.toggle(CLASS_VISUAL_EFFECTS_NAME);
+        bs_config.visualEffects = !bs_config.visualEffects;
+        localStorage.setItem('beautysearch', JSON.stringify(bs_config));
+    }
+
+    executeOnShown(() => {
+        setTimeout(() => {
+            const button = document.getElementById('optionsButton');
+            if (!button || button.dataset.bsOptions) return;
+            let last_rclick = 0;
+            button.addEventListener('contextmenu', () => {
+                if (Date.now() - last_rclick <= 250) {
+                    toggleVisualEffects();
+                } else {
+                    last_rclick = Date.now();
+                }
+            });
+            button.addEventListener('keydown', (event) => {
+                if(event.key === 'b') {
+                    toggleVisualEffects();
+                }
+            });
+            button.dataset.bsOptions = true;
+        }, 500);
+    });
 }
 
 if(SETTINGS.explorerSearchFixes) {
@@ -503,23 +550,24 @@ if(SETTINGS.topAppsCardsOutline) {
         }
     `);
     if(SETTINGS.acrylicMode) {
+        const parent = SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : '';
         injectStyle(`
-            .topItemsGroup .selectable {
+            ${parent}.topItemsGroup .selectable {
                 transition: all 25ms ease-out;
                 -webkit-backdrop-filter: brightness(101%);
             }
         
-            .${DEF_LIGHT} .topItemsGroup .selectable:hover, {
+            ${parent}.${DEF_LIGHT} .topItemsGroup .selectable:hover, {
                 background-color: rgba(255, 255, 255, 0.48) !important;
             }
-            .${DEF_LIGHT} .topItemsGroup .selectable:active {
+            ${parent}.${DEF_LIGHT} .topItemsGroup .selectable:active {
                 background-color: rgba(255, 255, 255, 0.5) !important;
             }
 
-            .${DEF_DARK} .topItemsGroup .selectable:hover {
+            ${parent}.${DEF_DARK} .topItemsGroup .selectable:hover {
                 background-color: rgba(255, 255, 255, 0.14) !important;
             }
-            .${DEF_DARK} .topItemsGroup .selectable:active {
+            ${parent}.${DEF_DARK} .topItemsGroup .selectable:active {
                 background-color: rgba(255, 255, 255, 0.18) !important;
             }
         `);
@@ -635,9 +683,9 @@ if(SETTINGS.corners != 'default') {
             border-radius: ${radius} !important;
         }
     `);
-    if(SETTINGS.contextMenuShadows && SETTINGS.corners == 'sharp') {
+    if((SETTINGS.contextMenuShadows || (bs_config != null && bs_config.visualEffects)) && SETTINGS.corners == 'sharp') {
         injectStyle(`
-            ${selectors.light(['#menuContainer, .contextMenu'])} {
+            ${selectors.light(['#menuContainer, .contextMenu'], (SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : ''))} {
                 border-radius: 0.5px !important;
             }
         `);

@@ -80,9 +80,6 @@ namespace BeautySearch
                 features.Enable("version2022");
             }
 
-            
-            features.Exclude("enforceDarkSearchBox");
-
             if ("'fake'".Equals(features.Get("acrylicMode")))
             {
                 if (CURRENT_BUILD < BUILD_20H1 || CURRENT_BUILD >= 19541)
@@ -156,11 +153,19 @@ namespace BeautySearch
                     MessageBoxIcon.Error
                 );
             }
+            bool globalInstall = features.IsEnabled("globalInstall");
 
             string script = LoadScript("BeautySearch");
             script = script.Replace("const SETTINGS = SETTINGS_DEFAULTS;", features.Build());
-            Utility.WriteFile(SCRIPT_DEST, LoadScript("BeautySearchLoader"));
-            Utility.WriteFile(TARGET_DIR + @"\" + SID + ".js", script);
+            if (globalInstall)
+            {
+                Utility.WriteFile(SCRIPT_DEST, script);
+            }
+            else
+            {
+                Utility.WriteFile(SCRIPT_DEST, LoadScript("BeautySearchLoader"));
+                Utility.WriteFile(TARGET_DIR + @"\" + SID + ".js", script);
+            }
 
             if (!KillSearchApp())
             {
