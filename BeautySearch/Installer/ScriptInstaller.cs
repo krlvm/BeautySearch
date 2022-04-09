@@ -259,6 +259,9 @@ namespace BeautySearch
 
         private static string LoadScript(string name)
         {
+#if DEBUG
+            return File.ReadAllText(Path.GetDirectoryName(Application.ExecutablePath) + "\\..\\..\\" + $"{name}.js");
+#else
             Assembly assembly = Assembly.GetExecutingAssembly();
 
             using (Stream stream = assembly.GetManifestResourceStream($"BeautySearch.{name}.js"))
@@ -268,6 +271,7 @@ namespace BeautySearch
                     return reader.ReadToEnd();
                 }
             }
+#endif
         }
 
         // Controller Injector
@@ -330,7 +334,7 @@ namespace BeautySearch
             }
         }
 
-        #region Search Box Text
+#region Search Box Text
         private const string SEARCH_BOX_TEXT_REGISTRY_VALUE = "SearchBoxText";
         private const string SEARCH_BOX_TASKBAR_MODE_REGISTRY_VALUE = "SearchboxTaskbarMode";
 
@@ -372,7 +376,7 @@ namespace BeautySearch
                 key.SetValue(SEARCH_BOX_TASKBAR_MODE_REGISTRY_VALUE, visible ? 2 : 1, RegistryValueKind.DWord);
             }
         }
-        #endregion
+#endregion
 
 
         // Multi User
