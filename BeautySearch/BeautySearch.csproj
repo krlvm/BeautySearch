@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="Installer\FakeBackgroundAcrylic.cs" />
     <Compile Include="Installer\FeatureControl.cs" />
+    <Compile Include="Installer\FileExplorerSearchControl.cs" />
     <Compile Include="UI\InstallationForm.cs">
       <SubType>Form</SubType>
     </Compile>

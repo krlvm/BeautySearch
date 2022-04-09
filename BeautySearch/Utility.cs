@@ -22,6 +22,27 @@ namespace BeautySearch
             return int.Parse(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "UBR", "0").ToString());
         }
 
+        public static bool RunElevated(string args, out int exitCode)
+        {
+            try
+            {
+                var process = Process.Start(new ProcessStartInfo(Process.GetCurrentProcess().MainModule.FileName)
+                {
+                    UseShellExecute = true,
+                    Verb = "runas",
+                    Arguments = args
+                });
+                process.WaitForExit();
+                exitCode = process.ExitCode;
+                return true;
+            }
+            catch (Exception)
+            {
+                exitCode = -1;
+                return false;
+            }
+        }
+
         public static string InsertAfter(string target, string hook, string s)
         {
             return target.Insert(target.IndexOf(hook) + hook.Length, s);
