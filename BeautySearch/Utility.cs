@@ -34,24 +34,10 @@ namespace BeautySearch
 
         public static bool WriteFile(string filepath, string text)
         {
-            if (true)
-            {
-                StreamWriter sw = new StreamWriter(filepath);
-                sw.WriteLine(text);
-                sw.Close();
-                return true;
-            }
-            try
-            {
-                StreamWriter sw = new StreamWriter(filepath);
-                sw.WriteLine(text);
-                sw.Close();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            var sw = new StreamWriter(filepath);
+            sw.WriteLine(text);
+            sw.Close();
+            return true;
         }
         
         public static bool CheckIfMachineHasKey(string key)

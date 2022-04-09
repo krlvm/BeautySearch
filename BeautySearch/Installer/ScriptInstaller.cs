@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace BeautySearch
@@ -269,7 +268,7 @@ namespace BeautySearch
 #if DEBUG
             return File.ReadAllText(Path.GetDirectoryName(Application.ExecutablePath) + "\\..\\..\\" + $"{name}.js");
 #else
-            Assembly assembly = Assembly.GetExecutingAssembly();
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             using (Stream stream = assembly.GetManifestResourceStream($"BeautySearch.{name}.js"))
             {
