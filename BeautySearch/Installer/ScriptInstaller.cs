@@ -80,13 +80,7 @@ namespace BeautySearch
                 features.Enable("version2022");
             }
 
-            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY, true))
-            {
-                if (key != null)
-                {
-                    key.SetValue("SearchBoxTheme", features.IsEnabled("enforceDarkSearchBox") ? 2 : 0, RegistryValueKind.DWord);
-                }
-            }
+            
             features.Exclude("enforceDarkSearchBox");
 
             if ("'fake'".Equals(features.Get("acrylicMode")))
@@ -338,6 +332,13 @@ namespace BeautySearch
         private const string SEARCH_BOX_TEXT_REGISTRY_VALUE = "SearchBoxText";
         private const string SEARCH_BOX_TASKBAR_MODE_REGISTRY_VALUE = "SearchboxTaskbarMode";
 
+        public static string GetSearchBoxText()
+        {
+            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY + @"Flighting\Override", false))
+            {
+                return key == null ? "" : (string)key.GetValue(SEARCH_BOX_TEXT_REGISTRY_VALUE, "");
+            }
+        }
         public static void SetSearchBoxText(string text)
         {
             using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY + @"Flighting\Override", true))

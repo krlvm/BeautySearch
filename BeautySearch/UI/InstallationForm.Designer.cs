@@ -45,19 +45,23 @@
             this.radioButton5 = new System.Windows.Forms.RadioButton();
             this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.searchRestartBtn = new System.Windows.Forms.Button();
-            this.clearIconCacheBtn = new System.Windows.Forms.Button();
-            this.clearIconCacheTooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.restartSearchAppTooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.topAppsBtn = new System.Windows.Forms.Button();
-            this.searchBoxTextBtn = new System.Windows.Forms.Button();
-            this.legacyExplorerSearchBtn = new System.Windows.Forms.Button();
+            this.optionsBtnTooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.optionsBtn = new System.Windows.Forms.Button();
+            this.optionsMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.optionsMenu_ClearIconCache = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsMenu_EditTopApps = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsMenu_EditSearchBoxText = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsMenu_ToggleFileExplorerClassicSearch = new System.Windows.Forms.ToolStripMenuItem();
+            this.optionsMenu_SearchBoxTheme = new System.Windows.Forms.ToolStripMenuItem();
             this.themeGroup.SuspendLayout();
             this.cornersGroup.SuspendLayout();
+            this.optionsMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // installBtn
             // 
-            this.installBtn.Location = new System.Drawing.Point(12, 518);
+            this.installBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.installBtn.Location = new System.Drawing.Point(11, 478);
             this.installBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.installBtn.Name = "installBtn";
             this.installBtn.Size = new System.Drawing.Size(136, 36);
@@ -68,7 +72,8 @@
             // 
             // uninstallBtn
             // 
-            this.uninstallBtn.Location = new System.Drawing.Point(324, 518);
+            this.uninstallBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.uninstallBtn.Location = new System.Drawing.Point(323, 478);
             this.uninstallBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.uninstallBtn.Name = "uninstallBtn";
             this.uninstallBtn.Size = new System.Drawing.Size(136, 36);
@@ -79,9 +84,11 @@
             // 
             // copyrightLabel
             // 
+            this.copyrightLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.copyrightLabel.AutoSize = true;
             this.copyrightLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.copyrightLabel.Location = new System.Drawing.Point(167, 528);
+            this.copyrightLabel.Location = new System.Drawing.Point(166, 488);
             this.copyrightLabel.Name = "copyrightLabel";
             this.copyrightLabel.Size = new System.Drawing.Size(139, 17);
             this.copyrightLabel.TabIndex = 5;
@@ -89,8 +96,9 @@
             // 
             // linkLabel1
             // 
+            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(11, 489);
+            this.linkLabel1.Location = new System.Drawing.Point(10, 449);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(250, 17);
             this.linkLabel1.TabIndex = 12;
@@ -100,8 +108,9 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(11, 455);
+            this.label2.Location = new System.Drawing.Point(10, 415);
             this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(310, 34);
@@ -111,6 +120,8 @@
             // 
             // featureBox
             // 
+            this.featureBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.featureBox.CheckOnClick = true;
             this.featureBox.FormattingEnabled = true;
             this.featureBox.Location = new System.Drawing.Point(12, 11);
@@ -121,6 +132,7 @@
             // 
             // themeGroup
             // 
+            this.themeGroup.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.themeGroup.Controls.Add(this.radioButton3);
             this.themeGroup.Controls.Add(this.radioButton2);
             this.themeGroup.Controls.Add(this.radioButton1);
@@ -165,6 +177,7 @@
             // 
             // cornersGroup
             // 
+            this.cornersGroup.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.cornersGroup.Controls.Add(this.radioButton4);
             this.cornersGroup.Controls.Add(this.radioButton5);
             this.cornersGroup.Controls.Add(this.radioButton6);
@@ -209,68 +222,85 @@
             // 
             // searchRestartBtn
             // 
+            this.searchRestartBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.searchRestartBtn.Font = new System.Drawing.Font("Segoe MDL2 Assets", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.searchRestartBtn.Location = new System.Drawing.Point(393, 455);
+            this.searchRestartBtn.Location = new System.Drawing.Point(323, 415);
             this.searchRestartBtn.Name = "searchRestartBtn";
             this.searchRestartBtn.Size = new System.Drawing.Size(67, 57);
             this.searchRestartBtn.TabIndex = 18;
             this.searchRestartBtn.Text = "";
-            this.restartSearchAppTooltip.SetToolTip(this.searchRestartBtn, "Restart Search App");
+            this.optionsBtnTooltip.SetToolTip(this.searchRestartBtn, "Restart Search App");
             this.searchRestartBtn.UseVisualStyleBackColor = true;
             this.searchRestartBtn.Click += new System.EventHandler(this.searchRestartBtn_Click);
             // 
-            // clearIconCacheBtn
+            // optionsBtn
             // 
-            this.clearIconCacheBtn.Font = new System.Drawing.Font("Segoe MDL2 Assets", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.clearIconCacheBtn.Location = new System.Drawing.Point(324, 455);
-            this.clearIconCacheBtn.Name = "clearIconCacheBtn";
-            this.clearIconCacheBtn.Size = new System.Drawing.Size(67, 57);
-            this.clearIconCacheBtn.TabIndex = 20;
-            this.clearIconCacheBtn.Text = "";
-            this.clearIconCacheTooltip.SetToolTip(this.clearIconCacheBtn, "Clear Search App Icon Cache");
-            this.clearIconCacheBtn.UseVisualStyleBackColor = true;
-            this.clearIconCacheBtn.Click += new System.EventHandler(this.clearIconCacheBtn_Click);
+            this.optionsBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.optionsBtn.Font = new System.Drawing.Font("Segoe MDL2 Assets", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.optionsBtn.Location = new System.Drawing.Point(392, 415);
+            this.optionsBtn.Name = "optionsBtn";
+            this.optionsBtn.Size = new System.Drawing.Size(67, 57);
+            this.optionsBtn.TabIndex = 20;
+            this.optionsBtn.Text = "";
+            this.optionsBtnTooltip.SetToolTip(this.optionsBtn, "Options");
+            this.optionsBtn.UseVisualStyleBackColor = true;
+            this.optionsBtn.Click += new System.EventHandler(this.optionsBtn_Click);
             // 
-            // topAppsBtn
+            // optionsMenu
             // 
-            this.topAppsBtn.Location = new System.Drawing.Point(12, 415);
-            this.topAppsBtn.Name = "topAppsBtn";
-            this.topAppsBtn.Size = new System.Drawing.Size(156, 34);
-            this.topAppsBtn.TabIndex = 21;
-            this.topAppsBtn.Text = "Customize \"Top Apps\"";
-            this.topAppsBtn.UseVisualStyleBackColor = true;
-            this.topAppsBtn.Click += new System.EventHandler(this.topAppsBtn_Click);
+            this.optionsMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.optionsMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.optionsMenu_ClearIconCache,
+            this.optionsMenu_EditTopApps,
+            this.optionsMenu_EditSearchBoxText,
+            this.optionsMenu_ToggleFileExplorerClassicSearch,
+            this.optionsMenu_SearchBoxTheme});
+            this.optionsMenu.Name = "optionsMenu";
+            this.optionsMenu.Size = new System.Drawing.Size(309, 152);
             // 
-            // searchBoxTextBtn
+            // optionsMenu_ClearIconCache
             // 
-            this.searchBoxTextBtn.Location = new System.Drawing.Point(171, 415);
-            this.searchBoxTextBtn.Name = "searchBoxTextBtn";
-            this.searchBoxTextBtn.Size = new System.Drawing.Size(150, 34);
-            this.searchBoxTextBtn.TabIndex = 22;
-            this.searchBoxTextBtn.Text = "Edit Search Box Text";
-            this.searchBoxTextBtn.UseVisualStyleBackColor = true;
-            this.searchBoxTextBtn.Click += new System.EventHandler(this.searchBoxTextBtn_Click);
+            this.optionsMenu_ClearIconCache.Name = "optionsMenu_ClearIconCache";
+            this.optionsMenu_ClearIconCache.Size = new System.Drawing.Size(308, 24);
+            this.optionsMenu_ClearIconCache.Text = "Clear Icon Cache";
+            this.optionsMenu_ClearIconCache.Click += new System.EventHandler(this.optionsMenu_ClearIconCache_Click);
             // 
-            // legacyExplorerSearchBtn
+            // optionsMenu_EditTopApps
             // 
-            this.legacyExplorerSearchBtn.Location = new System.Drawing.Point(324, 415);
-            this.legacyExplorerSearchBtn.Name = "legacyExplorerSearchBtn";
-            this.legacyExplorerSearchBtn.Size = new System.Drawing.Size(136, 34);
-            this.legacyExplorerSearchBtn.TabIndex = 23;
-            this.legacyExplorerSearchBtn.Text = "Old File Search";
-            this.legacyExplorerSearchBtn.UseVisualStyleBackColor = true;
-            this.legacyExplorerSearchBtn.Click += new System.EventHandler(this.legacyExplorerSearchBtn_Click);
+            this.optionsMenu_EditTopApps.Name = "optionsMenu_EditTopApps";
+            this.optionsMenu_EditTopApps.Size = new System.Drawing.Size(308, 24);
+            this.optionsMenu_EditTopApps.Text = "Customize \"Top Apps\"";
+            this.optionsMenu_EditTopApps.Click += new System.EventHandler(this.optionsMenu_EditTopApps_Click);
+            // 
+            // optionsMenu_EditSearchBoxText
+            // 
+            this.optionsMenu_EditSearchBoxText.Name = "optionsMenu_EditSearchBoxText";
+            this.optionsMenu_EditSearchBoxText.Size = new System.Drawing.Size(308, 24);
+            this.optionsMenu_EditSearchBoxText.Text = "Edit Search Box Text";
+            this.optionsMenu_EditSearchBoxText.Click += new System.EventHandler(this.optionsMenu_EditSearchBoxText_Click);
+            // 
+            // optionsMenu_ToggleFileExplorerClassicSearch
+            // 
+            this.optionsMenu_ToggleFileExplorerClassicSearch.Name = "optionsMenu_ToggleFileExplorerClassicSearch";
+            this.optionsMenu_ToggleFileExplorerClassicSearch.Size = new System.Drawing.Size(308, 24);
+            this.optionsMenu_ToggleFileExplorerClassicSearch.Text = "Restore classic File Explorer Search";
+            this.optionsMenu_ToggleFileExplorerClassicSearch.Click += new System.EventHandler(this.optionsMenu_ToggleFileExplorerClassicSearch_Click);
+            // 
+            // optionsMenu_SearchBoxTheme
+            // 
+            this.optionsMenu_SearchBoxTheme.CheckOnClick = true;
+            this.optionsMenu_SearchBoxTheme.Name = "optionsMenu_SearchBoxTheme";
+            this.optionsMenu_SearchBoxTheme.Size = new System.Drawing.Size(308, 24);
+            this.optionsMenu_SearchBoxTheme.Text = "Enforce Dark Search Box";
+            this.optionsMenu_SearchBoxTheme.CheckedChanged += new System.EventHandler(this.optionsMenu_SearchBoxTheme_CheckedChanged);
             // 
             // InstallationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(472, 563);
-            this.Controls.Add(this.legacyExplorerSearchBtn);
-            this.Controls.Add(this.searchBoxTextBtn);
-            this.Controls.Add(this.topAppsBtn);
-            this.Controls.Add(this.clearIconCacheBtn);
+            this.ClientSize = new System.Drawing.Size(472, 528);
+            this.Controls.Add(this.optionsBtn);
             this.Controls.Add(this.searchRestartBtn);
             this.Controls.Add(this.cornersGroup);
             this.Controls.Add(this.themeGroup);
@@ -291,6 +321,7 @@
             this.themeGroup.PerformLayout();
             this.cornersGroup.ResumeLayout(false);
             this.cornersGroup.PerformLayout();
+            this.optionsMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -313,12 +344,14 @@
         private System.Windows.Forms.RadioButton radioButton5;
         private System.Windows.Forms.RadioButton radioButton6;
         private System.Windows.Forms.Button searchRestartBtn;
-        private System.Windows.Forms.Button clearIconCacheBtn;
-        private System.Windows.Forms.ToolTip restartSearchAppTooltip;
-        private System.Windows.Forms.ToolTip clearIconCacheTooltip;
-        private System.Windows.Forms.Button topAppsBtn;
-        private System.Windows.Forms.Button searchBoxTextBtn;
-        private System.Windows.Forms.Button legacyExplorerSearchBtn;
+        private System.Windows.Forms.ToolTip optionsBtnTooltip;
+        private System.Windows.Forms.Button optionsBtn;
+        private System.Windows.Forms.ContextMenuStrip optionsMenu;
+        private System.Windows.Forms.ToolStripMenuItem optionsMenu_ClearIconCache;
+        private System.Windows.Forms.ToolStripMenuItem optionsMenu_EditTopApps;
+        private System.Windows.Forms.ToolStripMenuItem optionsMenu_EditSearchBoxText;
+        private System.Windows.Forms.ToolStripMenuItem optionsMenu_ToggleFileExplorerClassicSearch;
+        private System.Windows.Forms.ToolStripMenuItem optionsMenu_SearchBoxTheme;
     }
 }
 

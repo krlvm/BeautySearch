@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Media;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
@@ -173,22 +174,29 @@ namespace BeautySearch
         {
             ScriptInstaller.KillSearchApp();
             Utility.ShowSearchWindow();
+            SystemSounds.Asterisk.Play();
         }
 
-        private void clearIconCacheBtn_Click(object sender, EventArgs e)
+        private void optionsBtn_Click(object sender, EventArgs e)
+        {
+            optionsMenu.Show(Cursor.Position.X, Cursor.Position.Y);
+        }
+
+        private void optionsMenu_ClearIconCache_Click(object sender, EventArgs e)
         {
             ScriptInstaller.ClearIconCache();
             Utility.ShowSearchWindow();
         }
 
-        private void topAppsBtn_Click(object sender, EventArgs e)
+        private void optionsMenu_EditTopApps_Click(object sender, EventArgs e)
         {
             TopAppsEditorForm.Launch();
         }
 
-        private void searchBoxTextBtn_Click(object sender, EventArgs e)
+        private void optionsMenu_EditSearchBoxText_Click(object sender, EventArgs e)
         {
-            SearchBoxTextInput dialog = new SearchBoxTextInput();
+            SearchBoxTextInputForm dialog = new SearchBoxTextInputForm();
+            dialog.textInput.Text = ScriptInstaller.GetSearchBoxText();
             DialogResult result = dialog.ShowDialog(this);
 
             if (result != DialogResult.Cancel)
@@ -199,9 +207,28 @@ namespace BeautySearch
             dialog.Dispose();
         }
 
+
+        private void optionsMenu_SearchBoxTheme_CheckedChanged(object sender, EventArgs e)
+        {
+            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(ScriptInstaller.SEARCH_APP_REGISTRY, true))
+            {
+                if (key != null)
+                {
+                    key.SetValue("SearchBoxTheme", optionsMenu_SearchBoxTheme.Checked ? 2 : 0, RegistryValueKind.DWord);
+                }
+            }
+        }
+        private void optionsMenu_SearchBoxTheme_UpdateStatus()
+        {
+            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(ScriptInstaller.SEARCH_APP_REGISTRY, false))
+            {
+                optionsMenu_SearchBoxTheme.Checked = key != null && (int)key.GetValue("SearchBoxTheme") == 2;
+            }
+        }
+
         private const string NEW_SEARCH_DISABLE_KEY_ROOT = @"Software\Classes\CLSID\{1d64637d-31e9-4b06-9124-e83fb178ac6e}\";
         private const string NEW_SEARCH_DISABLE_KEY = NEW_SEARCH_DISABLE_KEY_ROOT + "TreatAs";
-        private void legacyExplorerSearchBtn_Click(object sender, EventArgs e)
+        private void optionsMenu_ToggleFileExplorerClassicSearch_Click(object sender, EventArgs e)
         {
             if (ScriptInstaller.CURRENT_BUILD < ScriptInstaller.BUILD_20H1)
             {
@@ -216,7 +243,7 @@ namespace BeautySearch
 
             // 0 - new search, 1 - old search, 2 - old search (all users)
             int state = Utility.CheckIfMachineHasKey(NEW_SEARCH_DISABLE_KEY_ROOT) ? 2 : (
-                Utility.CheckIfCurrentUserHasKey(NEW_SEARCH_DISABLE_KEY_ROOT) ? 1 : 0    
+                Utility.CheckIfCurrentUserHasKey(NEW_SEARCH_DISABLE_KEY_ROOT) ? 1 : 0
             );
 
             if (state > 0)
@@ -232,13 +259,15 @@ namespace BeautySearch
                     if (state == 1)
                     {
                         Utility.DeleteCurrentUserSubKeyTree(NEW_SEARCH_DISABLE_KEY_ROOT);
-                    } else
+                    }
+                    else
                     {
                         Registry.LocalMachine.DeleteSubKeyTree(NEW_SEARCH_DISABLE_KEY_ROOT);
                     }
                     MessageBox.Show("Restart File Explorer to apply the changes", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
-            } else
+            }
+            else
             {
                 DialogResult dialogResult = MessageBox.Show(
                     "Do you want to disable the new File Explorer Search Experience introduced in 19H2?",
@@ -263,7 +292,8 @@ namespace BeautySearch
                         {
                             key = Registry.LocalMachine.CreateSubKey(NEW_SEARCH_DISABLE_KEY, true);
                         }
-                    } else if (dialogResult == DialogResult.No)
+                    }
+                    else if (dialogResult == DialogResult.No)
                     {
                         Utility.OpenCurrentUserRegistryKey(NEW_SEARCH_DISABLE_KEY, true);
                     }
@@ -282,6 +312,7 @@ namespace BeautySearch
         private void UpdateInstallationStatus()
         {
             installBtn.Text = ScriptInstaller.IsInstalled() ? "Reinstall" : "Install";
+            optionsMenu_SearchBoxTheme_UpdateStatus();
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

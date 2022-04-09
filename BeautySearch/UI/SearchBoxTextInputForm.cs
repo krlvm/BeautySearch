@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace BeautySearch.UI
 {
-    public partial class SearchBoxTextInput : Form
+    public partial class SearchBoxTextInputForm : Form
     {
-        public SearchBoxTextInput()
+        public SearchBoxTextInputForm()
         {
             InitializeComponent();
         }
