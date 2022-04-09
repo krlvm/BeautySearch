@@ -1,5 +1,6 @@
 ﻿using BeautySearch.UI;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -92,11 +93,6 @@ namespace BeautySearch
 
         private void installBtn_Click(object sender, EventArgs e)
         {
-            if (Utility.RequireAdministrator())
-            {
-                return;
-            }
-
             FeatureControl features = new FeatureControl();
 
             foreach (int i in featureBox.CheckedIndices)
@@ -114,7 +110,8 @@ namespace BeautySearch
                 features.Set("acrylicMode", "fake");
             }
 
-            switch (ScriptInstaller.Install(features))
+            int result = Utility.IsAdministrator() ? ScriptInstaller.Install(features) : RunElevated($"Install {JsonConvert.ToString(features.ToJson())}");
+            switch (result)
             {
                 case 0:
                     //MessageBox.Show("BeautySearch successfully installed", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -132,6 +129,9 @@ namespace BeautySearch
                 case ScriptInstaller.ERR_OLD_BUILD:
                     MessageBox.Show("BeautySearch can be installed only on Windows 10 May 2019 Update (19H1, Build 18363) and higher", "Unsupported Build", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
+                default:
+                    MessageBox.Show("Unknown Error: " + result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
             }
 
             UpdateInstallationStatus();
@@ -139,12 +139,9 @@ namespace BeautySearch
 
         private void uninstallBtn_Click(object sender, EventArgs e)
         {
-            if (Utility.RequireAdministrator())
-            {
-                return;
-            }
+            int result = Utility.IsAdministrator() ? ScriptInstaller.Uninstall() : RunElevated("Uninstall");
 
-            switch (ScriptInstaller.Uninstall())
+            switch (result)
             {
                 case 0:
                     MessageBox.Show("BeautySearch successfully uninstalled", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -160,6 +157,9 @@ namespace BeautySearch
                     break;
                 case ScriptInstaller.ERR_KILL_FAILED:
                     MessageBox.Show("BeautySearch has been uninstalled, sign out and sign in for the change to take effect", "BeautySearch", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                default:
+                    MessageBox.Show("Unknown Error: " + result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     break;
             }
 
@@ -308,6 +308,18 @@ namespace BeautySearch
         }
 
         #endregion
+
+        private int RunElevated(string args)
+        {
+            var process = Process.Start(new ProcessStartInfo(Process.GetCurrentProcess().MainModule.FileName)
+            {
+                UseShellExecute = true,
+                Verb = "runas",
+                Arguments = args
+            });
+            process.WaitForExit();
+            return process.ExitCode;
+        }
 
         private void UpdateInstallationStatus()
         {

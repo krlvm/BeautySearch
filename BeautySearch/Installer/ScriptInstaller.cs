@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace BeautySearch
@@ -80,7 +79,7 @@ namespace BeautySearch
                 features.Enable("version2022");
             }
 
-            if ("'fake'".Equals(features.Get("acrylicMode")))
+            if ("fake".Equals(features.Get("acrylicMode")))
             {
                 if (CURRENT_BUILD < BUILD_20H1 || CURRENT_BUILD >= 19541)
                 {

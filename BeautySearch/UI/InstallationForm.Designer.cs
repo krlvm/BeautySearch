@@ -256,7 +256,7 @@
             this.optionsMenu_ToggleFileExplorerClassicSearch,
             this.optionsMenu_SearchBoxTheme});
             this.optionsMenu.Name = "optionsMenu";
-            this.optionsMenu.Size = new System.Drawing.Size(309, 152);
+            this.optionsMenu.Size = new System.Drawing.Size(309, 124);
             // 
             // optionsMenu_ClearIconCache
             // 
@@ -310,9 +310,10 @@
             this.Controls.Add(this.copyrightLabel);
             this.Controls.Add(this.uninstallBtn);
             this.Controls.Add(this.installBtn);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MaximizeBox = false;
             this.Name = "InstallationForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BeautySearch Installer";

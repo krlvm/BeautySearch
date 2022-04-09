@@ -44,7 +44,7 @@
  * @author krlvm
  **/
 
- const SETTINGS_DEFAULTS = {
+const SETTINGS_DEFAULTS = {
     version2022: false,            // true | false
     useController: true,           // true | false
     restyleOnLoadAcrylic: true,    // true | false
