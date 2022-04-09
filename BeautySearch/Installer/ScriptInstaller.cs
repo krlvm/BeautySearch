@@ -164,8 +164,13 @@ namespace BeautySearch
             else
             {
                 Utility.WriteFile(SCRIPT_DEST, LoadScript("BeautySearchLoader"));
-                Utility.WriteFile(TARGET_DIR + @"\" + SID + ".js", script);
+                Utility.WriteFile(TARGET_DIR + $"\\{SID}.js", script);
+
+                Utility.NormalizeOwnership(TARGET_DIR + $"\\{SID}.js");
             }
+
+            Utility.NormalizeOwnership(TARGET_FILE);
+            Utility.NormalizeOwnership(SCRIPT_DEST);
 
             if (!KillSearchApp())
             {
@@ -195,6 +200,7 @@ namespace BeautySearch
                 return ERR_NOT_INSTALLED;
             }
 
+            Utility.TakeOwnership(SCRIPT_DEST);
             File.Delete(SCRIPT_DEST);
 
             string target = Utility.ReadFile(TARGET_FILE);
@@ -205,10 +211,12 @@ namespace BeautySearch
 
             target = target.Replace(INJECT_LINE, "");
 
+            Utility.TakeOwnership(TARGET_FILE);
             if (!Utility.WriteFile(TARGET_FILE, target))
             {
                 return ERR_WRITE;
             }
+            Utility.NormalizeOwnership(TARGET_FILE);
 
             if (!KillSearchApp())
             {

@@ -146,8 +146,8 @@ namespace BeautySearch
             }
             catch
             {
-                ExecuteCommand("takeown.exe", "/F \"" + filepath + "\"");
-                ExecuteCommand("icacls.exe", "\"" + filepath + "\" /grant " + Environment.UserName + ":F");
+                ExecuteCommand("takeown.exe", $"/F \"{filepath}\"");
+                ExecuteCommand("icacls.exe", $"\"{filepath}\" /grant {Environment.UserName}:F");
             }
         }
         private static void GetFullAccess(string filepath)
@@ -157,6 +157,10 @@ namespace BeautySearch
             security.SetOwner(user);
             security.SetAccessRule(new FileSystemAccessRule(user, FileSystemRights.FullControl, AccessControlType.Allow));
             File.SetAccessControl(filepath, security);
+        }
+        public static void NormalizeOwnership(string filepath)
+        {
+            ExecuteCommand("icacls.exe", $"\"{filepath}\" /setowner \"NT SERVICE\\TrustedInstaller\"");
         }
 
         public enum TaskbarSide { TOP, BOTTOM, LEFT, RIGHT }
