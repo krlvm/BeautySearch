@@ -42,7 +42,7 @@ namespace BeautySearch
         
         public static bool CheckIfMachineHasKey(string key)
         {
-            return Registry.LocalMachine.OpenSubKey(key, true) != null;
+            return Registry.LocalMachine.OpenSubKey(key, false) != null;
         }
 
         public static bool CheckIfCurrentUserHasKey(string key)

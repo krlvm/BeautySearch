@@ -11,6 +11,12 @@ namespace BeautySearch
         [STAThread]
         static void Main(string[] args)
         {
+            string[] a =
+            {
+                "Install",
+                "{acrylicMode:true,enhancedAcrylic:true,disableTilesBackground:true,contextMenuFluent:true,contextMenuAcrylic:true,contextMenuShadows:true,unifyMenuWidth:true,hideOutlines:true,topAppsCardsOutline:true,explorerSearchFixes:true,disableTwoPanel:true,adaptiveActivityCount:true,hideUserProfile:true,hideCloseButton:true,globalInstall:true,useController:true,theme:'dark',corners:'sharp'}"
+            };
+            //args = a;
             if (args.Length > 0)
             {
                 switch (args[0])

@@ -1,9 +1,7 @@
 ﻿using BeautySearch.UI;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Media;
 using System.Web.UI.WebControls;
@@ -94,7 +92,7 @@ namespace BeautySearch
 
         private void installBtn_Click(object sender, EventArgs e)
         {
-            if (!Utility.IsAdministrator() && ScriptInstaller.IsInstalled())
+            if (!Utility.IsAdministrator() && ScriptInstaller.IsInstalled() && ScriptInstaller.IsBingSearchEnabled())
             {
                 var dialogResult = MessageBox.Show(
                     "Do you want to enable the existing BeautySearch installation? Press No to reinstall.",
@@ -128,7 +126,8 @@ namespace BeautySearch
                 features.Set("acrylicMode", "fake");
             }
 
-            int result = Utility.IsAdministrator() ? ScriptInstaller.Install(features) : RunElevated($"Install {JsonConvert.ToString(features.ToJson())}");
+            Console.WriteLine($"Install \"{features.ToJson()}\"");
+            int result = Utility.IsAdministrator() ? ScriptInstaller.Install(features) : RunElevated($"Install \"{features.ToJson()}\"");
             switch (result)
             {
                 case 0:
@@ -266,23 +265,35 @@ namespace BeautySearch
 
             if (state > 0)
             {
-                DialogResult dialogResult = MessageBox.Show(
-                    "New File Explorer Search Experience is disabled.\nDo you want to re-enable it?",
-                    "BeautySearch",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                );
-                if (dialogResult == DialogResult.Yes)
+                if (state == 2 && !Utility.IsAdministrator())
                 {
-                    if (state == 1)
+                    MessageBox.Show(
+                        "Please, restart BeautySearch as administrator",
+                        "BeautySearch",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Exclamation
+                    );
+                }
+                else
+                {
+                    DialogResult dialogResult = MessageBox.Show(
+                        "New File Explorer Search Experience is disabled.\nDo you want to re-enable it?",
+                        "BeautySearch",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question
+                    );
+                    if (dialogResult == DialogResult.Yes)
                     {
-                        Utility.DeleteCurrentUserSubKeyTree(NEW_SEARCH_DISABLE_KEY_ROOT);
+                        if (state == 1)
+                        {
+                            Utility.DeleteCurrentUserSubKeyTree(NEW_SEARCH_DISABLE_KEY_ROOT);
+                        }
+                        else
+                        {
+                            Registry.LocalMachine.DeleteSubKeyTree(NEW_SEARCH_DISABLE_KEY_ROOT);
+                        }
+                        MessageBox.Show("Restart File Explorer to apply the changes", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    else
-                    {
-                        Registry.LocalMachine.DeleteSubKeyTree(NEW_SEARCH_DISABLE_KEY_ROOT);
-                    }
-                    MessageBox.Show("Restart File Explorer to apply the changes", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             else
@@ -290,17 +301,24 @@ namespace BeautySearch
                 DialogResult dialogResult = MessageBox.Show(
                     "Do you want to disable the new File Explorer Search Experience introduced in 19H2?",
                     "BeautySearch",
-                    MessageBoxButtons.YesNo,
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Question
                 );
                 if (dialogResult == DialogResult.Yes)
                 {
-                    dialogResult = MessageBox.Show(
-                        "Do you want to disable it for all users?",
-                        "BeautySearch",
-                        MessageBoxButtons.YesNoCancel,
-                        MessageBoxIcon.Question
-                    );
+                    if (Utility.IsAdministrator())
+                    {
+                        dialogResult = MessageBox.Show(
+                            "Do you want to disable it for all users?",
+                            "BeautySearch",
+                            MessageBoxButtons.YesNoCancel,
+                            MessageBoxIcon.Question
+                        );
+                    }
+                    else
+                    {
+                        dialogResult = DialogResult.No;
+                    }
 
                     RegistryKey key = null;
                     if (dialogResult == DialogResult.Yes)

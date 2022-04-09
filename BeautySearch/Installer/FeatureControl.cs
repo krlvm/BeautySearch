@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace BeautySearch
 {
@@ -47,16 +47,50 @@ namespace BeautySearch
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(features, Formatting.None);
+            var builder = new StringBuilder();
+            foreach (KeyValuePair<string, object> pair in features)
+            {
+                object val = pair.Value is bool ? pair.Value.ToString().ToLower() : (pair.Value is string ? $"'{pair.Value}'" : pair.Value);
+                builder.Append($"{pair.Key}:{val},");
+            }
+            var body = builder.ToString();
+            body = body.Substring(0, body.Length - 1);
+            return "{" + body + "}";
         }
 
         public static FeatureControl Parse(string json)
         {
-            var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            Console.WriteLine(json);
+            json = json.Substring(1, json.Length - 2);
+            Console.WriteLine(json);
             var features = new FeatureControl();
-            foreach (var entry in data)
+            foreach (var entry in json.Split(','))
             {
-                features.Set(entry.Key, entry.Value.ToString());
+                var arr = entry.Split(':');
+                var key = arr[0];
+                var val = arr[1];
+                object targetVal;
+                if (val.StartsWith("'"))
+                {
+                    targetVal = val.Substring(1, val.Length - 2);
+                }
+                else if ("true".Equals(val) || "false".Equals(val))
+                {
+                    targetVal = bool.Parse(val);
+                }
+                else
+                {
+                    if (val.Contains("."))
+                    {
+                        targetVal = double.Parse(val);
+                    }
+                    else
+                    {
+                        targetVal = int.Parse(val);
+                    }
+                }
+                Console.WriteLine(key + "/" + targetVal);
+                features.Set(key, targetVal);
             }
             return features;
         }
