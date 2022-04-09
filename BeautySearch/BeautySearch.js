@@ -202,7 +202,7 @@ if(SETTINGS.version2022 && sa_config != null) {
             });
         } else {
             executeOnLoad(() => {
-                sa_config.activityInZI = Math.floor((CortanaApp.height - 244) / 64);
+                sa_config.activityInZI = Math.floor((CortanaApp.height - 248) / (64 + 1));
             })
         }
     }
