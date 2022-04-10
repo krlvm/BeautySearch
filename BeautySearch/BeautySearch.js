@@ -81,7 +81,7 @@ const SETTINGS_DEFAULTS = {
 // Use defaults if the script is injected manually
 const SETTINGS = SETTINGS_DEFAULTS;
 
-const VERSION = '1.13';
+const VERSION = '1.13.2';
 
 console.log('BeautySearch v' + VERSION + ' is loaded');
 
@@ -441,6 +441,13 @@ if(SETTINGS.contextMenuFluent) {
         }
     `);
     
+    injectStyle(`
+        .contextMenu .menuItem.focusable:focus {
+            transform: scale(0.99);
+        }
+    `);
+    
+    
     if(!SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
         const prefix = SETTINGS.globalInstall ? `body:not(${CLASS_VISUAL_EFFECTS}) ` : '';
         injectStyle(`
@@ -491,19 +498,19 @@ if(SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
     if (SETTINGS.contextMenuLightI) {
         injectStyle(`
             ${selectors.light(['.contextMenu .menuItem.focusable:hover'], prefix)} {
-                background-color: rgba(217, 217, 217, 0.8) !important;
+                background-color: rgba(0, 0, 0, 0.1) !important;
             }
             ${selectors.light(['.contextMenu .menuItem.focusable:focus'], prefix)} {
-                background-color: rgba(203, 203, 203, 0.9) !important;
+                background-color: rgba(0, 0, 0, 0.15) !important;
             }
         `);
     } else {
         injectStyle(`
             ${selectors.light(['.contextMenu .menuItem.focusable:hover'], prefix)} {
-                background-color: rgba(244, 244, 244, 0.7) !important;
+                background-color: rgba(255, 255, 255, 0.6) !important;
             }
             ${selectors.light(['.contextMenu .menuItem.focusable:focus'], prefix)} {
-                background-color: rgba(244, 244, 244, 0.9) !important;
+                background-color: rgba(255, 255, 255, 0.8) !important;
             }
         `);
     }
