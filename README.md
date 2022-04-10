@@ -88,7 +88,7 @@ BeautySearch allows you to edit the text which is displayed on Search Box by def
 
 ### Enforce Dark Search Box when Taskbar is Dark
 
-BeautySearch allows you get Dark Search box when System Theme is set to Dark, but Apps Theme is set to Dark.
+BeautySearch allows you get Dark Search box when System Theme is set to Dark, but Apps Theme is set to Light.
 
 <img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/searchbox-dark-text.png" width="50%" />
 
