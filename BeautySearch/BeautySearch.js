@@ -442,14 +442,16 @@ if(SETTINGS.contextMenuFluent) {
     `);
     
     injectStyle(`
-        .contextMenu .menuItem.focusable:focus {
+        ${SETTINGS.hideOutlines ? '.hideOutline ' : ''}.contextMenu .menuItem.focusable:focus {
             transform: scale(0.99);
         }
     `);
     
-    
     if(!SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
-        const prefix = SETTINGS.globalInstall ? `body:not(${CLASS_VISUAL_EFFECTS}) ` : '';
+        const makePrefix = (appendix) => `body:not(${CLASS_VISUAL_EFFECTS})${appendix} `;
+        const prefix = SETTINGS.globalInstall ? makePrefix('') : '';
+        const hideOutlineSuffix = SETTINGS.hideOutlines ? '.hideOutline' : '';
+
         injectStyle(`
             ${selectors.light(['.contextMenu', '#dialog_overlay > div'], prefix)} {
                 background-color: ${SETTINGS.contextMenuLightI ? '#F2F2F2' : '#E4E4E4'} !important;
@@ -457,7 +459,7 @@ if(SETTINGS.contextMenuFluent) {
             ${selectors.light(['.contextMenu .menuItem.focusable:hover'], prefix)} {
                 background-color: ${SETTINGS.contextMenuLightI ? '#D9D9D9' : '#F4F4F4'} !important;
             }
-            ${selectors.light(['.contextMenu .menuItem.focusable:focus'], prefix)} {
+            ${selectors.light(['.contextMenu .menuItem.focusable:focus'], makePrefix(hideOutlineSuffix))} {
                 background-color: ${SETTINGS.contextMenuLightI ? '#CBCBCB' : '#FAFAFA'} !important;
             }
 
@@ -467,7 +469,7 @@ if(SETTINGS.contextMenuFluent) {
             ${selectors.dark(['.contextMenu .menuItem.focusable:hover'], prefix)} {
                 background-color: #404040 !important;
             }
-            ${selectors.dark(['.contextMenu .menuItem.focusable:focus'], prefix)} {
+            ${selectors.dark(['.contextMenu .menuItem.focusable:focus'], makePrefix(hideOutlineSuffix))} {
                 background-color: #464646 !important;
             }
         `);
@@ -486,12 +488,14 @@ if(SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
     const tint = [ SETTINGS.contextMenuLightI ? 'rgba(242, 242, 242, 0.6)' : 'rgba(228, 228, 228, 0.6)', 'rgba(0, 0, 0, 0.6)' ];
     injectAcrylicStyle('.contextMenu', tint);
     injectAcrylicStyle('#dialog_overlay > div', tint);
-    const prefix = SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : '';
+    const makePrefix = (appendix) => `${CLASS_VISUAL_EFFECTS}${appendix} `;
+    const prefix = SETTINGS.globalInstall ? makePrefix('') : '';
+    const hideOutlineSuffix = SETTINGS.hideOutlines ? '.hideOutline' : '';
     injectStyle(`
         ${selectors.dark(['.contextMenu .menuItem.focusable:hover'], prefix)} {
             background-color: rgba(255, 255, 255, 0.2) !important;
         }
-        ${selectors.dark(['.contextMenu .menuItem.focusable:focus'], prefix)} {
+        ${selectors.dark(['.contextMenu .menuItem.focusable:focus'], makePrefix(hideOutlineSuffix))} {
             background-color: rgba(255, 255, 255, 0.25) !important;
         }
     `);
@@ -500,7 +504,7 @@ if(SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
             ${selectors.light(['.contextMenu .menuItem.focusable:hover'], prefix)} {
                 background-color: rgba(0, 0, 0, 0.1) !important;
             }
-            ${selectors.light(['.contextMenu .menuItem.focusable:focus'], prefix)} {
+            ${selectors.light(['.contextMenu .menuItem.focusable:focus'], makePrefix(hideOutlineSuffix))} {
                 background-color: rgba(0, 0, 0, 0.15) !important;
             }
         `);
@@ -509,7 +513,7 @@ if(SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
             ${selectors.light(['.contextMenu .menuItem.focusable:hover'], prefix)} {
                 background-color: rgba(255, 255, 255, 0.6) !important;
             }
-            ${selectors.light(['.contextMenu .menuItem.focusable:focus'], prefix)} {
+            ${selectors.light(['.contextMenu .menuItem.focusable:focus'], makePrefix(hideOutlineSuffix))} {
                 background-color: rgba(255, 255, 255, 0.8) !important;
             }
         `);
