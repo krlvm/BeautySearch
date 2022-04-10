@@ -48,6 +48,7 @@ namespace BeautySearch
             AddFeature("Fluent Context Menu", "contextMenuFluent");
             AddFeature("Acrylic Context Menu", "contextMenuAcrylic", acrylicEnabled);
             AddFeature("Context Menu Shadows", "contextMenuShadows", acrylicEnabled);
+            AddFeature("Consistent 19H1+ Light Theme context menus", "contextMenu19H1");
             AddFeature("Align widths of context menus", "unifyMenuWidth");
             AddFeature("Hide control outlines when using mouse", "hideOutlines");
             AddFeature("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline");

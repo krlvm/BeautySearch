@@ -103,6 +103,11 @@ namespace BeautySearch
                     }
                 }
             }
+            if (!features.IsEnabled("contextMenu19H1"))
+            {
+                features.Enable("contextMenuLightI");
+            }
+            features.Exclude("contextMenu19H1");
 
             SetBingSearchEnabled(BING_SEARCH_DISABLED);
             KillSearchApp();

@@ -55,6 +55,7 @@ const SETTINGS_DEFAULTS = {
     contextMenuFluent: true,       // true | false
     contextMenuShadows: true,      // true | false
     contextMenuAcrylic: true,      // true | false
+    contextMenuLightI: false,       // true | false
     explorerSearchFixes: false,    // true | false
     topAppsCardsOutline: false,    // true | false
     hideOutlines: true,            // true | false
@@ -322,20 +323,32 @@ const getAcrylicBackgrounds = (tint) => [
 const injectAcrylicStyle = (parent, tint) => {
     // background: front, ..., back
     // background-blend-mode is not supported on EdgeHTML
+    const isCommonTint = !!tint && !Array.isArray(tint);
+    let lightTint, darkTint;
+    if (tint) {
+        if (Array.isArray(tint)) {
+            lightTint = tint[0], darkTint = tint[1];
+        } else {
+            lightTint = tint, darkTint = tint;
+        }
+    } else {
+        lightTint = 'rgba(255, 255, 255, 0.6)';
+        darkTint = 'rgba(0, 0, 0, 0.6)';
+    }
     return injectStyle(`
         ${parent} {
             -webkit-backdrop-filter: blur(30px) saturate(150%);
         }
-        ${(tint ? `
+        ${(isCommonTint ? `
             ${parent} {
                 background: ${getAcrylicBackgrounds(tint)};
             }
         ` : `
             ${selectors.light([parent], (SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : ''))} {
-                background: ${getAcrylicBackgrounds('rgba(255, 255, 255, 0.6)')};
+                background: ${getAcrylicBackgrounds(lightTint)};
             }
             ${selectors.dark([parent], (SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : ''))} {
-                background: ${getAcrylicBackgrounds('rgba(0, 0, 0, 0.6)')};
+                background: ${getAcrylicBackgrounds(darkTint)};
             }
         `)}
     `);
@@ -428,25 +441,26 @@ if(SETTINGS.contextMenuFluent) {
         }
     `);
     
-    if(!SETTINGS.contextMenuAcrylic) {
+    if(!SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
+        const prefix = SETTINGS.globalInstall ? `body:not(${CLASS_VISUAL_EFFECTS}) ` : '';
         injectStyle(`
-            ${selectors.light(['.contextMenu', '#dialog_overlay > div'])} {
-                background-color: #E4E4E4 !important;
+            ${selectors.light(['.contextMenu', '#dialog_overlay > div'], prefix)} {
+                background-color: ${SETTINGS.contextMenuLightI ? '#F2F2F2' : '#E4E4E4'} !important;
             }
-            ${selectors.light(['.contextMenu .menuItem.focusable:hover'])} {
-                background-color: #F4F4F4 !important;
+            ${selectors.light(['.contextMenu .menuItem.focusable:hover'], prefix)} {
+                background-color: ${SETTINGS.contextMenuLightI ? '#D9D9D9' : '#F4F4F4'} !important;
             }
-            ${selectors.light(['.contextMenu .menuItem.focusable:focus'])} {
-                background-color: #FAFAFA !important;
+            ${selectors.light(['.contextMenu .menuItem.focusable:focus'], prefix)} {
+                background-color: ${SETTINGS.contextMenuLightI ? '#CBCBCB' : '#FAFAFA'} !important;
             }
 
-            ${selectors.dark(['.contextMenu', '#dialog_overlay > div'])} {
+            ${selectors.dark(['.contextMenu', '#dialog_overlay > div'], prefix)} {
                 background-color: #2B2B2B !important;
             }
-            ${selectors.dark(['.contextMenu .menuItem.focusable:hover'])} {
+            ${selectors.dark(['.contextMenu .menuItem.focusable:hover'], prefix)} {
                 background-color: #404040 !important;
             }
-            ${selectors.dark(['.contextMenu .menuItem.focusable:focus'])} {
+            ${selectors.dark(['.contextMenu .menuItem.focusable:focus'], prefix)} {
                 background-color: #464646 !important;
             }
         `);
@@ -462,13 +476,37 @@ if(SETTINGS.contextMenuShadows || SETTINGS.globalInstall) {
 }
 
 if(SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
-    injectAcrylicStyle('.contextMenu');
-    injectAcrylicStyle('#dialog_overlay > div');
+    const tint = [ SETTINGS.contextMenuLightI ? 'rgba(242, 242, 242, 0.6)' : 'rgba(228, 228, 228, 0.6)', 'rgba(0, 0, 0, 0.6)' ];
+    injectAcrylicStyle('.contextMenu', tint);
+    injectAcrylicStyle('#dialog_overlay > div', tint);
+    const prefix = SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : '';
     injectStyle(`
-        ${selectors.dark(['.contextMenu .menuItem.focusable:hover'], (SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : ''))} {
+        ${selectors.dark(['.contextMenu .menuItem.focusable:hover'], prefix)} {
             background-color: rgba(255, 255, 255, 0.2) !important;
         }
+        ${selectors.dark(['.contextMenu .menuItem.focusable:focus'], prefix)} {
+            background-color: rgba(255, 255, 255, 0.25) !important;
+        }
     `);
+    if (SETTINGS.contextMenuLightI) {
+        injectStyle(`
+            ${selectors.light(['.contextMenu .menuItem.focusable:hover'], prefix)} {
+                background-color: rgba(217, 217, 217, 0.8) !important;
+            }
+            ${selectors.light(['.contextMenu .menuItem.focusable:focus'], prefix)} {
+                background-color: rgba(203, 203, 203, 0.9) !important;
+            }
+        `);
+    } else {
+        injectStyle(`
+            ${selectors.light(['.contextMenu .menuItem.focusable:hover'], prefix)} {
+                background-color: rgba(244, 244, 244, 0.7) !important;
+            }
+            ${selectors.light(['.contextMenu .menuItem.focusable:focus'], prefix)} {
+                background-color: rgba(244, 244, 244, 0.9) !important;
+            }
+        `);
+    }
 }
 
 let bs_config = null;
