@@ -250,7 +250,7 @@ namespace BeautySearch
         {
             using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(ScriptInstaller.SEARCH_APP_REGISTRY, false))
             {
-                optionsMenu_SearchBoxTheme.Checked = key != null && (int)key.GetValue("SearchBoxTheme") == 2;
+                optionsMenu_SearchBoxTheme.Checked = key != null && (int)key.GetValue("SearchBoxTheme", 0) == 2;
             }
         }
 
