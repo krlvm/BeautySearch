@@ -89,6 +89,7 @@ namespace BeautySearch.UI
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.saveBtn);
             this.Controls.Add(this.textInput);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "SearchBoxTextInputForm";
             this.ShowInTaskbar = false;
