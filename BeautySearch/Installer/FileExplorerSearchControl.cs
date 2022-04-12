@@ -1,6 +1,5 @@
 ﻿using Microsoft.Win32;
 using System.Windows.Forms;
-using BeautySearch.Installer;
 
 namespace BeautySearch.Installer
 {
@@ -23,8 +22,8 @@ namespace BeautySearch.Installer
             }
 
             // 0 - new search, 1 - old search, 2 - old search (all users)
-            int state = Utility.CheckIfMachineHasKey(NEW_SEARCH_DISABLE_KEY_ROOT) ? 2 : (
-                Utility.CheckIfCurrentUserHasKey(NEW_SEARCH_DISABLE_KEY_ROOT) ? 1 : 0
+            int state = Utility.CheckIfMachineHasKey(NEW_SEARCH_DISABLE_KEY) ? 2 : (
+                Utility.CheckIfCurrentUserHasKey(NEW_SEARCH_DISABLE_KEY) ? 1 : 0
             );
 
             if (state > 0)
@@ -45,11 +44,11 @@ namespace BeautySearch.Installer
                     {
                         if (state == 1)
                         {
-                            Utility.DeleteCurrentUserSubKeyTree(NEW_SEARCH_DISABLE_KEY_ROOT);
+                            Utility.DeleteCurrentUserSubKeyTree(NEW_SEARCH_DISABLE_KEY);
                         }
                         else
                         {
-                            Registry.LocalMachine.DeleteSubKeyTree(NEW_SEARCH_DISABLE_KEY_ROOT);
+                            Registry.LocalMachine.DeleteSubKeyTree(NEW_SEARCH_DISABLE_KEY);
                         }
                         MessageBox.Show("Restart File Explorer to apply the changes", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -58,7 +57,7 @@ namespace BeautySearch.Installer
             else
             {
                 DialogResult dialogResult = MessageBox.Show(
-                    "Do you want to disable the new File Explorer Search Experience introduced in 19H2?",
+                    "Do you want to disable the new File Explorer Search Experience introduced in 19H2?" + (Utility.IsAdministrator() ? "" : "\n\n(Run as administrator to disable for all users)"),
                     "BeautySearch",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question
