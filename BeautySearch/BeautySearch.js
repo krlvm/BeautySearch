@@ -81,7 +81,7 @@ const SETTINGS_DEFAULTS = {
 // Use defaults if the script is injected manually
 const SETTINGS = SETTINGS_DEFAULTS;
 
-const VERSION = '1.13.3';
+const VERSION = '1.13.4';
 
 console.log('BeautySearch v' + VERSION + ' is loaded');
 
@@ -568,10 +568,10 @@ if(SETTINGS.explorerSearchFixes) {
     // It is very slow and has HiDPI scaling bug which hiding the bottom border
     // of the Explorer Search Box
     injectStyle(`
-        .panelCanResize.${DEF_LIGHT} .scr {
+        .panelCanResize.${DEF_LIGHT} .scr, .fileExplorer.${DEF_LIGHT} .scr {
             border-top: 1px solid #D9D9D9;
         }
-        .panelCanResize.${DEF_DARK} .scr {
+        .panelCanResize.${DEF_DARK} .scr, .fileExplorer.${DEF_DARK} .scr {
             border-top: 1px solid #535353;
         }
     `);
