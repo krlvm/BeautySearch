@@ -44,11 +44,11 @@ namespace BeautySearch.Installer
                     {
                         if (state == 1)
                         {
-                            Utility.DeleteCurrentUserSubKeyTree(NEW_SEARCH_DISABLE_KEY);
+                            Utility.DeleteCurrentUserSubKeyTree(NEW_SEARCH_DISABLE_KEY_ROOT);
                         }
                         else
                         {
-                            Registry.LocalMachine.DeleteSubKeyTree(NEW_SEARCH_DISABLE_KEY);
+                            Registry.LocalMachine.DeleteSubKeyTree(NEW_SEARCH_DISABLE_KEY_ROOT);
                         }
                         MessageBox.Show("Restart File Explorer to apply the changes", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -89,7 +89,7 @@ namespace BeautySearch.Installer
                     }
                     else if (dialogResult == DialogResult.No)
                     {
-                        Utility.OpenCurrentUserRegistryKey(NEW_SEARCH_DISABLE_KEY, true);
+                        key = Utility.OpenCurrentUserRegistryKey(NEW_SEARCH_DISABLE_KEY, true);
                     }
 
                     if (key != null)
