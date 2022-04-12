@@ -787,6 +787,11 @@ if(SETTINGS.version2022) {
             }
         `);
     }
+    injectStyle(`
+        .previewDataSection .label {
+            -ms-user-select: none;
+        }
+    `);
     injectDarkTheme(DARK_THEME_CLASS);
     if (SETTINGS.theme == 'light') {
         const parent = `.${DEF_DARK}:not(.zeroInput19H1):not(.bsDark)`;
