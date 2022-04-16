@@ -110,8 +110,11 @@ const launchUri = (uri) => {
     getController(controller => controller.launchUri(uri));
 }
 
+const DEF_LIGHT = 'lightTheme' + (SETTINGS.version2022 ? '' : '19H1');
+const DEF_DARK  = 'darkTheme'  + (SETTINGS.version2022 ? '' : '19H1');
+
 const isSystemLightTheme = () => {
-    return document.getElementById('root').classList.contains('${DEF_LIGHT}');
+    return document.getElementById('root').classList.contains(DEF_LIGHT);
 }
 
 const executeOnShown = (callback) => {
@@ -211,9 +214,6 @@ if(SETTINGS.version2022 && sa_config != null) {
         sa_config.snrVersion += '\nBeautySearch v' + VERSION;
     }
 }
-
-const DEF_LIGHT = 'lightTheme' + (SETTINGS.version2022 ? '' : '19H1');
-const DEF_DARK  = 'darkTheme'  + (SETTINGS.version2022 ? '' : '19H1');
 
 const CLASS_VISUAL_EFFECTS_NAME = 'bsVisualEffects';
 const CLASS_VISUAL_EFFECTS = '.' + CLASS_VISUAL_EFFECTS_NAME;
