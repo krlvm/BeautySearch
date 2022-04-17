@@ -443,7 +443,7 @@ if(SETTINGS.contextMenuFluent) {
     `);
     
     injectStyle(`
-        ${SETTINGS.hideOutlines ? '.hideOutline ' : ''}.contextMenu .menuItem.focusable:focus {
+        ${SETTINGS.hideOutlines ? '.hideOutline ' : ''}.contextMenu .menuItem.focusable:active {
             transform: scale(0.99);
         }
     `);
@@ -496,7 +496,7 @@ if(SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
         ${selectors.dark(['.contextMenu .menuItem.focusable:hover'], prefix)} {
             background-color: rgba(255, 255, 255, 0.2) !important;
         }
-        ${selectors.dark(['.contextMenu .menuItem.focusable:focus'], makePrefix(hideOutlineSuffix))} {
+        ${selectors.dark(['.contextMenu .menuItem.focusable:active'], prefix)} {
             background-color: rgba(255, 255, 255, 0.25) !important;
         }
     `);
@@ -505,7 +505,7 @@ if(SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
             ${selectors.light(['.contextMenu .menuItem.focusable:hover'], prefix)} {
                 background-color: rgba(0, 0, 0, 0.1) !important;
             }
-            ${selectors.light(['.contextMenu .menuItem.focusable:focus'], makePrefix(hideOutlineSuffix))} {
+            ${selectors.light(['.contextMenu .menuItem.focusable:active'], prefix)} {
                 background-color: rgba(0, 0, 0, 0.15) !important;
             }
         `);
@@ -514,7 +514,7 @@ if(SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
             ${selectors.light(['.contextMenu .menuItem.focusable:hover'], prefix)} {
                 background-color: rgba(255, 255, 255, 0.6) !important;
             }
-            ${selectors.light(['.contextMenu .menuItem.focusable:focus'], makePrefix(hideOutlineSuffix))} {
+            ${selectors.light(['.contextMenu .menuItem.focusable:active'], prefix)} {
                 background-color: rgba(255, 255, 255, 0.8) !important;
             }
         `);
@@ -594,11 +594,28 @@ if(SETTINGS.topAppsCardsOutline) {
             box-shadow: none !important;
             transform: scale(0.98);
         }
+    `);
 
+    injectStyle(`
         .suggsList > li {
             box-shadow: none !important;
         }
+
+        ${selectors.light(['.suggsList > li:hover'], '.zeroInput19H1')} {
+            background-color: rgba(255, 255, 255, 0.6) !important;
+        }
+        ${selectors.light(['.suggsList > li:hover:active'], '.zeroInput19H1')} {
+            background-color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        ${selectors.dark(['.suggsList > li:hover'], '.zeroInput19H1')} {
+            background-color: rgba(255, 255, 255, 0.2) !important;
+        }
+        ${selectors.dark(['.suggsList > li:hover:active'], '.zeroInput19H1')} {
+            background-color: rgba(255, 255, 255, 0.25) !important;
+        }
     `);
+
     if(SETTINGS.acrylicMode) {
         const parent = SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : '';
         injectStyle(`
