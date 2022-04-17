@@ -168,6 +168,8 @@ namespace BeautySearch
         public static void NormalizeOwnership(string filepath)
         {
             ExecuteCommand("icacls.exe", $"\"{filepath}\" /setowner \"NT SERVICE\\TrustedInstaller\"");
+            ExecuteCommand("icacls.exe", $"\"{filepath}\" /remove {Environment.UserName}:F");
+            ExecuteCommand("icacls.exe", $"\"{filepath}\" /t /q /c /reset");
         }
 
         public enum TaskbarSide { TOP, BOTTOM, LEFT, RIGHT }
