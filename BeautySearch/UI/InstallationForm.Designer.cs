@@ -61,7 +61,7 @@
             // installBtn
             // 
             this.installBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.installBtn.Location = new System.Drawing.Point(11, 499);
+            this.installBtn.Location = new System.Drawing.Point(11, 518);
             this.installBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.installBtn.Name = "installBtn";
             this.installBtn.Size = new System.Drawing.Size(136, 36);
@@ -73,7 +73,7 @@
             // uninstallBtn
             // 
             this.uninstallBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.uninstallBtn.Location = new System.Drawing.Point(323, 499);
+            this.uninstallBtn.Location = new System.Drawing.Point(323, 518);
             this.uninstallBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.uninstallBtn.Name = "uninstallBtn";
             this.uninstallBtn.Size = new System.Drawing.Size(136, 36);
@@ -88,7 +88,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.copyrightLabel.AutoSize = true;
             this.copyrightLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.copyrightLabel.Location = new System.Drawing.Point(166, 509);
+            this.copyrightLabel.Location = new System.Drawing.Point(166, 528);
             this.copyrightLabel.Name = "copyrightLabel";
             this.copyrightLabel.Size = new System.Drawing.Size(139, 17);
             this.copyrightLabel.TabIndex = 5;
@@ -98,7 +98,7 @@
             // 
             this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(10, 470);
+            this.linkLabel1.Location = new System.Drawing.Point(10, 489);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(250, 17);
             this.linkLabel1.TabIndex = 12;
@@ -110,7 +110,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 436);
+            this.label2.Location = new System.Drawing.Point(10, 455);
             this.label2.Margin = new System.Windows.Forms.Padding(0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(310, 34);
@@ -127,7 +127,7 @@
             this.featureBox.Location = new System.Drawing.Point(12, 11);
             this.featureBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.featureBox.Name = "featureBox";
-            this.featureBox.Size = new System.Drawing.Size(450, 310);
+            this.featureBox.Size = new System.Drawing.Size(450, 327);
             this.featureBox.TabIndex = 15;
             // 
             // themeGroup
@@ -136,7 +136,7 @@
             this.themeGroup.Controls.Add(this.radioButton3);
             this.themeGroup.Controls.Add(this.radioButton2);
             this.themeGroup.Controls.Add(this.radioButton1);
-            this.themeGroup.Location = new System.Drawing.Point(12, 330);
+            this.themeGroup.Location = new System.Drawing.Point(12, 349);
             this.themeGroup.Name = "themeGroup";
             this.themeGroup.Size = new System.Drawing.Size(200, 100);
             this.themeGroup.TabIndex = 16;
@@ -181,7 +181,7 @@
             this.cornersGroup.Controls.Add(this.radioButton4);
             this.cornersGroup.Controls.Add(this.radioButton5);
             this.cornersGroup.Controls.Add(this.radioButton6);
-            this.cornersGroup.Location = new System.Drawing.Point(260, 330);
+            this.cornersGroup.Location = new System.Drawing.Point(260, 349);
             this.cornersGroup.Name = "cornersGroup";
             this.cornersGroup.Size = new System.Drawing.Size(200, 100);
             this.cornersGroup.TabIndex = 17;
@@ -224,7 +224,7 @@
             // 
             this.searchRestartBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.searchRestartBtn.Font = new System.Drawing.Font("Segoe MDL2 Assets", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.searchRestartBtn.Location = new System.Drawing.Point(323, 436);
+            this.searchRestartBtn.Location = new System.Drawing.Point(323, 455);
             this.searchRestartBtn.Name = "searchRestartBtn";
             this.searchRestartBtn.Size = new System.Drawing.Size(67, 57);
             this.searchRestartBtn.TabIndex = 18;
@@ -237,7 +237,7 @@
             // 
             this.optionsBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.optionsBtn.Font = new System.Drawing.Font("Segoe MDL2 Assets", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.optionsBtn.Location = new System.Drawing.Point(392, 436);
+            this.optionsBtn.Location = new System.Drawing.Point(392, 455);
             this.optionsBtn.Name = "optionsBtn";
             this.optionsBtn.Size = new System.Drawing.Size(67, 57);
             this.optionsBtn.TabIndex = 20;
@@ -299,7 +299,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(472, 549);
+            this.ClientSize = new System.Drawing.Size(472, 568);
             this.Controls.Add(this.optionsBtn);
             this.Controls.Add(this.searchRestartBtn);
             this.Controls.Add(this.cornersGroup);

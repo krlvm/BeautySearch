@@ -616,7 +616,7 @@ if(SETTINGS.topAppsCardsOutline) {
         }
     `);
 
-    if(SETTINGS.acrylicMode) {
+    if(SETTINGS.acrylicMode || SETTINGS.globalInstall) {
         const parent = SETTINGS.globalInstall ? CLASS_VISUAL_EFFECTS + ' ' : '';
         injectStyle(`
             ${parent}.topItemsGroup .selectable {
@@ -769,6 +769,18 @@ let darkThemeListener = () => {
     }
 };
 if(SETTINGS.version2022) {
+    injectStyle(`
+        #preBootstrapBuildInfo {
+            display: none;
+        }
+    `);
+    const replaceLoadingAnimation = () => {
+        document.getElementById('preBootstrapLoading').classList.add('b_hide');
+        document.getElementById('preBootstrapPane').innerHTML += '<progress id="b_progress" class="b_progressBar accentColor"></progress>';
+    }
+    //document.addEventListener('load', replaceLoadingAnimation);
+    replaceLoadingAnimation();
+
     // Align preview pane jumplist item icons vertically
     injectStyle(`
         .previewDataSection .sectionItem {
@@ -777,9 +789,6 @@ if(SETTINGS.version2022) {
         }
     `);
     injectStyle(`
-        #preBootstrapBuildInfo {
-            display: none;
-        }
         .${DEF_LIGHT} .selected .openPreviewPaneBtn {
             border-color: rgba(255, 255, 255, 0.5) !important;
         }

@@ -63,6 +63,7 @@ namespace BeautySearch
             }
             else
             {
+                AddFeature("Speed up loading", "speedLoad", true);
                 AddFeature("Always show recent files path", "alwaysShowActivityPath", true);
                 AddFeature("Disable two-panel mode", "disableTwoPanel", true);
                 AddFeature("Automatically recent last activity items count", "adaptiveActivityCount", true);

@@ -11,12 +11,12 @@ namespace BeautySearch
         public static int CURRENT_BUILD;
         public static int CURRENT_BUILD_PATCH;
 
-        public const  int BUILD_19H1 = 18362;
-        public const  int BUILD_19H2 = 18363;
-        public const  int BUILD_20H1 = 19041;
+        public const int BUILD_19H1 = 18362;
+        public const int BUILD_19H2 = 18363;
+        public const int BUILD_20H1 = 19041;
 
         private const int MIN_REQUIRED_BUILD = BUILD_19H1;
-        public  const int MIN_20H1_PATCH_FIX = 1618;
+        public const int MIN_20H1_PATCH_FIX = 1618;
 
         // Error codes
         public const int ERR_READ = 1;
@@ -26,7 +26,7 @@ namespace BeautySearch
         public const int ERR_OLD_BUILD = 5;
 
         // Bing Search
-        public  const string SEARCH_APP_REGISTRY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Search\";
+        public const string SEARCH_APP_REGISTRY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Search\";
         private const int BING_SEARCH_DISABLED = 0;
         private const int BING_SEARCH_ENABLED = 1;
 
@@ -66,6 +66,13 @@ namespace BeautySearch
         public static bool is20H1Fixed()
         {
             return CURRENT_BUILD < BUILD_20H1 || CURRENT_BUILD >= 19500 || CURRENT_BUILD_PATCH >= MIN_20H1_PATCH_FIX;
+        }
+
+        private const int TIMEOUT_20H1F_DEFAULT = 2500;
+        private const int TIMEOUT_20H1F_CUSTOM  = 200;
+        private static string Get20H1FTimeout(int timeout)
+        {
+            return timeout + ",\"ShowWebViewTimer\"";
         }
 
         public static int Install(FeatureControl features)
@@ -127,6 +134,18 @@ namespace BeautySearch
             if (!target.Contains(INJECT_LINE))
             {
                 target += INJECT_LINE;
+            }
+
+            if (is20H1Fixed())
+            {
+                if (features.IsEnabled("speedLoad"))
+                {
+                    target = target.Replace(Get20H1FTimeout(TIMEOUT_20H1F_DEFAULT), Get20H1FTimeout(TIMEOUT_20H1F_CUSTOM));
+                } 
+                else
+                {
+                    target = target.Replace(Get20H1FTimeout(TIMEOUT_20H1F_CUSTOM), Get20H1FTimeout(TIMEOUT_20H1F_DEFAULT));
+                }
             }
 
             //target = ToggleEntrypointFeature(target, "enableTwoPanesZI", !features.IsEnabled("disableTwoPanel"));
@@ -214,6 +233,11 @@ namespace BeautySearch
             }
 
             target = target.Replace(INJECT_LINE, "");
+
+            if (is20H1Fixed())
+            {
+                target = target.Replace(Get20H1FTimeout(TIMEOUT_20H1F_CUSTOM), Get20H1FTimeout(TIMEOUT_20H1F_DEFAULT));
+            }
 
             Utility.TakeOwnership(TARGET_FILE);
             if (!Utility.WriteFile(TARGET_FILE, target))
