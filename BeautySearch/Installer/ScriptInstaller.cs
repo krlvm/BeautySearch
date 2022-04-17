@@ -326,10 +326,11 @@ namespace BeautySearch
         private static bool InjectController()
         {
             string CONTROLLER_FILE = FindControllerFile();
-            Utility.TakeOwnership(CONTROLLER_FILE);
-
             string controller = Utility.ReadFile(CONTROLLER_FILE);
-            if (!controller.Contains("bsController"))
+
+            bool ver2022Fault = controller.Contains("bsController=this;return l.isBingWallpaperAppInstalled");
+
+            if (!controller.Contains("bsController") || ver2022Fault)
             {
                 // Controller is accessible via 'bsController' global variable
                 controller = "var bsController = null;" + controller;
@@ -338,9 +339,19 @@ namespace BeautySearch
                     controller = controller.Insert(controller.IndexOf("}return l.prototype"), ";bsController=l;");
                 } else
                 {
-                    controller = controller.Insert(controller.IndexOf("return l.isBingWallpaperAppInstalled"), "bsController=this;");
+                    if (ver2022Fault)
+                    {
+                        // BeautySearch versions from 1.10 to 1.13.7 detected the controller wrongly
+                        controller = controller.Replace("bsController=this;return l.isBingWallpaperAppInstalled", "bsController=l;return l.isBingWallpaperAppInstalled");
+                    } else
+                    {
+                        controller = controller.Insert(controller.IndexOf("return l.isBingWallpaperAppInstalled"), "bsController=l;");
+                    }
                 }
-                return Utility.WriteFile(CONTROLLER_FILE, controller);
+                Utility.TakeOwnership(CONTROLLER_FILE);
+                bool success = Utility.WriteFile(CONTROLLER_FILE, controller);
+                Utility.NormalizeOwnership(CONTROLLER_FILE);
+                return success;
             }
             return true;
         }
