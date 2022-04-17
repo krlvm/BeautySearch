@@ -68,6 +68,7 @@ const SETTINGS_DEFAULTS = {
     hideUserProfile: true,         // true | false
     hideCloseButton: true,         // true | false
     activityItemCount: -1,         // number
+    alwaysShowActivityPath: true,  // true | false
     activityDynamicDOM: false,     // true | false
     showBeautySearchVer: false,    // number
     globalInstall: true,
@@ -792,6 +793,20 @@ if(SETTINGS.version2022) {
             -ms-user-select: none;
         }
     `);
+    if (SETTINGS.alwaysShowActivityPath) {
+        injectStyle(`
+            .zeroInput19H1 .suggestion .additionalInfoText {
+                display: block !important;
+                padding-left: 12px !important;
+                padding-right: 16px;
+                line-height: 16px;
+                font-size: 13px;
+            }
+            .zeroInput19H1.${DEF_LIGHT} .suggestion .additionalInfoText {
+                color: rgba(0, 0, 0, 0.6) !important;
+            }
+        `);
+    }
     injectDarkTheme(DARK_THEME_CLASS);
     if (SETTINGS.theme == 'light') {
         const parent = `.${DEF_DARK}:not(.zeroInput19H1):not(.bsDark)`;
