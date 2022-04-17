@@ -56,7 +56,7 @@ namespace BeautySearch
         public static bool WriteFile(string filepath, string text)
         {
             var sw = new StreamWriter(filepath);
-            sw.WriteLine(text);
+            sw.Write(text);
             sw.Close();
             return true;
         }
