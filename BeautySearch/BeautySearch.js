@@ -781,6 +781,26 @@ if(SETTINGS.version2022) {
     //document.addEventListener('load', replaceLoadingAnimation);
     replaceLoadingAnimation();
 
+    injectStyle(`
+        .removeIcon * {
+            transition: color 25ms ease-out;
+        }
+
+        ${selectors.light(['.removeIcon *'])} {
+            color: rgba(0, 0, 0, 0.7) !important;
+        }
+        ${selectors.light(['.removeIcon:hover *'])} {
+            color: black !important;
+        }
+        
+        ${selectors.dark(['.removeIcon *'])} {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+        ${selectors.dark(['.removeIcon:hover *'])} {
+            color: white !important;
+        }
+    `);
+
     // Align preview pane jumplist item icons vertically
     injectStyle(`
         .previewDataSection .sectionItem {
