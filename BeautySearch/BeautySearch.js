@@ -60,7 +60,7 @@ const SETTINGS_DEFAULTS = {
     topAppsCardsOutline: false,    // true | false
     hideOutlines: true,            // true | false
     acrylicMode: false,            // true | false | 'fake'
-    backgroundMode: true,          // true | false | 'system' | color: String
+    backgroundMode: true,          // true | false | 'system' | 'dark2022' | color: String
     enhancedAcrylic: true,         // true | false
     corners: 'sharp',              // 'default' | 'sharp' | 'round'
     theme: 'auto',                 // 'auto'    | 'light' | 'dark'
@@ -724,6 +724,12 @@ if(SETTINGS.backgroundMode) {
                     }
                 `);
             }
+        } else if (SETTINGS.backgroundMode == 'dark2022') {
+            injectStyle(`
+                .${DEF_DARK} {
+                    background: #1f1f1f !important;
+                }
+            `);
         } else {
             injectStyle(`
                 #rootContainer {

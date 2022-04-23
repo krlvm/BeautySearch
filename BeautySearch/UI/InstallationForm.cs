@@ -36,14 +36,12 @@ namespace BeautySearch
 
         private void EnumerateFeatures()
         {
+            bool ver2022 = ScriptInstaller.is20H1Fixed();
             bool acrylicEnabled = Utility.IsPersonalizationFeatureEnabled("EnableTransparency");
 
-            if (!ScriptInstaller.is20H1() || !ScriptInstaller.is20H1Fixed())
-            {
-                AddFeature("Show accent color on Search Window", "backgroundMode", Utility.IsPersonalizationFeatureEnabled("ColorPrevalence"));
-            }
-            AddFeature("Enable Acrylic" + (!ScriptInstaller.is20H1Fixed() ? " (or Fake Acrylic on 20H1+)" : ""), "acrylicMode", acrylicEnabled);
+            AddFeature("Enable Acrylic" + (!ver2022 ? " (or Fake Acrylic on 20H1+)" : ""), "acrylicMode", acrylicEnabled);
             AddFeature("Enhanced design with more Acrylic", "enhancedAcrylic", true);
+            AddFeature("Show accent color on Search Window" + (ScriptInstaller.is20H1() && ver2022 ? " when it is shown on Start" : ""), "backgroundMode", (ScriptInstaller.is20H1() && ver2022) || Utility.IsPersonalizationFeatureEnabled("ColorPrevalence"));
             AddFeature("Remove background from UWP application icons", "disableTilesBackground", ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1+1);
             AddFeature("Fluent Context Menu", "contextMenuFluent");
             AddFeature("Acrylic Context Menu", "contextMenuAcrylic", acrylicEnabled);
@@ -57,7 +55,7 @@ namespace BeautySearch
             {
                 AddFeature("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes", Utility.GetDPIScaling() == 120);
             }
-            if (!ScriptInstaller.is20H1Fixed())
+            if (!ver2022)
             {
                 AddFeature("[20H1+] Capture desktop to apply Fake Acrylic", "fakeAcrylicDesktopCrop", false);
                 AddFeature("[20H1+] Don't override Fake Acrylic wallpaper for now", "skipFakeAcrylic", false);

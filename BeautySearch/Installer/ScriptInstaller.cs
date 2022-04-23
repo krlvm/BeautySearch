@@ -146,6 +146,11 @@ namespace BeautySearch
                 {
                     target = target.Replace(Get20H1FTimeout(TIMEOUT_20H1F_CUSTOM), Get20H1FTimeout(TIMEOUT_20H1F_DEFAULT));
                 }
+
+                if (!features.IsEnabled("backgroundMode"))
+                {
+                    features.Set("backgroundMode", "dark2022");
+                }
             }
 
             //target = ToggleEntrypointFeature(target, "enableTwoPanesZI", !features.IsEnabled("disableTwoPanel"));
