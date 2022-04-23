@@ -150,6 +150,9 @@ namespace BeautySearch
                 if (!features.IsEnabled("backgroundMode"))
                 {
                     features.Set("backgroundMode", "dark2022");
+                } else
+                {
+                    features.Exclude("backgroundMode");
                 }
             }
 
