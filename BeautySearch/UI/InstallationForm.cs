@@ -52,6 +52,7 @@ namespace BeautySearch
             AddFeature("Align widths of context menus", "unifyMenuWidth");
             AddFeature("Hide control outlines when using mouse", "hideOutlines");
             AddFeature("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline");
+            AddFeature("Hide Review and Share options for UWP apps", "hideUWPReviewShare");
             if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_19H2)
             {
                 AddFeature("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes", Utility.GetDPIScaling() == 120);
@@ -66,7 +67,7 @@ namespace BeautySearch
                 AddFeature("Speed up loading", "speedLoad", true);
                 AddFeature("Always show recent files path", "alwaysShowActivityPath", true);
                 AddFeature("Disable two-panel mode", "disableTwoPanel", true);
-                AddFeature("Automatically recent last activity items count", "adaptiveActivityCount", true);
+                AddFeature("Automatically adjust recent last activity items count", "adaptiveActivityCount", true);
                 AddFeature("Hide user profile icon", "hideUserProfile", true);
                 AddFeature("Hide close button", "hideCloseButton", true);
                 AddFeature("Install for all users", "globalInstall", true);

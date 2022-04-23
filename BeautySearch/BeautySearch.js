@@ -69,6 +69,7 @@ const SETTINGS_DEFAULTS = {
     hideCloseButton: true,         // true | false
     activityItemCount: -1,         // number
     alwaysShowActivityPath: true,  // true | false
+    hideUWPReviewShare: true,      // true | false
     activityDynamicDOM: false,     // true | false
     showBeautySearchVer: false,    // number
     globalInstall: true,
@@ -757,6 +758,14 @@ if(SETTINGS.corners != 'default') {
             }
         `);
     }
+}
+
+if(SETTINGS.hideUWPReviewShare) {
+    injectStyle(`
+        .menuItem#Review, .menuItem#Share, .selectable#pp_Review, .selectable#pp_Share {
+            display: none;
+        }
+    `);
 }
 
 let darkThemeListener = () => {
