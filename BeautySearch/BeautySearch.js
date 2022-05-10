@@ -83,7 +83,7 @@ const SETTINGS_DEFAULTS = {
 // Use defaults if the script is injected manually
 const SETTINGS = SETTINGS_DEFAULTS;
 
-const VERSION = '1.14';
+const VERSION = '1.14.1';
 
 console.log('BeautySearch v' + VERSION + ' is loaded');
 
