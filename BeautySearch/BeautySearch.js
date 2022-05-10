@@ -407,7 +407,11 @@ if(SETTINGS.disableTilesBackground) {
         .icon {
             background: none !important;
         }
-        .iconWithBackground {
+        .icon img {
+            width: 100% !important;
+            height: 100% !important;
+        }
+        .iconWithBackground img {
             transform: scale(1.3);
         }
         .activityFeedGroup .iconWithBackground {
