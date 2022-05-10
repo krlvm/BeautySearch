@@ -404,8 +404,13 @@ if(SETTINGS.enhancedAcrylic) {
 
 if(SETTINGS.disableTilesBackground) {
     injectStyle(`
+        .itemContent {
+            display: flex;
+            align-items: center;
+        }
         .icon {
             background: none !important;
+            padding: 0 !important;
         }
         .icon img {
             width: 100% !important;
