@@ -448,7 +448,7 @@ if(SETTINGS.contextMenuFluent) {
     `);
     
     injectStyle(`
-        ${SETTINGS.hideOutlines ? '.hideOutline ' : ''}.contextMenu .menuItem.focusable:active {
+        ${SETTINGS.hideOutlines ? '.mouseNavigation ' : ''}.contextMenu .menuItem.focusable:active {
             transform: scale(0.99);
         }
     `);
@@ -456,7 +456,7 @@ if(SETTINGS.contextMenuFluent) {
     if(!SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
         const makePrefix = (appendix) => `body:not(${CLASS_VISUAL_EFFECTS})${appendix} `;
         const prefix = SETTINGS.globalInstall ? makePrefix('') : '';
-        const hideOutlineSuffix = SETTINGS.hideOutlines ? '.hideOutline' : '';
+        const hideOutlineSuffix = SETTINGS.hideOutlines ? '.mouseNavigation' : '';
 
         injectStyle(`
             ${selectors.light(['.contextMenu', '#dialog_overlay > div'], prefix)} {
@@ -496,7 +496,7 @@ if(SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
     injectAcrylicStyle('#dialog_overlay > div', tint);
     const makePrefix = (appendix) => `${CLASS_VISUAL_EFFECTS}${appendix} `;
     const prefix = SETTINGS.globalInstall ? makePrefix('') : '';
-    const hideOutlineSuffix = SETTINGS.hideOutlines ? '.hideOutline' : '';
+    const hideOutlineSuffix = SETTINGS.hideOutlines ? '.mouseNavigation' : '';
     injectStyle(`
         ${selectors.dark(['.contextMenu .menuItem.focusable:hover'], prefix)} {
             background-color: rgba(255, 255, 255, 0.2) !important;
@@ -661,28 +661,29 @@ if(SETTINGS.topAppsCardsOutline) {
     }
 }
 
+document.body.classList.add('mouseNavigation');
+// Show outlines on keyboard and hide on mouse
+window.addEventListener('keydown', () => document.body.classList.remove('mouseNavigation'));
+window.addEventListener('mousedown', () => document.body.classList.add('mouseNavigation'));
+
 if(SETTINGS.hideOutlines) {
     injectStyle(`
-        .hideOutline * {
+        .mouseNavigation * {
             outline: none !important;
         }
     `);
     if (SETTINGS.version2022) {
         injectStyle(`
-            .hideOutline #root.darkTheme:not(.zeroInput19H1) .sa_hv.arrowOrTabAction,
-            .hideOutline #root.darkTheme:not(.zeroInput19H1) .groupContainer .sa_hv.selectable,
-            .hideOutline #root.darkTheme:not(.zeroInput19H1) .sectionItem.selectable.sa_hv,
-            .hideOutline #root:not(.zeroInput19H1) .sa_hv.arrowOrTabAction,
-            .hideOutline #root:not(.zeroInput19H1) .groupContainer .sa_hv.selectable,
-            .hideOutline #root:not(.zeroInput19H1) .sectionItem.selectable.sa_hv {
+            .mouseNavigation #root.darkTheme:not(.zeroInput19H1) .sa_hv.arrowOrTabAction,
+            .mouseNavigation #root.darkTheme:not(.zeroInput19H1) .groupContainer .sa_hv.selectable,
+            .mouseNavigation #root.darkTheme:not(.zeroInput19H1) .sectionItem.selectable.sa_hv,
+            .mouseNavigation #root:not(.zeroInput19H1) .sa_hv.arrowOrTabAction,
+            .mouseNavigation #root:not(.zeroInput19H1) .groupContainer .sa_hv.selectable,
+            .mouseNavigation #root:not(.zeroInput19H1) .sectionItem.selectable.sa_hv {
                 border-color: transparent !important;
             }
         `);
     }
-    document.body.classList.add('hideOutline');
-    // Show outlines on keyboard and hide on mouse
-    window.addEventListener('keydown', () => document.body.classList.remove('hideOutline'));
-    window.addEventListener('mousedown', () => document.body.classList.add('hideOutline'));
 }
 
 if(SETTINGS.acrylicMode == 'fake') {
@@ -772,7 +773,8 @@ if(SETTINGS.corners != 'default') {
 
 if(SETTINGS.hideUWPReviewShare) {
     injectStyle(`
-        .menuItem#Review, .menuItem#Share, .selectable#pp_Review, .selectable#pp_Share {
+        .mouseNavigation .menuItem#Review, .mouseNavigation .menuItem#Share,
+        .mouseNavigation .selectable#pp_Review, .mouseNavigation .selectable#pp_Share {
             display: none;
         }
     `);
@@ -965,12 +967,12 @@ if(SETTINGS.version2022) {
                 background-color: rgba(255, 255, 255, 0.5) !important;
             }
 
-            body:not(.hideOutline) #root.darkTheme:not(.zeroInput19H1) .sa_hv.arrowOrTabAction,
-            body:not(.hideOutline) #root.darkTheme:not(.zeroInput19H1) .groupContainer .sa_hv.selectable,
-            body:not(.hideOutline) #root.darkTheme:not(.zeroInput19H1) .sectionItem.selectable.sa_hv,
-            body:not(.hideOutline) #root:not(.zeroInput19H1) .sa_hv.arrowOrTabAction,
-            body:not(.hideOutline) #root:not(.zeroInput19H1) .groupContainer .sa_hv.selectable,
-            body:not(.hideOutline) #root:not(.zeroInput19H1) .sectionItem.selectable.sa_hv {
+            body:not(.mouseNavigation) #root.darkTheme:not(.zeroInput19H1) .sa_hv.arrowOrTabAction,
+            body:not(.mouseNavigation) #root.darkTheme:not(.zeroInput19H1) .groupContainer .sa_hv.selectable,
+            body:not(.mouseNavigation) #root.darkTheme:not(.zeroInput19H1) .sectionItem.selectable.sa_hv,
+            body:not(.mouseNavigation) #root:not(.zeroInput19H1) .sa_hv.arrowOrTabAction,
+            body:not(.mouseNavigation) #root:not(.zeroInput19H1) .groupContainer .sa_hv.selectable,
+            body:not(.mouseNavigation) #root:not(.zeroInput19H1) .sectionItem.selectable.sa_hv {
                 border-color: black !important;
             }
         `);
