@@ -827,6 +827,21 @@ if(SETTINGS.version2022) {
         }
     `);
 
+    injectStyle(`
+        .zeroInput19H1 .suggsList .details {
+            display: flex;
+        }
+        .zeroInput19H1 .suggsList .details .primaryText {
+            width: 100%;
+        }
+        .zeroInput19H1 .suggsList .details .title {
+            width: 100%;
+            padding-right: 12px !important;
+        }
+        .zeroInput19H1 .suggsList .details .removeIcon {
+            margin-top: 4px;
+        }
+    `);
     // Align preview pane jumplist item icons vertically
     injectStyle(`
         .previewDataSection .sectionItem {
