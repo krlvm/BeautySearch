@@ -83,7 +83,7 @@ const SETTINGS_DEFAULTS = {
 // Use defaults if the script is injected manually
 const SETTINGS = SETTINGS_DEFAULTS;
 
-const VERSION = '1.14.2';
+const VERSION = '1.14.3';
 
 console.log('BeautySearch v' + VERSION + ' is loaded');
 
@@ -838,7 +838,7 @@ if(SETTINGS.version2022) {
             width: 100%;
             padding-right: 12px !important;
         }
-        .zeroInput19H1 .suggsList .details .removeIcon {
+        .zeroInput19H1:not(.allScope) .suggsList .details .removeIcon {
             margin-top: 4px;
         }
     `);
