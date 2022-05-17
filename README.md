@@ -153,7 +153,7 @@ $ BeautySearch.exe auto light
 ```
 
 ### Manual installation
-Download the last version of the BeautySearch script [here](https://raw.githubusercontent.com/krlvm/BeautySearch/master/BeautySearch.js) and modify it in order to get the tweaks you're need.\
+Download the last version of the BeautySearch script [here](https://raw.githubusercontent.com/krlvm/BeautySearch/master/BeautySearch/BeautySearch.js) and modify it in order to get the tweaks you're need.\
 Navigate to `C:\Windows\SystemApps\Microsoft.Windows.Search_cw5n1h2txyewy\cache\Local\` (or `C:\Windows\SystemApps\Microsoft.Windows.Cortana_cw5n1h2txyewy\cache\Local\` on 19H1 and 19H2) and take full ownership & access over the `Desktop` folder.\
 Open `2.html` in Notepad or any other text editor and add this line to the end of the file:\
 `<script type=\"text/javascript\" src=\"ms-appx-web:///cache/local/Desktop/BeautySearch.js\"></script>`\
