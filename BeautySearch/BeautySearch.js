@@ -828,6 +828,19 @@ if(SETTINGS.version2022) {
     `);
 
     injectStyle(`
+        .contextMenu {
+            overflow-x: hidden;
+        }
+        .menu-item_details {
+            flex: 1;
+            min-width: 0;
+        }
+        .oneLineMax {
+            max-width: 100%;
+        }
+    `);
+
+    injectStyle(`
         .zeroInput19H1 .suggsList .details {
             display: flex;
         }
