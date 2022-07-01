@@ -286,7 +286,7 @@ const injectDarkTheme = (parent = '') => {
         ${parent} .sectionItem:hover {
             background-color: rgba(255, 255, 255, 0.25) !important;
         }
-        ${parent} .sectionItem:focus {
+        ${parent} .sectionItem:active {
             background-color: rgba(255, 255, 255, 0.3) !important;
         }
 
@@ -529,6 +529,46 @@ if(SETTINGS.contextMenuAcrylic || SETTINGS.globalInstall) {
             }
         `);
     }
+}
+
+if (!SETTINGS.contextMenuLightI) {
+    injectStyle(`
+        .${DEF_LIGHT} .sectionItem:hover {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+        }
+        .${DEF_LIGHT} .sectionItem:active {
+            background-color: rgba(255, 255, 255, 0.64) !important;
+        }
+        
+        .${DEF_LIGHT}:not(.zeroInput19H1) .suggestions .selectable:not(.sa_hv):hover,
+        .${DEF_LIGHT}:not(.zeroInput19H1) .suggestions .previewPaneOpened:not(.sa_hv) {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+        }
+        .${DEF_LIGHT}:not(.zeroInput19H1) .suggestions .selectable:not(.sa_hv):active {
+            background-color: rgba(255, 255, 255, 0.64) !important;
+        }
+        
+        .${DEF_LIGHT}:not(.zeroInput19H1) .suggestions .selectable.selected:not(.sa_hv) {
+            background-color: rgba(255, 255, 255, 0.5) !important;
+        }
+        .${DEF_LIGHT}:not(.zeroInput19H1) .suggestions .selectable:not(.sa_hv):active {
+            background-color: rgba(255, 255, 255, 0.64) !important;
+        }
+        
+        .${DEF_LIGHT}:not(.zeroInput19H1) .suggestions .selectable:not(.sa_hv) .suggDetailsContainer:hover,
+        .${DEF_LIGHT}:not(.zeroInput19H1) .suggestions .selectable:not(.sa_hv) .openPreviewPaneBtn:hover {
+            background-color: rgba(255, 255, 255, 0.36) !important;
+        }
+        
+        .${DEF_LIGHT} .selectable:not(.sa_hv) .openPreviewPaneBtn:hover,
+        .${DEF_LIGHT} .selectable:not(.sa_hv) .suggDetailsContainer:hover .openPreviewPaneBtn,
+        .${DEF_LIGHT} .withOpenPreviewPaneBtn:not(.sa_hv):hover .openPreviewPaneBtn {
+            border-color: rgba(0, 0, 0, 0.08) !important;
+        }
+        .${DEF_LIGHT} .selected:not(.sa_hv) .openPreviewPaneBtn {
+            border-color: rgba(0, 0, 0, 0.05) !important;
+        }
+    `);
 }
 
 let bs_config = null;
@@ -862,15 +902,23 @@ if(SETTINGS.version2022) {
             align-items: center;
         }
     `);
+
     injectStyle(`
         .${DEF_LIGHT} .selected .openPreviewPaneBtn {
             border-color: rgba(255, 255, 255, 0.5) !important;
         }
-        .${DEF_LIGHT} .openPreviewPaneBtn:hover,
-        .${DEF_LIGHT} .suggDetailsContainer:hover .openPreviewPaneBtn,
-        .${DEF_LIGHT} .withOpenPreviewPaneBtn:hover .openPreviewPaneBtn {
-            border-color: rgba(255, 255, 255, 0.8) !important;
-        }
+    `);
+    if (SETTINGS.contextMenuLightI) {
+        injectStyle(`
+            .${DEF_LIGHT} .openPreviewPaneBtn:hover,
+            .${DEF_LIGHT} .suggDetailsContainer:hover .openPreviewPaneBtn,
+            .${DEF_LIGHT} .withOpenPreviewPaneBtn:hover .openPreviewPaneBtn {
+                border-color: rgba(255, 255, 255, 0.8) !important;
+            }
+        `);
+    }
+
+    injectStyle(`
         .${DEF_LIGHT} #qfContainer #temporaryMessage {
             background-color: rgba(255, 255, 255, 0.5) !important;
         }
@@ -977,7 +1025,7 @@ if(SETTINGS.version2022) {
             ${parent} .sectionItem:hover {
                 background-color: rgba(0, 0, 0, 0.1) !important;
             }
-            ${parent} .sectionItem:focus {
+            ${parent} .sectionItem:active {
                 background-color: rgba(0, 0, 0, 0.25) !important;
             }
 
