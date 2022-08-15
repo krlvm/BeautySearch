@@ -55,7 +55,7 @@ const SETTINGS_DEFAULTS = {
     contextMenuFluent: true,       // true | false
     contextMenuShadows: true,      // true | false
     contextMenuAcrylic: true,      // true | false
-    contextMenuLightI: false,       // true | false
+    contextMenuLightI: false,      // true | false
     explorerSearchFixes: false,    // true | false
     topAppsCardsOutline: false,    // true | false
     hideOutlines: true,            // true | false
@@ -398,6 +398,10 @@ if(SETTINGS.enhancedAcrylic) {
         .${DEF_LIGHT} .previewContainer .divider {
             border: 1px solid ${backdropShade};
             //background: ${backdropShade};
+        }
+        
+        #qfPreviewScrollArea {
+            background: transparent !important;
         }
     `);
 }
