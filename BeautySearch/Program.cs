@@ -81,7 +81,15 @@ namespace BeautySearch
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new InstallationForm());
+
+            if (Utility.GetBuildNumber() >= 22000)
+            {
+                Application.Run(new InstallationForm11());
+            }
+            else
+            {
+                Application.Run(new InstallationForm());
+            }
         }
     }
 }

@@ -15,6 +15,9 @@ namespace BeautySearch
         public const int BUILD_19H2 = 18363;
         public const int BUILD_20H1 = 19041;
 
+        public const int BUILD_11_21H2 = 22621;
+        public const int BUILD_11_22H2 = 22621;
+
         private const int MIN_REQUIRED_BUILD = BUILD_19H1;
         public const int MIN_20H1_PATCH_FIX = 1618;
 
@@ -37,24 +40,34 @@ namespace BeautySearch
         private static string TARGET_FILE;
         private static string SCRIPT_DEST;
 
-        private const string INJECT_LINE = "<script type=\"text/javascript\" src=\"ms-appx-web:///cache/local/Desktop/BeautySearch.js\"></script>";
+        private static string INJECT_LINE;
 
         static ScriptInstaller()
         {
             CURRENT_BUILD = Utility.GetBuildNumber();
             CURRENT_BUILD_PATCH = Utility.GetBuildMinorVersion();
-            if (CURRENT_BUILD >= BUILD_20H1)
+            if (CURRENT_BUILD >= BUILD_11_21H2)
             {
-                SEARCH_APP_EXEC = "SearchApp";
-                SEARCH_APP_NAME = "Microsoft.Windows.Search_cw5n1h2txyewy";
+                SEARCH_APP_EXEC = "SearchHost";
+                TARGET_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\Cortana.UI\cache\SVLocal\Desktop";
+                INJECT_LINE = "<script type=\"text/javascript\" src=\"ms-appx-web:///Cortana.UI/cache/svlocal/desktop/BeautySearch.js\"></script>";
             }
-            else if (CURRENT_BUILD >= BUILD_19H1)
+            else
             {
-                SEARCH_APP_EXEC = "SearchUI";
-                SEARCH_APP_NAME = "Microsoft.Windows.Cortana_cw5n1h2txyewy";
+                if (CURRENT_BUILD >= BUILD_20H1)
+                {
+                    SEARCH_APP_EXEC = "SearchApp";
+                    SEARCH_APP_NAME = "Microsoft.Windows.Search_cw5n1h2txyewy";
+                }
+                else if (CURRENT_BUILD >= BUILD_19H1)
+                {
+                    SEARCH_APP_EXEC = "SearchUI";
+                    SEARCH_APP_NAME = "Microsoft.Windows.Cortana_cw5n1h2txyewy";
+                }
+                TARGET_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Windows\SystemApps\{SEARCH_APP_NAME}\cache\Local\Desktop";
+                INJECT_LINE = "<script type=\"text/javascript\" src=\"ms-appx-web:///cache/local/Desktop/BeautySearch.js\"></script>";
             }
 
-            TARGET_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Windows\SystemApps\{SEARCH_APP_NAME}\cache\Local\Desktop";
             TARGET_FILE = TARGET_DIR + @"\2.html";
             SCRIPT_DEST = TARGET_DIR + @"\BeautySearch.js";
         }
@@ -186,7 +199,7 @@ namespace BeautySearch
             }
             bool globalInstall = features.IsEnabled("globalInstall");
 
-            string script = LoadScript("BeautySearch");
+            string script = LoadScript("BeautySearch" + (CURRENT_BUILD >= BUILD_11_21H2 ? "11" : ""));
             script = script.Replace("const SETTINGS = SETTINGS_DEFAULTS;", features.Build());
             if (globalInstall)
             {
@@ -342,10 +355,11 @@ namespace BeautySearch
             {
                 // Controller is accessible via 'bsController' global variable
                 controller = "var bsController = null;" + controller;
-                if (CURRENT_BUILD_PATCH < MIN_20H1_PATCH_FIX)
+                if (is20H1() && CURRENT_BUILD_PATCH < MIN_20H1_PATCH_FIX)
                 {
                     controller = controller.Insert(controller.IndexOf("}return l.prototype"), ";bsController=l;");
-                } else
+                }
+                else
                 {
                     if (ver2022Fault)
                     {
