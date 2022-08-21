@@ -1,18 +1,19 @@
 <div align="center">
 <img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/logo.png" height="150px" width="auto" />
 <br><h1>BeautySearch</h1>
-Windows 10 Search Window appearance tweaker
+Windows 10+ Search Window appearance tweaker
 <br><br>
 <a href="https://github.com/krlvm/BeautySearch/blob/master/LICENSE"><img src="https://img.shields.io/github/license/krlvm/BeautySearch?style=flat-square" alt="License"/></a>
 <a href="https://github.com/krlvm/BeautySearch/releases/latest"><img src="https://img.shields.io/github/v/release/krlvm/BeautySearch?style=flat-square" alt="Latest release"/></a>
 <a href="https://github.com/krlvm/BeautySearch/releases"><img src="https://img.shields.io/github/downloads/krlvm/BeautySearch/total?style=flat-square" alt="Downloads"/></a>
-<!--<a href="https://github.com/krlvm/BeautySearch/wiki"><img src="https://img.shields.io/badge/help-wiki-yellow?style=flat-square" alt="Help on the Wiki"/></a>-->
 <br>
 <img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/ui.png" alt="BeautySearch Installer" />
 </div>
 
 Windows 10 Search User Interface is built on web technologies, so it can be easily tweaked by injecting a custom JavaScript file.\
-The [BeautySearch script](https://github.com/krlvm/BeautySearch/blob/master/BeautySearch.js) can be installed automatically using the Installer written in C# or manually.
+The [BeautySearch script](https://raw.githubusercontent.com/krlvm/BeautySearch/master/BeautySearch/BeautySearch.js) can be installed automatically using the Installer written in C# or manually.
+
+Another [BeautySearch script](https://raw.githubusercontent.com/krlvm/BeautySearch/master/BeautySearch/BeautySearch11.js) is available for [Windows 11](https://github.com/krlvm/BeautySearch#windows-11).
 
 ## Available tweaks
 
@@ -64,7 +65,7 @@ There are outlines in UI to help the people navigating using keyboard. However, 
 BeautySearch can show the outlines only when you're using keyboard to make the UI look better.
 
 ### Adjusting corners
-BeautySearch allows you to make all corners sharp to be consistent with the rest of Windows 10 Shell, or rounded to be consistent with the new Fluent Design guidelines.
+BeautySearch allows you to make all corners sharp to be consistent with the rest of Windows Shell, or rounded to be consistent with the new Fluent Design guidelines.
 
 ### Enhanced look
 
@@ -99,6 +100,14 @@ Height of the Search Window can be resized by resizing the Start Menu.
 
 <img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/dynamic-activity.png" width="100%" />
 
+### Windows 11
+
+Windows 11 Search UI still not ideal and BeautySearch can improve its context menus acrylic effect to make it consistent with native (or even disable it), making them compact and aligning their widths. BeautySearch on Windows 11 also disables ugly outlines when keyboard navigation is not used, and making some other little quality improvements.
+
+The screenshot on the left was taken before installing BeautySearch, on the right - after.
+
+<img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/windows-11.png" width="100%" />
+
 ## FAQ
 
 ### Does BeautySearch have a performance impact?
@@ -113,9 +122,9 @@ No. BeautySearch doesn't have any analytics or telemetry, and doesn't even check
 
 ### Is it safe and stable enough to use?
 Yes. As stated earlier, BeautySearch is something like a stylesheet.\
-Just in case, check the compatibility of your system: at the time of publication, BeautySearch was tested on Windows 10 versions 19H1-21H1, as well as on the latest Windows 10 Insider Preview build (Build 21390).\
+Just in case, check the compatibility of your system: at the time of publication, BeautySearch was tested on Windows 10 versions 19H1-21H2, as well as on the latest Windows 10 Insider Preview build (Build 21390).\
 If you ran into a problem after installation, see below.
-Windows 11 is not supported, and apparently there is no need for this.
+Windows 11 is supported since version 1.15. It has been tested on 22H2, but most of the tweaks should also work on 22H1.
 
 ### Bing Search stopped to work after installation
 BeautySearch is incompatible with Bing Search. If you live in an unsupported region, you won't even notice.\
@@ -135,6 +144,7 @@ BeautySearch is tested on:
  - Windows 10 19H1, 19H2
  - Windows 10 20H1, 20H2, 21H1
  - Windows 10 Next, Insider Preview Build 21390
+ - Windows 11 22H2
 
 Download the Installer [here](https://github.com/krlvm/BeautySearch/releases/latest) and run it as administrator.\
 Select the tweaks you want to apply and click "Install".
