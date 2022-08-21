@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿#define REDIRECT_TO_CLASSICSEARCH
+
+using Microsoft.Win32;
 using System.Windows.Forms;
 
 namespace BeautySearch.Installer
@@ -10,6 +12,14 @@ namespace BeautySearch.Installer
 
         public static void Toggle()
         {
+            // ClassicSearch disables the new search for both x64 and x86 applications Open/Save dialogs
+            // and can also shrink the File Explorer address bar, that became very huge in 19H1
+            //
+            // BeautySearch implementation of modern search disabler is incomplete
+
+#if REDIRECT_TO_CLASSICSEARCH
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://github.com/krlvm/ClassicSearch"));
+#else
             if (ScriptInstaller.CURRENT_BUILD < ScriptInstaller.BUILD_20H1)
             {
                 MessageBox.Show(
@@ -99,6 +109,7 @@ namespace BeautySearch.Installer
                     }
                 }
             }
+#endif
         }
     }
 }
