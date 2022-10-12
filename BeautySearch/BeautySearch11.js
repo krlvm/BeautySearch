@@ -300,28 +300,28 @@ if (SETTINGS.improveAppearance) {
             border-radius: 4px !important;
         }
 
-        ${selectors.light(['.group:not([data-region="MRUHistory"]) .suggestion'], HOME_CLASS)} {
+        ${selectors.light(['.group:not([data-region="MRUHistory"]):not([data-region="CuratedSuggestions"]) .suggestion'], HOME_CLASS)} {
             box-shadow: none !important;
             border: 0.5px solid rgba(0, 0, 0, 0.15) !important;
         }
-        ${selectors.light(['.group:not([data-region="MRUHistory"]) .suggestion:hover'], HOME_CLASS)} {
+        ${selectors.light(['.group:not([data-region="MRUHistory"]):not([data-region="CuratedSuggestions"]) .suggestion:hover'], HOME_CLASS)} {
             border-color: rgba(0, 0, 0, 0.125) !important;
         }
-        ${selectors.light(['.group:not([data-region="MRUHistory"]) .suggestion:active'], HOME_CLASS)} {
+        ${selectors.light(['.group:not([data-region="MRUHistory"]):not([data-region="CuratedSuggestions"]) .suggestion:active'], HOME_CLASS)} {
             border-color: rgba(0, 0, 0, 0.1) !important;
         }
 
-        ${selectors.dark(['.group:not([data-region="MRUHistory"]) .suggestion'], HOME_CLASS)} {
+        ${selectors.dark(['.group:not([data-region="MRUHistory"]):not([data-region="CuratedSuggestions"]) .suggestion'], HOME_CLASS)} {
             box-shadow: none !important;
             border: 0.5px solid rgba(255, 255, 255, 0.06) !important;
         }
-        ${selectors.dark(['.group:not([data-region="MRUHistory"]) .suggestion:hover'], HOME_CLASS)} {
+        ${selectors.dark(['.group:not([data-region="MRUHistory"]):not([data-region="CuratedSuggestions"]) .suggestion:hover'], HOME_CLASS)} {
             border-color: rgba(255, 255, 255, 0.03) !important;
         }
-        ${selectors.dark(['.group:not([data-region="MRUHistory"]) .suggestion:active'], HOME_CLASS)} {
+        ${selectors.dark(['.group:not([data-region="MRUHistory"]):not([data-region="CuratedSuggestions"]) .suggestion:active'], HOME_CLASS)} {
             border-color: rgba(255, 255, 255, 0.02) !important;
         }
-        ${selectors.dark(['.group:not([data-region="MRUHistory"]) .suggestion:active *'], HOME_CLASS)} {
+        ${selectors.dark(['.group:not([data-region="MRUHistory"]):not([data-region="CuratedSuggestions"]) .suggestion:active *'], HOME_CLASS)} {
             color: rgba(255, 255, 255, 0.75) !important;
         }
     `);
