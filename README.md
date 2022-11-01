@@ -161,6 +161,10 @@ $ BeautySearch.exe auto [auto/light/dark] [disable-enhancements]
 $ BeautySearch.exe auto dark disable-enhancements
 $ BeautySearch.exe auto light
 ```
+Silent Uninstall
+```
+$ BeautySearch.exe Uninstall -Silent
+```
 
 ### Manual installation
 Download the last version of the BeautySearch script [here](https://raw.githubusercontent.com/krlvm/BeautySearch/master/BeautySearch.js) and modify it in order to get the tweaks you're need.\
