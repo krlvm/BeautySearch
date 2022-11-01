@@ -135,7 +135,7 @@ Also, work is underway to implement search for all regions with any search engin
 Only one antivirus out of 71 considers the file to be malicious, and only because the installer writes files to the system directory (see which directory in the manual installation section).
 The source code for both the installer and the script is published under the GNU GPLv3 license, and if you don't trust the published binaries, you can easily build the project using Visual Studio 2019.
 
-## Instlallation
+## Installation
 
 ### Using Instaler
 You need to run Windows 10 May 2019 Update (19H1 aka version 1903, build 18362) and higher to install BeautySearch using the Installer.
