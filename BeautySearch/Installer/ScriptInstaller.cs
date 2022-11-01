@@ -224,17 +224,20 @@ namespace BeautySearch
             return 0;
         }
 
-        public static int Uninstall()
+        public static int Uninstall(bool isSilent)
         {
-            DialogResult dialogResult = MessageBox.Show(
-                "Online Bing Search was disabled after BeautySearch installation.\nEnable it again?",
-                "BeautySearch",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
-            if (dialogResult == DialogResult.Yes)
+            if (!isSilent)
             {
-                SetBingSearchEnabled(BING_SEARCH_ENABLED);
+                DialogResult dialogResult = MessageBox.Show(
+                    "Online Bing Search was disabled after BeautySearch installation.\nEnable it again?",
+                    "BeautySearch",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+                if (dialogResult == DialogResult.Yes)
+                {
+                    SetBingSearchEnabled(BING_SEARCH_ENABLED);
+                }
             }
 
             KillSearchApp();

@@ -166,7 +166,7 @@ namespace BeautySearch
             int result;
             if (Utility.IsAdministrator())
             {
-                result = ScriptInstaller.Uninstall();
+                result = ScriptInstaller.Uninstall(false);
             }
             else if (!Utility.RunElevated("Uninstall", out result)) return;
 

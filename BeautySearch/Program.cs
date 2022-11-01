@@ -65,7 +65,7 @@ namespace BeautySearch
                         }
                     case "Uninstall":
                         {
-                            Environment.Exit(ScriptInstaller.Uninstall());
+                            Environment.Exit(ScriptInstaller.Uninstall(args.Length == 2 && "-Silent".Equals(args[1])));
                         }
                         break;
                     case "FileExplorerSearch":
