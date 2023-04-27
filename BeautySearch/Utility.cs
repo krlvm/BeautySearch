@@ -4,9 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Management;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Security.AccessControl;
 using System.Security.Principal;
+using System.Text;
 using System.Windows.Forms;
 
 namespace BeautySearch
@@ -25,13 +28,6 @@ namespace BeautySearch
                 writer.Write(text);
             }
             return true;
-        }
-
-        public static string GetUsername()
-        {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT UserName FROM Win32_ComputerSystem");
-            ManagementObjectCollection collection = searcher.Get();
-            return (string)collection.Cast<ManagementBaseObject>().First()["UserName"];
         }
 
         public static void ExecuteCommand(string exec, string args)
@@ -175,6 +171,11 @@ namespace BeautySearch
                 return Int32.Parse(key == null ? "10" : ((string)key.GetValue("WallpaperStyle", "10")));
             }
         }
+
+        public static string GetUsername()
+        {
+            return NativeHelper.GetUsername();
+        }
     }
 
     static class NativeHelper
@@ -200,6 +201,86 @@ namespace BeautySearch
             public int Right;
             public int Bottom;
         }
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        [SuppressUnmanagedCodeSecurity]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool CloseHandle(IntPtr hObject);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr GetCurrentProcess();
+        public const UInt32 TOKEN_QUERY = 0x0008;
+        [DllImport("advapi32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool OpenProcessToken(IntPtr ProcessHandle, UInt32 DesiredAccess, out IntPtr TokenHandle);
+        public const UInt32 TokenUser = 1;
+        [DllImport("advapi32.dll", SetLastError = true)]
+        static extern bool GetTokenInformation(IntPtr TokenHandle, UInt32 TokenInformationClass, IntPtr TokenInformation, uint TokenInformationLength, out uint ReturnLength);
+        public struct TOKEN_USER
+        {
+            public SID_AND_ATTRIBUTES User;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct SID_AND_ATTRIBUTES
+        {
+
+            public IntPtr Sid;
+            public int Attributes;
+        }
+        [DllImport("advapi32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        static extern bool LookupAccountSid(string lpSystemName, IntPtr Sid, StringBuilder lpName, ref uint cchName, StringBuilder ReferencedDomainName, ref uint cchReferencedDomainName, out uint peUse);
+
+        #region
+        public static string GetUsername()
+        {
+            string rv = null;
+            var hProcess = GetCurrentProcess();
+            if (hProcess != IntPtr.Zero)
+            {
+                IntPtr hToken = IntPtr.Zero;
+                if (OpenProcessToken(hProcess, TOKEN_QUERY, out hToken) && hToken != IntPtr.Zero)
+                {
+                    uint lenTokenInfo = 0;
+                    GetTokenInformation(hToken, TokenUser, IntPtr.Zero, lenTokenInfo, out lenTokenInfo);
+                    if (lenTokenInfo > 0)
+                    {
+                        IntPtr pTokenInfo = Marshal.AllocHGlobal((int)lenTokenInfo);
+                        if (pTokenInfo != IntPtr.Zero)
+                        {
+                            if (GetTokenInformation(hToken, TokenUser, pTokenInfo, lenTokenInfo, out lenTokenInfo) && lenTokenInfo > 0)
+                            {
+                                TOKEN_USER TokenUser = (TOKEN_USER)Marshal.PtrToStructure(pTokenInfo, typeof(TOKEN_USER));
+                                if (TokenUser.User.Sid != IntPtr.Zero)
+                                {
+                                    uint peUse = 0;
+                                    uint cchName = 0;
+                                    uint cchReferencedDomainName = 0;
+                                    LookupAccountSid(null, TokenUser.User.Sid, null, ref cchName, null, ref cchReferencedDomainName, out peUse);
+                                    if (cchName > 0 && cchReferencedDomainName > 0)
+                                    {
+                                        StringBuilder strName = new StringBuilder((int)cchName);
+                                        StringBuilder strReferencedDomainName = new StringBuilder((int)cchReferencedDomainName);
+                                        if (LookupAccountSid(null, TokenUser.User.Sid, strName, ref cchName, strReferencedDomainName, ref cchReferencedDomainName, out peUse) && cchName > 0 && cchReferencedDomainName > 0)
+                                        {
+                                            rv = strReferencedDomainName + "\\\\" + strName;
+                                        }
+                                    }
+                                }
+                            }
+                            Marshal.FreeHGlobal(pTokenInfo);
+                        }
+                    }
+                    CloseHandle(hToken);
+                }
+            }
+            if (rv == null)
+            {
+                throw new Exception("Failed to get your account's user name.");
+            }
+            return rv;
+        }
+        #endregion
     }
 
     // https://social.msdn.microsoft.com/Forums/sqlserver/en-US/f2d88949-2de7-451a-be47-a7372ce457ff/send-windows-key?forum=csharpgeneral
