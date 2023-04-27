@@ -4,67 +4,38 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
-namespace BeautySearch
+namespace BeautySearch.Installer
 {
     static class ScriptInstaller
     {
-        public static int CURRENT_BUILD;
-        public static int CURRENT_BUILD_PATCH;
+        private const int MIN_REQUIRED_BUILD = OSBuild.V19H1;
+        private const int MIN_20H1_PATCH_FIX = 1618;
 
-        public const int BUILD_19H1 = 18362;
-        public const int BUILD_19H2 = 18363;
-        public const int BUILD_20H1 = 19041;
-
-        public const int BUILD_11_21H2 = 22621;
-        public const int BUILD_11_22H2 = 22621;
-
-        private const int MIN_REQUIRED_BUILD = BUILD_19H1;
-        public const int MIN_20H1_PATCH_FIX = 1618;
-
-        // Error codes
+        ///////////////////////////////////////////////
         public const int ERR_READ = 1;
         public const int ERR_WRITE = 2;
         public const int ERR_NOT_INSTALLED = 3;
         public const int ERR_KILL_FAILED = 4;
         public const int ERR_OLD_BUILD = 5;
 
-        // Bing Search
-        public const string SEARCH_APP_REGISTRY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Search\";
-        private const int BING_SEARCH_DISABLED = 0;
-        private const int BING_SEARCH_ENABLED = 1;
-
-        private static string SEARCH_APP_NAME;
-        private static string SEARCH_APP_EXEC;
-
+        ///////////////////////////////////////////////
         private static string TARGET_DIR;
         private static string TARGET_FILE;
         private static string SCRIPT_DEST;
+        ///////////////////////////////////////////////
 
         private static string INJECT_LINE;
 
         static ScriptInstaller()
         {
-            CURRENT_BUILD = Utility.GetBuildNumber();
-            CURRENT_BUILD_PATCH = Utility.GetBuildMinorVersion();
-            if (CURRENT_BUILD >= BUILD_11_21H2)
+            if (SystemInfo.BUILD_NUMBER >= OSBuild.V11_21H2)
             {
-                SEARCH_APP_EXEC = "SearchHost";
                 TARGET_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\Cortana.UI\cache\SVLocal\Desktop";
                 INJECT_LINE = "<script type=\"text/javascript\" src=\"ms-appx-web:///Cortana.UI/cache/svlocal/desktop/BeautySearch.js\"></script>";
             }
             else
             {
-                if (CURRENT_BUILD >= BUILD_20H1)
-                {
-                    SEARCH_APP_EXEC = "SearchApp";
-                    SEARCH_APP_NAME = "Microsoft.Windows.Search_cw5n1h2txyewy";
-                }
-                else if (CURRENT_BUILD >= BUILD_19H1)
-                {
-                    SEARCH_APP_EXEC = "SearchUI";
-                    SEARCH_APP_NAME = "Microsoft.Windows.Cortana_cw5n1h2txyewy";
-                }
-                TARGET_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Windows\SystemApps\{SEARCH_APP_NAME}\cache\Local\Desktop";
+                TARGET_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Windows\SystemApps\{SearchAppManager.SEARCH_APP_NAME}\cache\Local\Desktop";
                 INJECT_LINE = "<script type=\"text/javascript\" src=\"ms-appx-web:///cache/local/Desktop/BeautySearch.js\"></script>";
             }
 
@@ -72,36 +43,35 @@ namespace BeautySearch
             SCRIPT_DEST = TARGET_DIR + @"\BeautySearch.js";
         }
 
-        public static bool is20H1()
-        {
-            return CURRENT_BUILD >= BUILD_20H1 && CURRENT_BUILD < 19500;
-        }
-        public static bool is20H1Fixed()
-        {
-            return CURRENT_BUILD < BUILD_20H1 || CURRENT_BUILD >= 19500 || CURRENT_BUILD_PATCH >= MIN_20H1_PATCH_FIX;
-        }
+        ///////////////////////////////////////////////
+        public static readonly bool IS_20H1 = SystemInfo.BUILD_NUMBER >= OSBuild.V20H1 && SystemInfo.BUILD_NUMBER < OSBuild.V_POST_20H1;
+        public static readonly bool IS_20H1_PATCHED = SystemInfo.BUILD_NUMBER >= OSBuild.V20H1 && SystemInfo.BUILD_NUMBER < OSBuild.V_POST_20H1 && SystemInfo.BUILD_NUMBER_MINOR >= MIN_20H1_PATCH_FIX;
+        public static readonly bool ACRYLIC_SUPPORTED = !IS_20H1 || IS_20H1_PATCHED;
+        public static readonly bool IS_MODERN = IS_20H1_PATCHED || SystemInfo.BUILD_NUMBER >= OSBuild.V_POST_20H1; 
 
+        ///////////////////////////////////////////////
         private const int TIMEOUT_20H1F_DEFAULT = 2500;
         private const int TIMEOUT_20H1F_CUSTOM  = 200;
         private static string Get20H1FTimeout(int timeout)
         {
             return timeout + ",\"ShowWebViewTimer\"";
         }
+        ///////////////////////////////////////////////
 
         public static int Install(FeatureControl features)
         {
-            if (CURRENT_BUILD < MIN_REQUIRED_BUILD)
+            if (SystemInfo.BUILD_NUMBER < MIN_REQUIRED_BUILD)
             {
                 return ERR_OLD_BUILD;
             }
-            if (is20H1Fixed())
+            if (IS_MODERN)
             {
                 features.Enable("version2022");
             }
 
             if ("fake".Equals(features.Get("acrylicMode")))
             {
-                if (CURRENT_BUILD < BUILD_20H1 || CURRENT_BUILD >= 19541)
+                if (SystemInfo.BUILD_NUMBER < OSBuild.V20H1 || SystemInfo.BUILD_NUMBER >= 19541)
                 {
                     MessageBox.Show(
                         "Fake Acrylic is available only on 20H1 and higher because native Search Window acrylic was broken. Use Default mode instead.",
@@ -129,8 +99,8 @@ namespace BeautySearch
             }
             features.Exclude("contextMenu19H1");
 
-            SetBingSearchEnabled(BING_SEARCH_DISABLED);
-            KillSearchApp();
+            SearchAppManager.SetBingSearchEnabled(false);
+            SearchAppManager.KillSearchApp();
 
             //Utility.TakeOwnership(TARGET_DIR);
             Utility.TakeOwnership(TARGET_FILE);
@@ -138,7 +108,7 @@ namespace BeautySearch
 
             // Read and modify HTML entry point
 
-            string target = Utility.ReadFile(TARGET_FILE);
+            string target = File.ReadAllText(TARGET_FILE);
             if (target == null)
             {
                 return ERR_READ;
@@ -149,7 +119,7 @@ namespace BeautySearch
                 target += INJECT_LINE;
             }
 
-            if (is20H1Fixed())
+            if (IS_MODERN)
             {
                 if (features.IsEnabled("speedLoad"))
                 {
@@ -163,26 +133,16 @@ namespace BeautySearch
                 if (!features.IsEnabled("backgroundMode"))
                 {
                     features.Set("backgroundMode", "dark2022");
-                } else
+                }
+                else
                 {
                     features.Exclude("backgroundMode");
                 }
             }
 
-            //target = ToggleEntrypointFeature(target, "enableTwoPanesZI", !features.IsEnabled("disableTwoPanel"));
-            //target = ToggleEntrypointFeature(target, "userProfileButtonEnabled", !features.IsEnabled("hideUserProfile"));
-            //target = ToggleEntrypointFeature(target, "showCloseButton", !features.IsEnabled("hideCloseButton"));
-            //
-            //if (features.IsEnabled("limitActivity"))
-            //{
-            //    target = target.Replace("\"activityInZI\":9", "\"activityInZI\":4");
-            //} else
-            //{
-            //    target = target.Replace("\"activityInZI\":4", "\"activityInZI\":9");
-            //}
             features.Set("activityItemCount", features.IsEnabled("adaptiveActivityCount") ? "-1" : "8");
 
-            if (!Utility.WriteFile(TARGET_FILE, target))
+            if (!Utility.WriteToFile(TARGET_FILE, target))
             {
                 return ERR_WRITE;
             }
@@ -199,24 +159,24 @@ namespace BeautySearch
             }
             bool globalInstall = features.IsEnabled("globalInstall");
 
-            string script = LoadScript("BeautySearch" + (CURRENT_BUILD >= BUILD_11_21H2 ? "11" : ""));
+            string script = LoadScript("BeautySearch" + (SystemInfo.BUILD_NUMBER >= OSBuild.V11_21H2 ? "11" : ""));
             script = script.Replace("const SETTINGS = SETTINGS_DEFAULTS;", features.Build());
             if (globalInstall)
             {
-                Utility.WriteFile(SCRIPT_DEST, script);
+                Utility.WriteToFile(SCRIPT_DEST, script);
             }
             else
             {
-                Utility.WriteFile(SCRIPT_DEST, LoadScript("BeautySearchLoader"));
-                Utility.WriteFile(TARGET_DIR + $"\\{SID}.js", script);
+                Utility.WriteToFile(SCRIPT_DEST, LoadScript("BeautySearchLoader"));
+                Utility.WriteToFile(TARGET_DIR + $"\\{SystemInfo.SID}.js", script);
 
-                Utility.NormalizeOwnership(TARGET_DIR + $"\\{SID}.js");
+                Utility.RestoreTrustedInstallerOwnership(TARGET_DIR + $"\\{SystemInfo.SID}.js");
             }
 
-            Utility.NormalizeOwnership(TARGET_FILE);
-            Utility.NormalizeOwnership(SCRIPT_DEST);
+            Utility.RestoreTrustedInstallerOwnership(TARGET_FILE);
+            Utility.RestoreTrustedInstallerOwnership(SCRIPT_DEST);
 
-            if (!KillSearchApp())
+            if (!SearchAppManager.KillSearchApp())
             {
                 return ERR_KILL_FAILED;
             }
@@ -236,11 +196,11 @@ namespace BeautySearch
                 );
                 if (dialogResult == DialogResult.Yes)
                 {
-                    SetBingSearchEnabled(BING_SEARCH_ENABLED);
+                    SearchAppManager.SetBingSearchEnabled(true);
                 }
             }
 
-            KillSearchApp();
+            SearchAppManager.KillSearchApp();
 
             if (!IsInstalled())
             {
@@ -250,7 +210,7 @@ namespace BeautySearch
             Utility.TakeOwnership(SCRIPT_DEST);
             File.Delete(SCRIPT_DEST);
 
-            string target = Utility.ReadFile(TARGET_FILE);
+            string target = File.ReadAllText(TARGET_FILE);
             if (target == null)
             {
                 return ERR_READ;
@@ -258,69 +218,24 @@ namespace BeautySearch
 
             target = target.Replace(INJECT_LINE, "");
 
-            if (is20H1Fixed())
+            if (IS_MODERN)
             {
                 target = target.Replace(Get20H1FTimeout(TIMEOUT_20H1F_CUSTOM), Get20H1FTimeout(TIMEOUT_20H1F_DEFAULT));
             }
 
             Utility.TakeOwnership(TARGET_FILE);
-            if (!Utility.WriteFile(TARGET_FILE, target))
+            if (!Utility.WriteToFile(TARGET_FILE, target))
             {
                 return ERR_WRITE;
             }
-            Utility.NormalizeOwnership(TARGET_FILE);
+            Utility.RestoreTrustedInstallerOwnership(TARGET_FILE);
 
-            if (!KillSearchApp())
+            if (!SearchAppManager.KillSearchApp())
             {
                 return ERR_KILL_FAILED;
             }
 
             return 0;
-        }
-
-        private const string VALUE_BING_SEARCH_ENABLED = "BingSearchEnabled";
-        public static void SetBingSearchEnabled(int val)
-        {
-            // When Bing Web Search is enabled, the Search App doesn't use the local search instance
-            // 0 - disabled, 1 - enabled
-            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY, true))
-            {
-                if (key != null)
-                {
-                    key.SetValue(VALUE_BING_SEARCH_ENABLED, val, RegistryValueKind.DWord);
-                    key.Close();
-                }
-            }
-        }
-        public static bool IsBingSearchEnabled()
-        {
-            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY, false))
-            {
-                if (key != null)
-                {
-                    return (int)key.GetValue(VALUE_BING_SEARCH_ENABLED) == 1;
-                }
-            }
-            return true;
-        }
-
-        public static bool KillSearchApp()
-        {
-            bool success = true;
-            foreach (var process in Process.GetProcessesByName(SEARCH_APP_EXEC))
-            {
-                try
-                {
-                    process.Kill();
-                }
-                catch
-                {
-                    // We will try to kill the Search App using TASKKILL instead of asking to re-login
-                    //success = false;
-                    Utility.ExecuteCommand("taskkill.exe", "/F /IM " + SEARCH_APP_EXEC + ".exe");
-                }
-            }
-            return success;
         }
 
         public static bool IsInstalled()
@@ -331,13 +246,12 @@ namespace BeautySearch
         private static string LoadScript(string name)
         {
 #if DEBUG
-            return File.ReadAllText(Path.GetDirectoryName(Application.ExecutablePath) + "\\..\\..\\" + $"{name}.js");
+            return File.ReadAllText(Path.GetDirectoryName(Application.ExecutablePath) + "\\..\\..\\Scripts\\" + $"{name}.js");
 #else
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-
-            using (Stream stream = assembly.GetManifestResourceStream($"BeautySearch.{name}.js"))
+            using (var stream = assembly.GetManifestResourceStream($"BeautySearch.Scripts.{name}.js"))
             {
-                using (StreamReader reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();
                 }
@@ -350,40 +264,29 @@ namespace BeautySearch
         private static bool InjectController()
         {
             string CONTROLLER_FILE = FindControllerFile();
-            string controller = Utility.ReadFile(CONTROLLER_FILE);
+            string controller = File.ReadAllText(CONTROLLER_FILE);
 
-            bool ver2022Fault = controller.Contains("bsController=this;return l.isBingWallpaperAppInstalled");
-
-            if (!controller.Contains("bsController") || ver2022Fault)
+            if (controller.Contains("bsController"))
             {
-                // Controller is accessible via 'bsController' global variable
-                controller = "var bsController = null;" + controller;
-                if (is20H1() && CURRENT_BUILD_PATCH < MIN_20H1_PATCH_FIX)
-                {
-                    controller = controller.Insert(controller.IndexOf("}return l.prototype"), ";bsController=l;");
-                }
-                else
-                {
-                    if (ver2022Fault)
-                    {
-                        // BeautySearch versions from 1.10 to 1.13.7 detected the controller wrongly
-                        controller = controller.Replace("bsController=this;return l.isBingWallpaperAppInstalled", "bsController=l;return l.isBingWallpaperAppInstalled");
-                    } else
-                    {
-                        controller = controller.Insert(controller.IndexOf("return l.isBingWallpaperAppInstalled"), "bsController=l;");
-                    }
-                }
-                Utility.TakeOwnership(CONTROLLER_FILE);
-                bool success = Utility.WriteFile(CONTROLLER_FILE, controller);
-                Utility.NormalizeOwnership(CONTROLLER_FILE);
-                return success;
-            }
-            return true;
-        }
+                return true;
+            }    
 
-        public static string GetCurrentUserSearchAppDataDirectory()
-        {
-            return $@"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\Packages\{SEARCH_APP_NAME}";
+            // Controller is accessible via 'bsController' global variable
+            controller = "var bsController = null;" + controller;
+            if (IS_20H1 && SystemInfo.BUILD_NUMBER_MINOR < MIN_20H1_PATCH_FIX)
+            {
+                controller = controller.Insert(controller.IndexOf("}return l.prototype"), ";bsController=l;");
+            }
+            else
+            {
+                controller = controller.Insert(controller.IndexOf("return l.isBingWallpaperAppInstalled"), "bsController=l;");
+            }
+
+            Utility.TakeOwnership(CONTROLLER_FILE);
+            bool success = Utility.WriteToFile(CONTROLLER_FILE, controller);
+            Utility.RestoreTrustedInstallerOwnership(CONTROLLER_FILE);
+
+            return success;
         }
 
         public static string FindControllerFile()
@@ -391,7 +294,7 @@ namespace BeautySearch
             // *laughs*
             foreach (var file in Directory.EnumerateFiles(TARGET_DIR, "*.js"))
             {
-                string text = Utility.ReadFile(file);
+                string text = File.ReadAllText(file);
                 if (text.Contains("return l.prototype") || text.Contains("return l.isBingWallpaperAppInstalled")) return file;
             }
             return null;
@@ -399,108 +302,8 @@ namespace BeautySearch
 
         private static string ToggleEntrypointFeature(string raw, string feature, bool isEnabled)
         {
-            if (isEnabled)
-            {
-                return raw.Replace("\"" + feature + "\":0", "\"" + feature + "\":1");
-            } else
-            {
-                return raw.Replace("\"" + feature + "\":1", "\"" + feature + "\":0");
-            }
-        }
-
-        public static void ClearIconCache()
-        {
-            string ICON_CACHE_DIR = $@"{GetCurrentUserSearchAppDataDirectory()}\LocalState\AppIconCache";
-            if (Directory.Exists(ICON_CACHE_DIR))
-            {
-                Directory.Delete(ICON_CACHE_DIR, true);
-            }
-        }
-
-#region Search Box Text
-        private const string SEARCH_BOX_TEXT_REGISTRY_VALUE = "SearchBoxText";
-        private const string SEARCH_BOX_TASKBAR_MODE_REGISTRY_VALUE = "SearchboxTaskbarMode";
-
-        public static string GetSearchBoxText()
-        {
-            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY + @"Flighting\Override", false))
-            {
-                return key == null ? "" : (string)key.GetValue(SEARCH_BOX_TEXT_REGISTRY_VALUE, "");
-            }
-        }
-        public static void SetSearchBoxText(string text)
-        {
-            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY + @"Flighting\Override", true))
-            {
-                if (key != null)
-                {
-                    if (text != null)
-                    {
-                        key.SetValue(SEARCH_BOX_TEXT_REGISTRY_VALUE, text, RegistryValueKind.String);
-                    }
-                    else if (key.GetValue(SEARCH_BOX_TEXT_REGISTRY_VALUE) != null)
-                    {
-                        key.DeleteValue(SEARCH_BOX_TEXT_REGISTRY_VALUE);
-                    }
-                    key.Close();
-                }
-            }
-
-            KillSearchApp();
-        }
-
-        public static bool IsSearchBoxVisible()
-        {
-            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY, true))
-            {
-                if (key == null) return false;
-                object value = key.GetValue(SEARCH_BOX_TASKBAR_MODE_REGISTRY_VALUE);
-                return value == null ? false : value.ToString() == "2";
-            }
-        }
-        public static void SetSearchBoxVisibility(bool visible)
-        {
-            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(SEARCH_APP_REGISTRY, true))
-            {
-                if (key == null) return;
-                key.SetValue(SEARCH_BOX_TASKBAR_MODE_REGISTRY_VALUE, visible ? 2 : 1, RegistryValueKind.DWord);
-            }
-        }
-#endregion
-
-
-        // Multi User
-        private static string _username;
-        public static string username
-        {
-            get
-            {
-                if (_username == null)
-                {
-                    _username = Utility.GetUsername();
-                }
-                return _username;
-            }
-        }
-        public static string localUsername
-        {
-            get
-            {
-                return username.Substring(username.IndexOf("\\"));
-            }
-        }
-
-        private static string _sid;
-        public  static string SID
-        {
-            get
-            {
-                if (_sid == null)
-                {
-                    _sid = (new System.Security.Principal.NTAccount(username)).Translate(typeof(System.Security.Principal.SecurityIdentifier)).Value.ToString();
-                }
-                return _sid;
-            }
+            return isEnabled ? raw.Replace("\"" + feature + "\":0", "\"" + feature + "\":1")
+                : raw.Replace("\"" + feature + "\":1", "\"" + feature + "\":0");
         }
     }
 }

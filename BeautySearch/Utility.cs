@@ -13,13 +13,55 @@ namespace BeautySearch
 {
     static class Utility
     {
-        public static int GetBuildNumber()
+        public static string InsertAfter(string s, string target, string insertion)
         {
-            return int.Parse(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentBuildNumber", "0").ToString());
+            return s.Insert(s.IndexOf(target) + target.Length, insertion);
         }
-        public static int GetBuildMinorVersion()
+
+        public static bool WriteToFile(string filepath, string text)
         {
-            return int.Parse(Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "UBR", "0").ToString());
+            using (var writer = new StreamWriter(filepath))
+            {
+                writer.Write(text);
+            }
+            return true;
+        }
+
+        public static string GetUsername()
+        {
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT UserName FROM Win32_ComputerSystem");
+            ManagementObjectCollection collection = searcher.Get();
+            return (string)collection.Cast<ManagementBaseObject>().First()["UserName"];
+        }
+
+        public static void ExecuteCommand(string exec, string args)
+        {
+            var process = Process.Start(new ProcessStartInfo()
+            {
+                FileName = exec,
+                Arguments = args,
+                WindowStyle = ProcessWindowStyle.Hidden
+            });
+            process.WaitForExit();
+        }
+
+        #region Administrator Rights
+
+        public static bool IsAdministrator()
+        {
+            var identity = WindowsIdentity.GetCurrent();
+            var principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
+        public static bool RequireAdministrator()
+        {
+            if (!IsAdministrator())
+            {
+                MessageBox.Show("Please, restart this application as administrator", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return true;
+            }
+            return false;
         }
 
         public static bool RunElevated(string args, out int exitCode)
@@ -36,31 +78,56 @@ namespace BeautySearch
                 exitCode = process.ExitCode;
                 return true;
             }
-            catch (Exception)
+            catch
             {
                 exitCode = -1;
                 return false;
             }
         }
 
-        public static string InsertAfter(string target, string hook, string s)
+        #endregion
+
+        #region File Permissions
+
+        public static void TakeOwnership(string filepath)
         {
-            return target.Insert(target.IndexOf(hook) + hook.Length, s);
+            if (!File.Exists(filepath))
+            {
+                return;
+            }
+            try
+            {
+                GainFullAccess(filepath);
+            }
+            catch
+            {
+                ExecuteCommand("takeown.exe", $"/F \"{filepath}\"");
+                ExecuteCommand("icacls.exe", $"\"{filepath}\" /grant {Environment.UserName}:F");
+            }
         }
 
-        public static string ReadFile(string filepath)
+        private static void GainFullAccess(string filepath)
         {
-            return File.ReadAllText(filepath);
+            var user = WindowsIdentity.GetCurrent().User;
+
+            var security = File.GetAccessControl(filepath);
+            security.SetOwner(user);
+            security.SetAccessRule(new FileSystemAccessRule(user, FileSystemRights.FullControl, AccessControlType.Allow));
+
+            File.SetAccessControl(filepath, security);
         }
 
-        public static bool WriteFile(string filepath, string text)
+        public static void RestoreTrustedInstallerOwnership(string filepath)
         {
-            var sw = new StreamWriter(filepath);
-            sw.Write(text);
-            sw.Close();
-            return true;
+            ExecuteCommand("icacls.exe", $"\"{filepath}\" /setowner \"NT SERVICE\\TrustedInstaller\"");
+            ExecuteCommand("icacls.exe", $"\"{filepath}\" /remove {Environment.UserName}:F");
+            ExecuteCommand("icacls.exe", $"\"{filepath}\" /t /q /c /reset");
         }
-        
+
+        #endregion
+
+        #region Registry
+
         public static bool CheckIfMachineHasKey(string key)
         {
             return Registry.LocalMachine.OpenSubKey(key, false) != null;
@@ -68,20 +135,22 @@ namespace BeautySearch
 
         public static bool CheckIfCurrentUserHasKey(string key)
         {
-            return Registry.Users.OpenSubKey(ScriptInstaller.SID + "\\" + key, false) != null;
+            return Registry.Users.OpenSubKey(SystemInfo.SID + "\\" + key, false) != null;
         }
 
         public static void DeleteCurrentUserSubKeyTree(string key)
         {
-            Registry.Users.DeleteSubKeyTree(ScriptInstaller.SID + "\\" + key);
+            Registry.Users.DeleteSubKeyTree(SystemInfo.SID + "\\" + key);
         }
 
         public static RegistryKey OpenCurrentUserRegistryKey(string key, bool writable)
         {
-            string path = ScriptInstaller.SID + "\\" + key;
-            RegistryKey hKey = Registry.Users.OpenSubKey(path, writable);
+            string path = SystemInfo.SID + "\\" + key;
+            var hKey = Registry.Users.OpenSubKey(path, writable);
             return hKey != null ? hKey : Registry.Users.CreateSubKey(path, writable);
         }
+
+        #endregion
 
         public static int GetDPIScaling()
         {
@@ -105,103 +174,6 @@ namespace BeautySearch
             {
                 return Int32.Parse(key == null ? "10" : ((string)key.GetValue("WallpaperStyle", "10")));
             }
-        }
-
-        public static bool RequireAdministrator()
-        {
-            if (!IsAdministrator())
-            {
-                MessageBox.Show("Please, restart this application as administrator", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return true;
-            }
-            return false;
-        }
-
-        public static bool IsAdministrator()
-        {
-            var identity = WindowsIdentity.GetCurrent();
-            var principal = new WindowsPrincipal(identity);
-            return principal.IsInRole(WindowsBuiltInRole.Administrator);
-        }
-
-        public static void ExecuteCommand(string exec, string args)
-        {
-            Process proc = new Process();
-            proc.StartInfo.FileName = exec;
-            proc.StartInfo.Arguments = args;
-            proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            proc.Start();
-            proc.WaitForExit();
-        }
-
-        public static string GetUsername()
-        {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT UserName FROM Win32_ComputerSystem");
-            ManagementObjectCollection collection = searcher.Get();
-            return (string)collection.Cast<ManagementBaseObject>().First()["UserName"];
-        }
-
-        public static void TakeOwnership(string filepath)
-        {
-            if (!File.Exists(filepath))
-            {
-                return;
-            }
-            try
-            {
-                GetFullAccess(filepath);
-            }
-            catch
-            {
-                ExecuteCommand("takeown.exe", $"/F \"{filepath}\"");
-                ExecuteCommand("icacls.exe", $"\"{filepath}\" /grant {Environment.UserName}:F");
-            }
-        }
-        private static void GetFullAccess(string filepath)
-        {
-            FileSecurity security = File.GetAccessControl(filepath);
-            SecurityIdentifier user = WindowsIdentity.GetCurrent().User;
-            security.SetOwner(user);
-            security.SetAccessRule(new FileSystemAccessRule(user, FileSystemRights.FullControl, AccessControlType.Allow));
-            File.SetAccessControl(filepath, security);
-        }
-        public static void NormalizeOwnership(string filepath)
-        {
-            ExecuteCommand("icacls.exe", $"\"{filepath}\" /setowner \"NT SERVICE\\TrustedInstaller\"");
-            ExecuteCommand("icacls.exe", $"\"{filepath}\" /remove {Environment.UserName}:F");
-            ExecuteCommand("icacls.exe", $"\"{filepath}\" /t /q /c /reset");
-        }
-
-        public enum TaskbarSide { TOP, BOTTOM, LEFT, RIGHT }
-
-        public static TaskbarSide GetTaskbarSide()
-        {
-            TaskbarSide side = TaskbarSide.BOTTOM;
-            if (Screen.PrimaryScreen.WorkingArea.Width == Screen.PrimaryScreen.Bounds.Width)
-            {
-                if (Screen.PrimaryScreen.WorkingArea.Top > 0) side = TaskbarSide.TOP;
-            }
-            else
-            {
-                side = Screen.PrimaryScreen.WorkingArea.Left > 0 ? TaskbarSide.LEFT : TaskbarSide.RIGHT;
-            }
-            return side;
-        }
-
-        public static void ShowSearchWindow()
-        {
-            KeyboardSend.KeyDown(Keys.LWin);
-            KeyboardSend.KeyDown(Keys.S);
-            KeyboardSend.KeyUp(Keys.LWin);
-            KeyboardSend.KeyUp(Keys.S);
-        }
-
-        public static void HideSearchWindow()
-        {
-            KeyboardSend.KeyDown(Keys.Escape);
-            KeyboardSend.KeyUp(Keys.Escape);
-
-            NativeHelper.SetForegroundWindow(NativeHelper.FindWindow("Shell_TrayWnd", null));
         }
     }
 

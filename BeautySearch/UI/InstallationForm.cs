@@ -26,7 +26,7 @@ namespace BeautySearch
 #else
             flavour = "v" + System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
 #endif
-            this.Text = "BeautySearch Installer " + flavour;
+            Text = "BeautySearch Installer " + flavour;
 
             EnumerateFeatures();
             UpdateInstallationStatus();
@@ -36,13 +36,13 @@ namespace BeautySearch
 
         private void EnumerateFeatures()
         {
-            bool ver2022 = ScriptInstaller.is20H1Fixed();
+            bool ver2022 = ScriptInstaller.IS_MODERN;
             bool acrylicEnabled = Utility.IsPersonalizationFeatureEnabled("EnableTransparency");
 
             AddFeature("Enable Acrylic" + (!ver2022 ? " (or Fake Acrylic on 20H1+)" : ""), "acrylicMode", acrylicEnabled);
             AddFeature("Enhanced design with more Acrylic", "enhancedAcrylic", true);
-            AddFeature("Show accent color on Search Window" + (ScriptInstaller.is20H1() && ver2022 ? " when it is shown on Start" : ""), "backgroundMode", (ScriptInstaller.is20H1() && ver2022) || Utility.IsPersonalizationFeatureEnabled("ColorPrevalence"));
-            AddFeature("Remove background from UWP application icons", "disableTilesBackground", ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1+1);
+            AddFeature("Show accent color on Search Window" + (ScriptInstaller.IS_MODERN ? " when it is shown on Start" : ""), "backgroundMode", ScriptInstaller.IS_MODERN || Utility.IsPersonalizationFeatureEnabled("ColorPrevalence"));
+            AddFeature("Remove background from UWP application icons", "disableTilesBackground", SystemInfo.BUILD_NUMBER >= OSBuild.V20H1+1);
             AddFeature("Fluent Context Menu", "contextMenuFluent");
             AddFeature("Acrylic Context Menu", "contextMenuAcrylic", acrylicEnabled);
             AddFeature("Context Menu Shadows", "contextMenuShadows", acrylicEnabled);
@@ -51,7 +51,7 @@ namespace BeautySearch
             AddFeature("Hide control outlines when using mouse", "hideOutlines");
             AddFeature("Make Top Apps look like Start Menu tiles", "topAppsCardsOutline");
             AddFeature("Hide Review and Share options for UWP apps", "hideUWPReviewShare");
-            if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_19H2)
+            if (SystemInfo.BUILD_NUMBER >= OSBuild.V19H2)
             {
                 AddFeature("[19H2+] Improve Explorer Search look (for 125% DPI Scaling)", "explorerSearchFixes", Utility.GetDPIScaling() == 120);
             }
@@ -75,7 +75,7 @@ namespace BeautySearch
             AddFeature("Check theme changes more frequently [Acrylic & Theme]", "restyleOnLoadAcrylic");
             AddFeature("Check theme changes more frequently [Theme]", "restyleOnLoadTheme");
             */
-            AddFeature("Controller Integration (Recommended for 20H1+)", "useController", ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1);
+            AddFeature("Controller Integration (Recommended for 20H1+)", "useController", SystemInfo.BUILD_NUMBER >= OSBuild.V20H1);
         }
 
         private void AddFeature(string name, string id)
@@ -95,7 +95,7 @@ namespace BeautySearch
 
         private void installBtn_Click(object sender, EventArgs e)
         {
-            if (!Utility.IsAdministrator() && ScriptInstaller.IsInstalled() && ScriptInstaller.IsBingSearchEnabled())
+            if (!Utility.IsAdministrator() && ScriptInstaller.IsInstalled() && SearchAppManager.IsBingSearchEnabled())
             {
                 var dialogResult = MessageBox.Show(
                     "Do you want to enable the existing BeautySearch installation? Press No to reinstall.",
@@ -105,9 +105,9 @@ namespace BeautySearch
                 );
                 if (dialogResult == DialogResult.Yes)
                 {
-                    ScriptInstaller.SetBingSearchEnabled(0);
-                    ScriptInstaller.KillSearchApp();
-                    Utility.ShowSearchWindow();
+                    SearchAppManager.SetBingSearchEnabled(false);
+                    SearchAppManager.KillSearchApp();
+                    SearchAppManager.ShowSearchWindow();
                     return;
                 }
             }
@@ -124,7 +124,7 @@ namespace BeautySearch
             features.Set("corners", cornersGroup.Controls.OfType<System.Windows.Forms.RadioButton>()
                                       .FirstOrDefault(r => r.Checked).Text.ToLower());
 
-            if (features.Get("acrylicMode") != null && !ScriptInstaller.is20H1Fixed())
+            if (features.Get("acrylicMode") != null && !ScriptInstaller.ACRYLIC_SUPPORTED)
             {
                 features.Set("acrylicMode", "fake");
             }
@@ -134,12 +134,16 @@ namespace BeautySearch
             {
                 result = ScriptInstaller.Install(features);
             }
-            else if (!Utility.RunElevated($"Install \"{features.ToJson()}\"", out result)) return;
+            else if (!Utility.RunElevated($"Install \"{features.ToJson()}\"", out result))
+            {
+                return;
+            }
+
             switch (result)
             {
                 case 0:
                     //MessageBox.Show("BeautySearch successfully installed", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Utility.ShowSearchWindow();
+                    SearchAppManager.ShowSearchWindow();
                     break;
                 case ScriptInstaller.ERR_READ:
                     MessageBox.Show("Failed to read target file (not enough permissions?)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -168,7 +172,10 @@ namespace BeautySearch
             {
                 result = ScriptInstaller.Uninstall(false);
             }
-            else if (!Utility.RunElevated("Uninstall", out result)) return;
+            else if (!Utility.RunElevated("Uninstall", out result))
+            {
+                return;
+            }
 
             switch (result)
             {
@@ -201,8 +208,8 @@ namespace BeautySearch
 
         private void searchRestartBtn_Click(object sender, EventArgs e)
         {
-            ScriptInstaller.KillSearchApp();
-            Utility.ShowSearchWindow();
+            SearchAppManager.KillSearchApp();
+            SearchAppManager.ShowSearchWindow();
             SystemSounds.Asterisk.Play();
         }
 
@@ -213,8 +220,8 @@ namespace BeautySearch
 
         private void optionsMenu_ClearIconCache_Click(object sender, EventArgs e)
         {
-            ScriptInstaller.ClearIconCache();
-            Utility.ShowSearchWindow();
+            SearchAppManager.ClearIconCache();
+            SearchAppManager.ShowSearchWindow();
         }
 
         private void optionsMenu_EditTopApps_Click(object sender, EventArgs e)
@@ -224,13 +231,14 @@ namespace BeautySearch
 
         private void optionsMenu_EditSearchBoxText_Click(object sender, EventArgs e)
         {
-            SearchBoxTextInputForm dialog = new SearchBoxTextInputForm();
-            dialog.textInput.Text = ScriptInstaller.GetSearchBoxText();
-            DialogResult result = dialog.ShowDialog(this);
+            var dialog = new SearchBoxTextInputForm();
+            dialog.textInput.Text = SearchAppManager.GetSearchBoxText();
+            var result = dialog.ShowDialog(this);
 
             if (result != DialogResult.Cancel)
             {
-                ScriptInstaller.SetSearchBoxText(result == DialogResult.OK ? dialog.textInput.Text : null);
+                SearchAppManager.SetSearchBoxText(result == DialogResult.OK ? dialog.textInput.Text : null);
+                SearchAppManager.KillSearchApp();
                 MessageBox.Show("Search Box Text has been changed.\nRestart File Explorer to fully apply the changes.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             dialog.Dispose();
@@ -239,7 +247,7 @@ namespace BeautySearch
 
         private void optionsMenu_SearchBoxTheme_CheckedChanged(object sender, EventArgs e)
         {
-            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(ScriptInstaller.SEARCH_APP_REGISTRY, true))
+            using (var key = Utility.OpenCurrentUserRegistryKey(SearchAppManager.SEARCH_APP_REGISTRY, true))
             {
                 if (key != null)
                 {
@@ -249,7 +257,7 @@ namespace BeautySearch
         }
         private void optionsMenu_SearchBoxTheme_UpdateStatus()
         {
-            using (RegistryKey key = Utility.OpenCurrentUserRegistryKey(ScriptInstaller.SEARCH_APP_REGISTRY, false))
+            using (var key = Utility.OpenCurrentUserRegistryKey(SearchAppManager.SEARCH_APP_REGISTRY, false))
             {
                 optionsMenu_SearchBoxTheme.Checked = key != null && (int)key.GetValue("SearchBoxTheme", 0) == 2;
             }

@@ -24,7 +24,7 @@ namespace BeautySearch
 #else
             flavour = "v" + System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
 #endif
-            this.Text = "BeautySearch Installer " + flavour;
+            Text = "BeautySearch Installer " + flavour;
 
             EnumerateFeatures();
             UpdateInstallationStatus();
@@ -46,7 +46,7 @@ namespace BeautySearch
             AddFeature("Always show recent files path", "alwaysShowActivityPath");
             AddFeature("Speed up loading", "speedLoad");
             AddFeature("Install for all users", "globalInstall");
-            AddFeature("Controller Integration (Recommended)", "useController", ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1);
+            AddFeature("Controller Integration (Recommended)", "useController");
         }
 
         private void AddFeature(string name, string id)
@@ -66,7 +66,7 @@ namespace BeautySearch
 
         private void installBtn_Click(object sender, EventArgs e)
         {
-            if (!Utility.IsAdministrator() && ScriptInstaller.IsInstalled() && ScriptInstaller.IsBingSearchEnabled())
+            if (!Utility.IsAdministrator() && ScriptInstaller.IsInstalled() && SearchAppManager.IsBingSearchEnabled())
             {
                 var dialogResult = MessageBox.Show(
                     "Do you want to enable the existing BeautySearch installation? Press No to reinstall.",
@@ -76,9 +76,9 @@ namespace BeautySearch
                 );
                 if (dialogResult == DialogResult.Yes)
                 {
-                    ScriptInstaller.SetBingSearchEnabled(0);
-                    ScriptInstaller.KillSearchApp();
-                    Utility.ShowSearchWindow();
+                    SearchAppManager.SetBingSearchEnabled(false);
+                    SearchAppManager.KillSearchApp();
+                    SearchAppManager.ShowSearchWindow();
                     return;
                 }
             }
@@ -95,12 +95,16 @@ namespace BeautySearch
             {
                 result = ScriptInstaller.Install(features);
             }
-            else if (!Utility.RunElevated($"Install \"{features.ToJson()}\"", out result)) return;
+            else if (!Utility.RunElevated($"Install \"{features.ToJson()}\"", out result))
+            {
+                return;
+            }
+
             switch (result)
             {
                 case 0:
                     //MessageBox.Show("BeautySearch successfully installed", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    Utility.ShowSearchWindow();
+                    SearchAppManager.ShowSearchWindow();
                     break;
                 case ScriptInstaller.ERR_READ:
                     MessageBox.Show("Failed to read target file (not enough permissions?)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -129,7 +133,10 @@ namespace BeautySearch
             {
                 result = ScriptInstaller.Uninstall(false);
             }
-            else if (!Utility.RunElevated("Uninstall", out result)) return;
+            else if (!Utility.RunElevated("Uninstall", out result))
+            {
+                return;
+            }
 
             switch (result)
             {
@@ -162,8 +169,8 @@ namespace BeautySearch
 
         private void searchRestartBtn_Click(object sender, EventArgs e)
         {
-            ScriptInstaller.KillSearchApp();
-            Utility.ShowSearchWindow();
+            SearchAppManager.KillSearchApp();
+            SearchAppManager.ShowSearchWindow();
             SystemSounds.Asterisk.Play();
         }
 

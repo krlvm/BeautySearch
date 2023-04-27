@@ -20,7 +20,7 @@ namespace BeautySearch.Installer
 #if REDIRECT_TO_CLASSICSEARCH
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://github.com/krlvm/ClassicSearch"));
 #else
-            if (ScriptInstaller.CURRENT_BUILD < ScriptInstaller.BUILD_20H1)
+            if (SystemInfo.BUILD_NUMBER < OSBuild.V20H1)
             {
                 MessageBox.Show(
                     "This is supported only on 20H1 and higher",
@@ -44,7 +44,7 @@ namespace BeautySearch.Installer
                 }
                 else
                 {
-                    DialogResult dialogResult = MessageBox.Show(
+                    var dialogResult = MessageBox.Show(
                         "New File Explorer Search Experience is disabled.\nDo you want to re-enable it?",
                         "BeautySearch",
                         MessageBoxButtons.YesNo,
@@ -66,7 +66,7 @@ namespace BeautySearch.Installer
             }
             else
             {
-                DialogResult dialogResult = MessageBox.Show(
+                var dialogResult = MessageBox.Show(
                     "Do you want to disable the new File Explorer Search Experience introduced in 19H2?" + (Utility.IsAdministrator() ? "" : "\n\n(Run as administrator to disable for all users)"),
                     "BeautySearch",
                     MessageBoxButtons.YesNo,

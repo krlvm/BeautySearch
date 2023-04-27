@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeautySearch.Installer;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -119,11 +120,11 @@ namespace BeautySearch.UI
             string json = webBrowser.Document.InvokeScript("exportJson").ToString();
             foreach (string file in CollectDataFiles())
             {
-                Utility.WriteFile(file, json);
+                Utility.WriteToFile(file, json);
             }
-            ScriptInstaller.KillSearchApp();
+            SearchAppManager.KillSearchApp();
             MessageBox.Show("Changes to Top Apps have been saved", "BeautySearch", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            Utility.ShowSearchWindow();
+            SearchAppManager.ShowSearchWindow();
         }
 
         private void cancelBtn_Click(object sender, EventArgs e)
@@ -133,7 +134,7 @@ namespace BeautySearch.UI
 
         static IEnumerable<string> CollectDataFiles()
         {
-            string directory = $@"{ScriptInstaller.GetCurrentUserSearchAppDataDirectory()}\LocalState\DeviceSearchCache";
+            string directory = $@"{SearchAppManager.GetCurrentUserSearchAppDataDirectory()}\LocalState\DeviceSearchCache";
             return Directory.EnumerateFiles(directory, "*", SearchOption.TopDirectoryOnly)
                 .Where(filename => filename.Substring(directory.Length + 1).StartsWith("AppCache"));
         }

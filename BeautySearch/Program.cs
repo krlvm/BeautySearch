@@ -18,7 +18,7 @@ namespace BeautySearch
                 {
                     case "auto":
                         {
-                            FeatureControl features = new FeatureControl();
+                            var features = new FeatureControl();
 
                             if (args.Length != 3 || !args[2].Equals("disable-enhancements"))
                             {
@@ -32,7 +32,7 @@ namespace BeautySearch
                             features.Set("corners", "sharp");
                             if (Utility.IsPersonalizationFeatureEnabled("EnableTransparency"))
                             {
-                                features.Set("acrylicMode", ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1 && ScriptInstaller.CURRENT_BUILD < 19541 ? "fake" : "true");
+                                features.Set("acrylicMode", ScriptInstaller.ACRYLIC_SUPPORTED ? "true" : "fake");
                                 features.Enable("contextMenuAcrylic");
                                 features.Enable("contextMenuShadows");
                             }
@@ -40,15 +40,15 @@ namespace BeautySearch
                             {
                                 features.Enable("backgroundMode");
                             }
-                            if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1 + 1)
+                            if (SystemInfo.BUILD_NUMBER >= OSBuild.V20H1 + 1)
                             {
                                 features.Enable("disableTilesBackground");
                             }
-                            if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_19H2 && Utility.GetDPIScaling() == 120)
+                            if (SystemInfo.BUILD_NUMBER >= OSBuild.V19H2 && Utility.GetDPIScaling() == 120)
                             {
                                 features.Enable("explorerSearchFixes");
                             }
-                            if (ScriptInstaller.CURRENT_BUILD >= ScriptInstaller.BUILD_20H1)
+                            if (SystemInfo.BUILD_NUMBER >= OSBuild.V20H1)
                             {
                                 features.Enable("useController");
                             }
@@ -82,7 +82,7 @@ namespace BeautySearch
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            if (Utility.GetBuildNumber() >= 22000)
+            if (SystemInfo.BUILD_NUMBER >= OSBuild.V11_21H2)
             {
                 Application.Run(new InstallationForm11());
             }

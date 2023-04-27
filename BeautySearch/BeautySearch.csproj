@@ -80,6 +80,8 @@
     <Compile Include="Installer\FakeBackgroundAcrylic.cs" />
     <Compile Include="Installer\FeatureControl.cs" />
     <Compile Include="Installer\FileExplorerSearchControl.cs" />
+    <Compile Include="Installer\SearchAppManager.cs" />
+    <Compile Include="SystemInfo.cs" />
     <Compile Include="UI\InstallationForm11.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,12 +160,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="BeautySearch.js" />
+    <EmbeddedResource Include="Scripts\BeautySearch.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TopAppsEditor.html" />
-    <EmbeddedResource Include="BeautySearchLoader.js" />
-    <EmbeddedResource Include="BeautySearch11.js" />
+    <EmbeddedResource Include="Scripts\BeautySearchLoader.js" />
+    <EmbeddedResource Include="Scripts\BeautySearch11.js" />
     <Content Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

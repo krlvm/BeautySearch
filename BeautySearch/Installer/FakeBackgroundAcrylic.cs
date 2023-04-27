@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.IO;
@@ -7,13 +6,13 @@ using System;
 using System.Linq;
 using static BeautySearch.NativeHelper;
 
-namespace BeautySearch
+namespace BeautySearch.Installer
 {
     static class FakeBackgroundAcrylic
     {
         public static void CaptureWallpaper(string directory)
         {
-            string WALLPAPER_CACHE_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Users\{ScriptInstaller.localUsername}\AppData\Roaming\Microsoft\Windows\Themes\CachedFiles";
+            string WALLPAPER_CACHE_DIR = $@"{Path.GetPathRoot(Environment.SystemDirectory)}Users\{SystemInfo.localUsername}\AppData\Roaming\Microsoft\Windows\Themes\CachedFiles";
             if(!Directory.Exists(WALLPAPER_CACHE_DIR))
             {
                 CaptureRealDesktop(directory);
@@ -87,7 +86,10 @@ namespace BeautySearch
                 }
             }
 
-            CaptureWallpaperFragment(new Bitmap(source), false, new int[2] { 500, 0 }, directory);
+            using (var bitmap = new Bitmap(source))
+            {
+                CaptureWallpaperFragment(bitmap, false, new int[2] { 500, 0 }, directory);
+            }
         }
 
         public static void CaptureRealDesktop(string directory)
@@ -98,7 +100,14 @@ namespace BeautySearch
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information
             );
-            CaptureWallpaperFragment(null, true, new int[2] { 700, 900 }, directory);
+
+            Rectangle bounds = Screen.PrimaryScreen.Bounds;
+
+            using (var bitmap = new Bitmap(bounds.Width, bounds.Height))
+            using (var g = Graphics.FromImage(bitmap))
+            {
+                CaptureWallpaperFragment(null, true, new int[2] { 700, 900 }, directory);
+            }
         }
 
         public static void CaptureWallpaperFragment(Bitmap bitmap, bool minimizeWindows, int[] sleep, string directory)
@@ -110,33 +119,25 @@ namespace BeautySearch
                 MinimizeAllWindows();
             }
 
-            Utility.ShowSearchWindow();
+            //
+            SearchAppManager.ShowSearchWindow();
             System.Threading.Thread.Sleep(sleep[0]);
+            //
             RECT wnd;
             GetWindowRect(GetForegroundWindow(), out wnd);
-            Utility.HideSearchWindow();
+            //
+            SearchAppManager.HideSearchWindow();
             System.Threading.Thread.Sleep(sleep[1]);
+            //
 
             int wndWidth = wnd.Right - wnd.Left;
             int wndHeight = wnd.Bottom - wnd.Top;
 
-            if (bitmap == null)
-            {
-                Rectangle bounds = Screen.PrimaryScreen.Bounds;
-                bitmap = new Bitmap(bounds.Width, bounds.Height);
-                using (Graphics g = Graphics.FromImage(bitmap))
-                {
-                    g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
-                }
-            }
-
-            using (Bitmap screen = bitmap.Clone(new Rectangle(wnd.Left, wnd.Top, wndWidth, wndHeight), bitmap.PixelFormat))
+            using (var screen = bitmap.Clone(new Rectangle(wnd.Left, wnd.Top, wndWidth, wndHeight), bitmap.PixelFormat))
             {
                 screen.Save(GetCroppedWallpaperPath(directory), ImageFormat.Png);
             }
         }
-
-
 
         static void MinimizeAllWindows()
         {
@@ -148,7 +149,7 @@ namespace BeautySearch
 
         public static string GetCroppedWallpaperPath(string rootDirectory)
         {
-            return rootDirectory + @"\" + ScriptInstaller.SID + ".png";
+            return rootDirectory + @"\" + SystemInfo.SID + ".png";
         }
     }
 }
