@@ -1,6 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.IO;
 using System.Windows.Forms;
 
@@ -260,6 +258,7 @@ namespace BeautySearch.Installer
         }
 
         // Controller Injector
+        // TODO: Refactor
 
         private static bool InjectController()
         {
@@ -273,7 +272,12 @@ namespace BeautySearch.Installer
 
             // Controller is accessible via 'bsController' global variable
             controller = "var bsController = null;" + controller;
-            if (IS_20H1 && SystemInfo.BUILD_NUMBER_MINOR < MIN_20H1_PATCH_FIX)
+            if (controller.Contains("static bindShown"))
+            {
+                // 1904X.3086+
+                controller = controller.Insert(controller.IndexOf("t._queryParamsCache={};"), ";bsController=t;");
+            }
+            else if (IS_20H1 && SystemInfo.BUILD_NUMBER_MINOR < MIN_20H1_PATCH_FIX)
             {
                 controller = controller.Insert(controller.IndexOf("}return l.prototype"), ";bsController=l;");
             }
@@ -295,7 +299,12 @@ namespace BeautySearch.Installer
             foreach (var file in Directory.EnumerateFiles(TARGET_DIR, "*.js"))
             {
                 string text = File.ReadAllText(file);
-                if (text.Contains("return l.prototype") || text.Contains("return l.isBingWallpaperAppInstalled")) return file;
+                if (text.Contains("static bindShown")
+                    || text.Contains("return l.prototype")
+                    || text.Contains("return l.isBingWallpaperAppInstalled"))
+                {
+                    return file;
+                }
             }
             return null;
         }
