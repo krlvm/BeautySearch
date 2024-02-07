@@ -301,7 +301,8 @@ namespace BeautySearch.Installer
                 string text = File.ReadAllText(file);
                 if (text.Contains("static bindShown")
                     || text.Contains("return l.prototype")
-                    || text.Contains("return l.isBingWallpaperAppInstalled"))
+                    || text.Contains("return l.isBingWallpaperAppInstalled")
+                    || text.Contains("n.Host=t"))
                 {
                     return file;
                 }
