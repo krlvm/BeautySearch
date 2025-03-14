@@ -93,10 +93,11 @@ let _controller = null;
 let _controllerQueue = [];
 const getController = (callback) => {
     const isAvailable = typeof bsController !== 'undefined' && bsController != null;
-    if(isAvailable) {
+    if (isAvailable) {
         _controller = bsController;
         callback(_controller);
     } else {
+        console.log('[BeautySearch] Controller integration is not available');
         showTemporaryMessage('<b>WARNING:</b> BeautySearch Controller is not available, some features may not work correctly. Reinstall BeautySearch or disable Controller Integration.');
     }
 }
@@ -186,6 +187,7 @@ if(SETTINGS.version2022 && sa_config != null) {
     if (SETTINGS.activityItemCount != -1) {
         sa_config.activityInZI = SETTINGS.activityItemCount;
     } else {
+        const suggDetailsContainerHeight = 50 + 4;
         sa_config.activityInZI = 4;
         if (SETTINGS.activityDynamicDOM) {
             executeOnShown(() => {
@@ -203,14 +205,24 @@ if(SETTINGS.version2022 && sa_config != null) {
                     availableHeight -= document.querySelector('.suggestions #groups .groupContainer.topItemsGroup').offsetHeight;
                     availableHeight -= document.querySelector('#groups .groupHeader').offsetHeight;
                     
-                    sa_config.activityInZI = Math.floor(availableHeight / 64);
+                    sa_config.activityInZI = Math.floor(availableHeight / suggDetailsContainerHeight);
                 }, 500);
             });
         } else {
             executeOnLoad(() => {
-                sa_config.activityInZI = Math.floor((CortanaApp.height - 248) / (64 + 1));
+                sa_config.activityInZI = Math.floor((CortanaApp.height - 248) / (suggDetailsContainerHeight + 1));
             })
         }
+    }
+    if (SETTINGS.disableTwoPanel) {
+        injectStyle(`
+            .zeroInput19H1 .leftPaneZIsuggestions, .groupContainer {
+                width: 100%;
+            }
+            .zeroInput19H1 .suggDetailsContainer .details .removeIcon {
+                margin: 0 !important;
+            }
+        `);
     }
     if (SETTINGS.showBeautySearchVer) {
         sa_config.snrVersion += '\nBeautySearch v' + VERSION;
