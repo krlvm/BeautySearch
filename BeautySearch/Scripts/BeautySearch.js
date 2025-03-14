@@ -843,6 +843,9 @@ if(SETTINGS.version2022) {
         #preBootstrapBuildInfo {
             display: none;
         }
+        html, body {
+            background: transparent !important;
+        }
     `);
     const replaceLoadingAnimation = () => {
         document.getElementById('preBootstrapLoading').classList.add('b_hide');
