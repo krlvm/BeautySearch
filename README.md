@@ -100,6 +100,25 @@ Height of the Search Window can be resized by resizing the Start Menu.
 
 <img src="https://raw.githubusercontent.com/krlvm/BeautySearch/master/github-images/dynamic-activity.png" width="100%" />
 
+### Old Windows 10 taskbar search icon
+
+> This method no longer works after update KB5052077 (19045.5555+)
+
+Some Windows 10 update made the search icon on the taskbar too big and disproportionate, you can restore the old icon using [ViVeTool](https://github.com/thebookisclosed/ViVe):
+
+```
+vivetool /disable /id:41868508
+```
+
+If you want to re-enable it:
+
+```
+vivetool /enable /id:41868508 /variant:1
+vivetool /enable /id:41868508 /variant:2
+```
+
+for variants 1 and 2 respectively.
+
 ### Windows 11
 
 Windows 11 Search UI still not ideal and BeautySearch can improve its context menus acrylic effect to make it consistent with native (or even disable it), making them compact and aligning their widths. BeautySearch on Windows 11 also disables ugly outlines when keyboard navigation is not used, and making some other little quality improvements.
