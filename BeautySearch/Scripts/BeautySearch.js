@@ -253,7 +253,7 @@ const injectDarkTheme = (parent = '') => {
         }
 
         ${parent} ${PREVIEW_CONTAINER} .divider {
-            border: 1px solid ${SETTINGS.enhancedAcrylic ? backdropShade : '#272727' };
+            border: 1px solid ${SETTINGS.enhancedAcrylic ? backdropShade : '#272727' } !important;
             //background: ${SETTINGS.enhancedAcrylic ? backdropShade : '#272727' };
         }
 
